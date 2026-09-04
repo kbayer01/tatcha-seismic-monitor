@@ -3877,7 +3877,28 @@ function render() {
         "primary-packaging"
     );
 
+const visibleFacilityProfiles =
+  facilityProfiles.filter(
+    site => {
 
+      if (
+        site.category === "cm"
+      ) {
+
+        return layerState.cms;
+      }
+
+      if (
+        site.category ===
+        "primary-packaging"
+      ) {
+
+        return layerState.packaging;
+      }
+
+      return false;
+    }
+  );
   const layers =
     [];
 
@@ -4120,7 +4141,7 @@ function render() {
   if (
     layerState.totalExposure
     &&
-    facilityProfiles.length
+    visibleFacilityProfiles.length
   ) {
 
     layers.push(
@@ -4131,7 +4152,7 @@ function render() {
           "total-exposure",
 
         data:
-          facilityProfiles,
+          visibleFacilityProfiles,
 
         getPosition:
           d => [
@@ -4189,7 +4210,7 @@ function render() {
   if (
     layerState.exposure
     &&
-    facilityProfiles.length
+    visibleFacilityProfiles.length
   ) {
 
     layers.push(
@@ -4200,7 +4221,7 @@ function render() {
           "current-exposure",
 
         data:
-          facilityProfiles,
+          visibleFacilityProfiles,
 
         getPosition:
           d => [
