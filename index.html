@@ -76,14 +76,26 @@
       backdrop-filter:blur(16px);
     }
 
-    #map {
-      position:relative;
+    #mapContainer {
+  position:relative;
 
-      width:100%;
-      height:100%;
+  width:100%;
+  height:100%;
 
-      background:#080b0f;
-    }
+  overflow:hidden;
+
+  background:#080b0f;
+}
+
+#map {
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100%;
+}
 
     .brand {
       display:flex;
@@ -1029,26 +1041,137 @@
 
   </aside>
 
-  <main id="map">
+<main id="mapContainer">
 
-    <div
-      id="loadingOverlay"
-      class="loading-overlay"
+  <div id="map"></div>
+
+  <div
+    id="loadingOverlay"
+    class="loading-overlay"
+  >
+    Loading earthquake catalog…
+  </div>
+
+  <div
+    id="historyBanner"
+    class="history-banner"
+  >
+    Historical mode
+  </div>
+
+  <aside
+    id="facilityDrawer"
+    class="facility-drawer"
+  >
+
+    <button
+      class="drawer-close"
+      onclick="closeFacilityDrawer()"
     >
-      Loading earthquake catalog…
+      ×
+    </button>
+
+    <div class="drawer-eyebrow">
+      MANUFACTURING LOCATION
     </div>
 
-    <div
-      id="historyBanner"
-      class="history-banner"
-    >
-      Historical mode
+    <h2 id="drawerSiteName">
+      Facility
+    </h2>
+
+    <div class="drawer-risk-row">
+
+      <span>
+        Current exposure
+      </span>
+
+      <span
+        id="drawerExposureBadge"
+        class="exposure-badge"
+      >
+        —
+      </span>
+
     </div>
 
-    <aside
-      id="facilityDrawer"
-      class="facility-drawer"
-    >
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-section-title">
+      CURRENT SEISMIC ACTIVITY
+    </div>
+
+    <div class="drawer-stat featured">
+
+      <span>
+        Largest nearby event
+      </span>
+
+      <strong id="drawerLargest">
+        —
+      </strong>
+
+    </div>
+
+    <div class="drawer-stat">
+      <span>Distance</span>
+      <strong id="drawerDistance">—</strong>
+    </div>
+
+    <div class="drawer-stat">
+      <span>Depth</span>
+      <strong id="drawerDepth">—</strong>
+    </div>
+
+    <div class="drawer-stat">
+      <span>M4+ events / 7 days</span>
+      <strong id="drawerM4Seven">—</strong>
+    </div>
+
+    <div class="drawer-stat">
+      <span>M5+ events / 30 days</span>
+      <strong id="drawerM5Thirty">—</strong>
+    </div>
+
+    <div class="drawer-divider"></div>
+
+    <div class="drawer-section-title">
+      ACTIVITY VS BASELINE
+    </div>
+
+    <div class="drawer-stat">
+      <span>Current activity</span>
+      <strong id="drawerActivity">—</strong>
+    </div>
+
+    <div class="drawer-stat">
+      <span>Historical weekly average</span>
+      <strong id="drawerBaseline">Select facility</strong>
+    </div>
+
+    <div class="drawer-stat">
+      <span>Current vs baseline</span>
+      <strong id="drawerVsBaseline">—</strong>
+    </div>
+
+    <div class="drawer-divider"></div>
+
+    <div
+      id="drawerEventLocation"
+      class="drawer-location"
+    ></div>
+
+    <div class="drawer-source">
+      Source: USGS
+    </div>
+
+    <div class="drawer-footer">
+      Last refreshed
+      <span id="drawerRefresh">—</span>
+    </div>
+
+  </aside>
+
+</main>
 
       <button
         class="drawer-close"
@@ -1919,15 +2042,20 @@ async function setDataMode(
         ? "block"
         : "none";
 
-  document
-    .getElementById(
-      "historyBanner"
-    )
+  const historyBanner =
+  document.getElementById(
+    "historyBanner"
+  );
+
+if (historyBanner) {
+
+  historyBanner
     .classList
     .toggle(
       "visible",
       mode === "history"
     );
+}
 
   const exposureToggle =
     document.getElementById(
