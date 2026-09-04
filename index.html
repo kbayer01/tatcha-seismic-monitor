@@ -26,7 +26,14 @@
       --yellow:#ffd34e;
       --orange:#ff8d37;
       --red:#ff3b45;
-      --deep:#bd1028;
+
+      --cm:#5ba7ff;
+      --packaging:#b88cff;
+
+      --convergent:#ff6670;
+      --divergent:#f6b84a;
+      --transform:#51c7e8;
+      --other:#8f99a6;
     }
 
     * {
@@ -58,7 +65,7 @@
       height:100%;
 
       display:grid;
-      grid-template-columns:340px minmax(0,1fr);
+      grid-template-columns:350px minmax(0,1fr);
     }
 
     #sidebar {
@@ -115,34 +122,31 @@
       letter-spacing:-.02em;
     }
 
-    .live-pill {
-      padding:5px 8px;
-
-      border:1px solid rgba(68,209,122,.35);
-      border-radius:999px;
-
-      background:rgba(68,209,122,.08);
-      color:#80efa7;
-
-      font-size:10px;
-      font-weight:600;
-
-      letter-spacing:.08em;
-    }
-
+    .live-pill,
     .history-pill {
       padding:5px 8px;
 
-      border:1px solid rgba(255,141,55,.4);
       border-radius:999px;
-
-      background:rgba(255,141,55,.08);
-      color:#ffad68;
 
       font-size:10px;
       font-weight:600;
 
       letter-spacing:.08em;
+      white-space:nowrap;
+    }
+
+    .live-pill {
+      border:1px solid rgba(68,209,122,.35);
+
+      background:rgba(68,209,122,.08);
+      color:#80efa7;
+    }
+
+    .history-pill {
+      border:1px solid rgba(255,141,55,.4);
+
+      background:rgba(255,141,55,.08);
+      color:#ffad68;
     }
 
     .subtitle {
@@ -206,6 +210,7 @@
 
     button.active {
       border-color:var(--cream);
+
       background:var(--cream);
       color:#111;
     }
@@ -290,41 +295,59 @@
       line-height:1.45;
     }
 
+    .layer-list {
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+
+      width:100%;
+
+      gap:2px;
+    }
+
     .key-row {
-  display:flex;
-  align-items:center;
+      display:flex;
+      flex-direction:row;
+      align-items:center;
 
-  gap:9px;
+      width:100%;
 
-  width:100%;
+      gap:9px;
+      margin:7px 0;
 
-  margin:8px 0;
+      color:#a9b0b9;
 
-  color:#a9b0b9;
+      font-size:11px;
+      line-height:1.3;
 
-  font-size:11px;
-}
-.layer-list {
-  display:flex;
-  flex-direction:column;
-  align-items:stretch;
-  width:100%;
-  gap:2px;
-}
+      flex-wrap:nowrap;
+    }
 
-.layer-list .key-row {
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  width:100%;
-  margin:7px 0;
-  flex-wrap:nowrap;
-}
     .key {
       width:9px;
       height:9px;
 
+      flex:0 0 9px;
+
       border-radius:50%;
+    }
+
+    .line-key {
+      width:18px;
+      height:3px;
+
+      flex:0 0 18px;
+
+      border-radius:999px;
+    }
+
+    .small-note {
+      margin-top:9px;
+
+      color:#717b87;
+
+      font-size:9px;
+      line-height:1.5;
     }
 
     .site {
@@ -361,9 +384,19 @@
       font-size:10px;
     }
 
+    .site-total {
+      margin-left:auto;
+
+      color:#d2d7dd;
+
+      font-size:9px;
+    }
+
     .dot {
       width:8px;
       height:8px;
+
+      flex:0 0 8px;
 
       border-radius:50%;
     }
@@ -398,7 +431,7 @@
       z-index:100;
 
       top:50%;
-      left:calc(50% + 170px);
+      left:calc(50% + 175px);
 
       width:380px;
 
@@ -458,7 +491,7 @@
       top:18px;
       right:18px;
 
-      width:360px;
+      width:385px;
       max-width:calc(100% - 36px);
       max-height:calc(100% - 36px);
 
@@ -528,16 +561,26 @@
     }
 
     .facility-drawer h2 {
-      margin:7px 35px 20px 0;
+      margin:7px 35px 6px 0;
 
       font-size:20px;
       line-height:1.25;
+    }
+
+    .drawer-category {
+      margin-bottom:18px;
+
+      color:#89929d;
+
+      font-size:10px;
     }
 
     .drawer-risk-row {
       display:flex;
       justify-content:space-between;
       align-items:center;
+
+      gap:15px;
 
       color:#9ea6af;
 
@@ -567,9 +610,43 @@
       margin-bottom:9px;
     }
 
+    .score-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+
+      gap:8px;
+
+      margin:10px 0 4px;
+    }
+
+    .score-card {
+      padding:10px;
+
+      border:1px solid #2d333c;
+      border-radius:9px;
+
+      background:#13171c;
+    }
+
+    .score-card-value {
+      font-size:18px;
+      font-weight:650;
+    }
+
+    .score-card-label {
+      margin-top:3px;
+
+      color:#7f8994;
+
+      font-size:8px;
+      line-height:1.3;
+
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
     .drawer-stat {
       display:flex;
-
       justify-content:space-between;
       align-items:flex-start;
 
@@ -600,6 +677,21 @@
 
       font-size:10px;
       line-height:1.55;
+    }
+
+    .drawer-method {
+      margin-top:12px;
+      padding:9px 10px;
+
+      border:1px solid #293039;
+      border-radius:8px;
+
+      background:#11151a;
+
+      color:#77818c;
+
+      font-size:9px;
+      line-height:1.5;
     }
 
     .drawer-footer {
@@ -638,7 +730,7 @@
       border:1px solid rgba(255,255,255,.13);
       border-radius:999px;
 
-      background:rgba(13,16,20,.9);
+      background:rgba(13,16,20,.92);
 
       color:#c9cfd6;
 
@@ -680,7 +772,7 @@
 
       #app {
         grid-template-columns:1fr;
-        grid-template-rows:310px minmax(0,1fr);
+        grid-template-rows:320px minmax(0,1fr);
       }
 
       #sidebar {
@@ -698,7 +790,7 @@
         bottom:18px;
 
         width:calc(100% - 36px);
-        max-height:55vh;
+        max-height:60vh;
       }
     }
   </style>
@@ -727,6 +819,7 @@
 
 </div>
 
+
 <div id="app">
 
   <aside id="sidebar">
@@ -745,9 +838,10 @@
     </div>
 
     <div class="subtitle">
-      Tatcha Manufacturing Network<br>
+      Tatcha Supply Network<br>
       Live + historical seismic activity
     </div>
+
 
     <div class="metric-grid">
 
@@ -783,6 +877,7 @@
 
     </div>
 
+
     <div class="section">
 
       <div class="label">
@@ -808,6 +903,7 @@
 
       </div>
 
+
       <div
         id="historyControls"
         class="history-controls"
@@ -824,8 +920,9 @@
         </select>
 
         <div class="history-description">
-          Explore magnitude 6.0+ earthquakes
-          from 2010 onward.
+          Explore USGS magnitude 6.0+
+          earthquakes by rolling period
+          or individual year.
         </div>
 
         <div
@@ -838,6 +935,7 @@
       </div>
 
     </div>
+
 
     <div class="section">
 
@@ -865,6 +963,7 @@
       </div>
 
     </div>
+
 
     <div
       class="section"
@@ -903,6 +1002,7 @@
 
     </div>
 
+
     <div
       class="section"
       id="magnitudeSection"
@@ -939,102 +1039,175 @@
       </div>
 
     </div>
-<div class="section">
-
-  <div class="label">
-    Layers
-  </div>
-
-  <div class="layer-list">
-
-    <label class="key-row">
-
-      <input
-        type="checkbox"
-        checked
-        onchange="toggleLayer('heat',this.checked)"
-      >
-
-      Seismic heat field
-
-    </label>
 
 
-    <label class="key-row">
-
-      <input
-        type="checkbox"
-        checked
-        onchange="toggleLayer('quakes',this.checked)"
-      >
-
-      Earthquake events
-
-    </label>
-
-
-    <label class="key-row">
-
-      <input
-        type="checkbox"
-        checked
-        onchange="toggleLayer('cms',this.checked)"
-      >
-
-      <span
-        class="key"
-        style="
-          background:#f8f3eb;
-          border:2px solid #5ba7ff;
-        "
-      ></span>
-
-      Contract Manufacturers
-
-    </label>
-
-
-    <label class="key-row">
-
-      <input
-        type="checkbox"
-        checked
-        onchange="toggleLayer('packaging',this.checked)"
-      >
-
-      <span
-        class="key"
-        style="
-          background:#b88cff;
-        "
-      ></span>
-
-      Primary Packaging
-
-    </label>
-
-
-    <label class="key-row">
-
-      <input
-        id="exposureToggle"
-        type="checkbox"
-        checked
-        onchange="toggleLayer('exposure',this.checked)"
-      >
-
-      Current site exposure halos
-
-    </label>
-
-  </div>
-
-</div>
-   
     <div class="section">
 
       <div class="label">
-        Current Site Exposure
+        Layers
+      </div>
+
+      <div class="layer-list">
+
+        <label class="key-row">
+
+          <input
+            type="checkbox"
+            checked
+            onchange="toggleLayer('heat',this.checked)"
+          >
+
+          Seismic heat field
+
+        </label>
+
+
+        <label class="key-row">
+
+          <input
+            type="checkbox"
+            checked
+            onchange="toggleLayer('quakes',this.checked)"
+          >
+
+          Earthquake events
+
+        </label>
+
+
+        <label class="key-row">
+
+          <input
+            type="checkbox"
+            checked
+            onchange="toggleLayer('boundaries',this.checked)"
+          >
+
+          <span
+            class="line-key"
+            style="background:#ff6670"
+          ></span>
+
+          Tectonic boundaries
+
+        </label>
+
+
+        <label class="key-row">
+
+          <input
+            type="checkbox"
+            checked
+            onchange="toggleLayer('cms',this.checked)"
+          >
+
+          <span
+            class="key"
+            style="
+              background:#f8f3eb;
+              border:2px solid #5ba7ff;
+            "
+          ></span>
+
+          Contract Manufacturers
+
+        </label>
+
+
+        <label class="key-row">
+
+          <input
+            type="checkbox"
+            checked
+            onchange="toggleLayer('packaging',this.checked)"
+          >
+
+          <span
+            class="key"
+            style="background:#b88cff"
+          ></span>
+
+          Primary Packaging
+
+        </label>
+
+
+        <label class="key-row">
+
+          <input
+            id="exposureToggle"
+            type="checkbox"
+            checked
+            onchange="toggleLayer('exposure',this.checked)"
+          >
+
+          Current site exposure halos
+
+        </label>
+
+
+        <label class="key-row">
+
+          <input
+            id="totalExposureToggle"
+            type="checkbox"
+            onchange="toggleLayer('totalExposure',this.checked)"
+          >
+
+          Total exposure halos
+
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <div class="section">
+
+      <div class="label">
+        Tectonic Boundary Types
+      </div>
+
+      <div class="key-row">
+        <span
+          class="line-key"
+          style="background:#ff6670"
+        ></span>
+        Convergent
+      </div>
+
+      <div class="key-row">
+        <span
+          class="line-key"
+          style="background:#f6b84a"
+        ></span>
+        Divergent
+      </div>
+
+      <div class="key-row">
+        <span
+          class="line-key"
+          style="background:#51c7e8"
+        ></span>
+        Transform
+      </div>
+
+      <div class="key-row">
+        <span
+          class="line-key"
+          style="background:#8f99a6"
+        ></span>
+        Other
+      </div>
+
+    </div>
+
+
+    <div class="section">
+
+      <div class="label">
+        Exposure Index
       </div>
 
       <div class="key-row">
@@ -1069,7 +1242,14 @@
         Very high
       </div>
 
+      <div class="small-note">
+        Total Exposure combines 60% current seismic activity
+        and 40% historical M6+ activity over the past 15 years.
+        It is an exposure index, not an earthquake prediction.
+      </div>
+
     </div>
+
 
     <div class="section">
 
@@ -1082,6 +1262,7 @@
       </div>
 
     </div>
+
 
     <div class="section">
 
@@ -1099,6 +1280,7 @@
 
     </div>
 
+
     <div
       class="timestamp"
       id="updated"
@@ -1113,6 +1295,7 @@
 
     <div id="map"></div>
 
+
     <div
       id="loadingOverlay"
       class="loading-overlay"
@@ -1120,12 +1303,14 @@
       Loading earthquake catalog…
     </div>
 
+
     <div
       id="historyBanner"
       class="history-banner"
     >
       Historical mode
     </div>
+
 
     <aside
       id="facilityDrawer"
@@ -1139,13 +1324,26 @@
         ×
       </button>
 
-      <div class="drawer-eyebrow">
-        MANUFACTURING LOCATION
+
+      <div
+        id="drawerEyebrow"
+        class="drawer-eyebrow"
+      >
+        SUPPLY LOCATION
       </div>
+
 
       <h2 id="drawerSiteName">
         Facility
       </h2>
+
+
+      <div
+        id="drawerCategory"
+        class="drawer-category"
+      >
+      </div>
+
 
       <div class="drawer-risk-row">
 
@@ -1162,11 +1360,87 @@
 
       </div>
 
+
       <div class="drawer-divider"></div>
+
+
+      <div class="drawer-section-title">
+        SEISMIC EXPOSURE PROFILE
+      </div>
+
+
+      <div class="score-grid">
+
+        <div class="score-card">
+
+          <div
+            id="drawerCurrentScore"
+            class="score-card-value"
+          >
+            —
+          </div>
+
+          <div class="score-card-label">
+            Current
+          </div>
+
+        </div>
+
+
+        <div class="score-card">
+
+          <div
+            id="drawerHistoricalScore"
+            class="score-card-value"
+          >
+            —
+          </div>
+
+          <div class="score-card-label">
+            Historical
+          </div>
+
+        </div>
+
+
+        <div class="score-card">
+
+          <div
+            id="drawerTotalScore"
+            class="score-card-value"
+          >
+            —
+          </div>
+
+          <div class="score-card-label">
+            Total
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="drawer-stat">
+
+        <span>
+          Total exposure level
+        </span>
+
+        <strong id="drawerTotalLevel">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="drawer-divider"></div>
+
 
       <div class="drawer-section-title">
         CURRENT SEISMIC ACTIVITY
       </div>
+
 
       <div class="drawer-stat featured">
 
@@ -1180,61 +1454,149 @@
 
       </div>
 
-      <div class="drawer-stat">
-        <span>Distance</span>
-        <strong id="drawerDistance">—</strong>
-      </div>
 
       <div class="drawer-stat">
-        <span>Depth</span>
-        <strong id="drawerDepth">—</strong>
+
+        <span>
+          Distance
+        </span>
+
+        <strong id="drawerDistance">
+          —
+        </strong>
+
       </div>
 
-      <div class="drawer-stat">
-        <span>M4+ events / 7 days</span>
-        <strong id="drawerM4Seven">—</strong>
-      </div>
 
       <div class="drawer-stat">
-        <span>M5+ events / 30 days</span>
-        <strong id="drawerM5Thirty">—</strong>
+
+        <span>
+          Depth
+        </span>
+
+        <strong id="drawerDepth">
+          —
+        </strong>
+
       </div>
+
+
+      <div class="drawer-stat">
+
+        <span>
+          M4+ events / 7 days
+        </span>
+
+        <strong id="drawerM4Seven">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="drawer-stat">
+
+        <span>
+          M5+ events / 30 days
+        </span>
+
+        <strong id="drawerM5Thirty">
+          —
+        </strong>
+
+      </div>
+
 
       <div class="drawer-divider"></div>
+
 
       <div class="drawer-section-title">
-        ACTIVITY VS BASELINE
+        15-YEAR HISTORICAL CONTEXT
       </div>
 
-      <div class="drawer-stat">
-        <span>Current activity</span>
-        <strong id="drawerActivity">—</strong>
-      </div>
 
       <div class="drawer-stat">
-        <span>Historical weekly average</span>
-        <strong id="drawerBaseline">Select facility</strong>
+
+        <span>
+          M6+ within 250 km
+        </span>
+
+        <strong id="drawerHistoricalCount">
+          —
+        </strong>
+
       </div>
 
+
       <div class="drawer-stat">
-        <span>Current vs baseline</span>
-        <strong id="drawerVsBaseline">—</strong>
+
+        <span>
+          M6+ within 500 km
+        </span>
+
+        <strong id="drawerHistorical500">
+          —
+        </strong>
+
       </div>
+
+
+      <div class="drawer-stat">
+
+        <span>
+          Largest historical event
+        </span>
+
+        <strong id="drawerHistoricalLargest">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="drawer-stat">
+
+        <span>
+          Nearest historical M6+
+        </span>
+
+        <strong id="drawerHistoricalNearest">
+          —
+        </strong>
+
+      </div>
+
 
       <div class="drawer-divider"></div>
+
 
       <div
         id="drawerEventLocation"
         class="drawer-location"
-      ></div>
+      >
+      </div>
+
+
+      <div class="drawer-method">
+        Total Exposure = 60% Current Exposure +
+        40% Historical Exposure. Historical Exposure uses
+        USGS M6.0+ events from the rolling prior 15 years,
+        weighted by magnitude and proximity. This index is
+        intended for comparative exposure context and is not
+        a seismic forecast or probability estimate.
+      </div>
+
 
       <div class="drawer-source">
-        Source: USGS
+        Sources: USGS seismic catalog + tectonic boundaries
       </div>
+
 
       <div class="drawer-footer">
         Last refreshed
-        <span id="drawerRefresh">—</span>
+        <span id="drawerRefresh">
+          —
+        </span>
       </div>
 
     </aside>
@@ -1267,6 +1629,19 @@ const USGS_HISTORY_API =
   "https://earthquake.usgs.gov/" +
   "fdsnws/event/1/query";
 
+const TECTONIC_BOUNDARY_FEED =
+  "https://earthquake.usgs.gov/" +
+  "arcgis/rest/services/eq/" +
+  "map_plateboundaries/MapServer/1/query" +
+  "?where=1%3D1" +
+  "&outFields=NAME%2CLABEL" +
+  "&returnGeometry=true" +
+  "&outSR=4326" +
+  "&f=geojson";
+
+const DAY_MS =
+  24 * 60 * 60 * 1000;
+
 const colors = {
 
   low:[68,209,122],
@@ -1296,6 +1671,13 @@ let liveEarthquakeData = [];
 
 let displayedEarthquakeData = [];
 
+let historicalExposureData = [];
+
+let tectonicBoundaryData = {
+  type:"FeatureCollection",
+  features:[]
+};
+
 let facilities = [];
 
 let dataMode = "live";
@@ -1306,7 +1688,7 @@ let minMagnitude = 2.5;
 
 let selectedFacility = null;
 
-let historicalBaselineCache = {};
+let historyRequestToken = 0;
 
 let layerState = {
 
@@ -1314,17 +1696,21 @@ let layerState = {
 
   quakes:true,
 
+  boundaries:true,
+
   cms:true,
 
   packaging:true,
 
-  exposure:true
+  exposure:true,
+
+  totalExposure:false
 
 };
 
 
 /* =====================================================
-   API KEY
+   GOOGLE MAPS API KEY
 ===================================================== */
 
 function saveApiKey() {
@@ -1356,10 +1742,21 @@ function saveApiKey() {
 
 function loadGoogleMaps(key) {
 
+  if (
+    document.getElementById(
+      "googleMapsScript"
+    )
+  ) {
+    return;
+  }
+
   const script =
     document.createElement(
       "script"
     );
+
+  script.id =
+    "googleMapsScript";
 
   script.src =
     "https://maps.googleapis.com/" +
@@ -1372,6 +1769,18 @@ function loadGoogleMaps(key) {
   script.async = true;
 
   script.defer = true;
+
+  script.onerror =
+    () => {
+
+      document
+        .getElementById(
+          "apiPanel"
+        )
+        .style
+        .display =
+          "block";
+    };
 
   document.head.appendChild(
     script
@@ -1477,12 +1886,14 @@ async function initMap() {
       }
     );
 
+
   overlay =
     new deck.GoogleMapsOverlay({
       layers:[]
     });
 
   overlay.setMap(map);
+
 
   pulseOverlay =
     new deck.GoogleMapsOverlay({
@@ -1491,21 +1902,36 @@ async function initMap() {
 
   pulseOverlay.setMap(map);
 
+
   populateHistoryYears();
 
   document
-    .getElementById("historyYear")
+    .getElementById(
+      "historyYear"
+    )
     .addEventListener(
       "change",
       loadHistoricalYear
     );
 
+
   await Promise.all([
+
     loadLiveEarthquakes(),
-    loadMyMap()
+
+    loadMyMap(),
+
+    loadTectonicBoundaries(),
+
+    loadHistoricalExposureCatalog()
+
   ]);
 
+
+  render();
+
   startPulseAnimation();
+
 
   setInterval(
     loadLiveEarthquakes,
@@ -1546,6 +1972,7 @@ async function loadLiveEarthquakes() {
         normalizeUSGSFeature
       );
 
+
     if (
       dataMode === "live"
     ) {
@@ -1553,12 +1980,14 @@ async function loadLiveEarthquakes() {
       displayedEarthquakeData =
         [...liveEarthquakeData];
 
-      render();
-
       updateTimestamp(
         "Live feed updated"
       );
     }
+
+
+    render();
+
 
     if (
       selectedFacility
@@ -1572,17 +2001,227 @@ async function loadLiveEarthquakes() {
 
   } catch(error) {
 
-    document
-      .getElementById("status")
-      .textContent =
-        "USGS live feed error: " +
-        error.message;
+    setStatus(
+      "USGS live feed error: " +
+      error.message
+    );
   }
 }
 
 
 /* =====================================================
-   HISTORICAL YEAR SELECTOR
+   15-YEAR HISTORICAL EXPOSURE CATALOG
+===================================================== */
+
+async function loadHistoricalExposureCatalog() {
+
+  const end =
+    new Date();
+
+  const start =
+    new Date(end);
+
+  start.setFullYear(
+    end.getFullYear() -
+    15
+  );
+
+
+  const params =
+    new URLSearchParams({
+
+      format:"geojson",
+
+      starttime:
+        start.toISOString(),
+
+      endtime:
+        end.toISOString(),
+
+      minmagnitude:"6.0",
+
+      orderby:"time",
+
+      limit:"20000"
+
+    });
+
+
+  try {
+
+    const response =
+      await fetch(
+        USGS_HISTORY_API +
+        "?" +
+        params.toString(),
+        {
+          cache:"no-store"
+        }
+      );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "USGS historical catalog returned " +
+        response.status
+      );
+    }
+
+
+    const json =
+      await response.json();
+
+
+    historicalExposureData =
+      json.features
+        .map(
+          normalizeUSGSFeature
+        )
+        .filter(
+          q =>
+            q.magnitude >= 6
+        );
+
+
+    render();
+
+  } catch(error) {
+
+    console.error(error);
+
+    setStatus(
+      "15-year exposure history could not be loaded. " +
+      "Live monitoring remains available."
+    );
+  }
+}
+
+
+/* =====================================================
+   TECTONIC BOUNDARIES
+===================================================== */
+
+async function loadTectonicBoundaries() {
+
+  try {
+
+    const response =
+      await fetch(
+        TECTONIC_BOUNDARY_FEED,
+        {
+          cache:"force-cache"
+        }
+      );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "USGS tectonic boundary service returned " +
+        response.status
+      );
+    }
+
+
+    const json =
+      await response.json();
+
+
+    if (
+      json &&
+      json.type ===
+        "FeatureCollection"
+    ) {
+
+      tectonicBoundaryData =
+        json;
+    }
+
+
+    render();
+
+  } catch(error) {
+
+    console.warn(
+      "Tectonic boundary layer unavailable:",
+      error
+    );
+
+    setStatus(
+      "Tectonic boundaries could not be loaded. " +
+      "Seismic monitoring remains available."
+    );
+  }
+}
+
+
+function boundaryColor(
+  feature
+) {
+
+  const label =
+    String(
+      feature?.properties?.LABEL ||
+      ""
+    )
+      .toLowerCase();
+
+
+  if (
+    label.includes(
+      "convergent"
+    )
+  ) {
+
+    return [
+      255,
+      102,
+      112,
+      210
+    ];
+  }
+
+
+  if (
+    label.includes(
+      "divergent"
+    )
+  ) {
+
+    return [
+      246,
+      184,
+      74,
+      210
+    ];
+  }
+
+
+  if (
+    label.includes(
+      "transform"
+    )
+  ) {
+
+    return [
+      81,
+      199,
+      232,
+      210
+    ];
+  }
+
+
+  return [
+    143,
+    153,
+    166,
+    165
+  ];
+}
+
+
+/* =====================================================
+   HISTORICAL PERIOD SELECTOR
 ===================================================== */
 
 function populateHistoryYears() {
@@ -1594,24 +2233,31 @@ function populateHistoryYears() {
 
   select.innerHTML = "";
 
+
   const rangeOptions = [
+
     {
       value:"5y",
       label:"Past 5 Years"
     },
+
     {
       value:"10y",
       label:"Past 10 Years"
     },
+
     {
       value:"15y",
       label:"Past 15 Years"
     },
+
     {
       value:"all",
       label:"2010 – Present"
     }
+
   ];
+
 
   rangeOptions.forEach(
     item => {
@@ -1633,8 +2279,26 @@ function populateHistoryYears() {
     }
   );
 
+
+  const separator =
+    document.createElement(
+      "option"
+    );
+
+  separator.disabled =
+    true;
+
+  separator.textContent =
+    "──────────";
+
+  select.appendChild(
+    separator
+  );
+
+
   const currentYear =
     new Date().getFullYear();
+
 
   for (
     let year = currentYear;
@@ -1659,8 +2323,9 @@ function populateHistoryYears() {
   }
 }
 
+
 /* =====================================================
-   HISTORICAL M6+ DATA
+   HISTORICAL M6+ DISPLAY DATA
 ===================================================== */
 
 async function loadHistoricalYear() {
@@ -1671,16 +2336,18 @@ async function loadHistoricalYear() {
     return;
   }
 
+
+  const requestToken =
+    ++historyRequestToken;
+
+
   showLoading(true);
 
-  /*
-    Clear previous display dataset
-    immediately.
-  */
 
   displayedEarthquakeData = [];
 
   render();
+
 
   const selected =
     document
@@ -1689,84 +2356,98 @@ async function loadHistoricalYear() {
       )
       .value;
 
+
   const currentYear =
-    new Date().getFullYear();
+    new Date()
+      .getFullYear();
+
+
+  const now =
+    new Date();
+
 
   let startDate;
+
   let endDate;
+
   let label;
 
- const now =
-  new Date();
-
-if (
-  selected === "5y" ||
-  selected === "10y" ||
-  selected === "15y"
-) {
-
-  const years =
-    Number(
-      selected.replace(
-        "y",
-        ""
-      )
-    );
-
-  const start =
-    new Date(now);
-
-  start.setFullYear(
-    now.getFullYear() -
-    years
-  );
-
-  startDate =
-    start.toISOString();
-
-  endDate =
-    now.toISOString();
-
-  label =
-    `Past ${years} Years`;
-
-} else if (
-  selected === "all"
-) {
-
-  startDate =
-    "2010-01-01T00:00:00Z";
-
-  endDate =
-    now.toISOString();
-
-  label =
-    "2010 – Present";
-
-} else {
-
-  const year =
-    Number(selected);
-
-  startDate =
-    `${year}-01-01T00:00:00Z`;
 
   if (
-    year === currentYear
+    selected === "5y" ||
+    selected === "10y" ||
+    selected === "15y"
   ) {
+
+    const years =
+      Number(
+        selected.replace(
+          "y",
+          ""
+        )
+      );
+
+
+    const start =
+      new Date(now);
+
+
+    start.setFullYear(
+      now.getFullYear() -
+      years
+    );
+
+
+    startDate =
+      start.toISOString();
 
     endDate =
       now.toISOString();
 
-  } else {
+    label =
+      `Past ${years} Years`;
+
+  } else if (
+    selected === "all"
+  ) {
+
+    startDate =
+      "2010-01-01T00:00:00Z";
 
     endDate =
-      `${year}-12-31T23:59:59Z`;
+      now.toISOString();
+
+    label =
+      "2010 – Present";
+
+  } else {
+
+    const year =
+      Number(selected);
+
+
+    startDate =
+      `${year}-01-01T00:00:00Z`;
+
+
+    if (
+      year === currentYear
+    ) {
+
+      endDate =
+        now.toISOString();
+
+    } else {
+
+      endDate =
+        `${year}-12-31T23:59:59Z`;
+    }
+
+
+    label =
+      String(year);
   }
 
-  label =
-    String(year);
-}
 
   const params =
     new URLSearchParams({
@@ -1785,25 +2466,19 @@ if (
 
     });
 
-  const url =
-    USGS_HISTORY_API +
-    "?" +
-    params.toString();
-
-  console.log(
-    "Historical USGS request:",
-    url
-  );
 
   try {
 
     const response =
       await fetch(
-        url,
+        USGS_HISTORY_API +
+        "?" +
+        params.toString(),
         {
           cache:"no-store"
         }
       );
+
 
     if (!response.ok) {
 
@@ -1813,8 +2488,23 @@ if (
       );
     }
 
+
     const json =
       await response.json();
+
+
+    /*
+      Ignore an older request if
+      the user changed periods quickly.
+    */
+
+    if (
+      requestToken !==
+      historyRequestToken
+    ) {
+      return;
+    }
+
 
     displayedEarthquakeData =
       json.features
@@ -1823,8 +2513,9 @@ if (
         )
         .filter(
           q =>
-            q.magnitude >= 6.0
+            q.magnitude >= 6
         );
+
 
     document
       .getElementById(
@@ -1835,11 +2526,12 @@ if (
         `${displayedEarthquakeData.length.toLocaleString()} ` +
         `earthquakes M6.0+`;
 
+
     const historyBanner =
-      document
-        .getElementById(
-          "historyBanner"
-        );
+      document.getElementById(
+        "historyBanner"
+      );
+
 
     if (
       historyBanner
@@ -1849,37 +2541,48 @@ if (
         `Historical M6+ • ${label}`;
     }
 
+
     updateTimestamp(
       "Historical catalog: " +
       label
     );
 
+
     render();
 
   } catch(error) {
 
-    document
-      .getElementById(
-        "status"
-      )
-      .textContent =
+    if (
+      requestToken ===
+      historyRequestToken
+    ) {
+
+      setStatus(
         "Historical catalog error: " +
-        error.message;
+        error.message
+      );
 
-    document
-      .getElementById(
-        "historyLoadedLabel"
-      )
-      .textContent =
-        "Historical load failed.";
 
-    console.error(
-      error
-    );
+      document
+        .getElementById(
+          "historyLoadedLabel"
+        )
+        .textContent =
+          "Historical load failed.";
+    }
+
+
+    console.error(error);
 
   } finally {
 
-    showLoading(false);
+    if (
+      requestToken ===
+      historyRequestToken
+    ) {
+
+      showLoading(false);
+    }
   }
 }
 
@@ -1897,19 +2600,26 @@ function normalizeUSGSFeature(
       ?.coordinates ||
     [0,0,0];
 
+
   return {
 
     id:
       feature.id,
 
     longitude:
-      coordinates[0],
+      Number(
+        coordinates[0]
+      ),
 
     latitude:
-      coordinates[1],
+      Number(
+        coordinates[1]
+      ),
 
     depth:
-      coordinates[2] || 0,
+      Number(
+        coordinates[2] || 0
+      ),
 
     magnitude:
       Number(
@@ -1923,12 +2633,16 @@ function normalizeUSGSFeature(
       "Unknown location",
 
     time:
-      feature.properties
-        ?.time,
+      Number(
+        feature.properties
+          ?.time || 0
+      ),
 
     updated:
-      feature.properties
-        ?.updated,
+      Number(
+        feature.properties
+          ?.updated || 0
+      ),
 
     url:
       feature.properties
@@ -1954,7 +2668,9 @@ async function setDataMode(
   mode
 ) {
 
-  dataMode = mode;
+  dataMode =
+    mode;
+
 
   document
     .getElementById(
@@ -1966,6 +2682,7 @@ async function setDataMode(
       mode === "live"
     );
 
+
   document
     .getElementById(
       "historyModeBtn"
@@ -1975,6 +2692,7 @@ async function setDataMode(
       "active",
       mode === "history"
     );
+
 
   document
     .getElementById(
@@ -1986,6 +2704,7 @@ async function setDataMode(
       mode === "history"
     );
 
+
   document
     .getElementById(
       "liveTimeSection"
@@ -1995,6 +2714,7 @@ async function setDataMode(
       mode === "live"
         ? "block"
         : "none";
+
 
   document
     .getElementById(
@@ -2006,10 +2726,12 @@ async function setDataMode(
         ? "block"
         : "none";
 
+
   const historyBanner =
     document.getElementById(
       "historyBanner"
     );
+
 
   if (
     historyBanner
@@ -2023,49 +2745,12 @@ async function setDataMode(
       );
   }
 
+
   const exposureToggle =
     document.getElementById(
       "exposureToggle"
     );
 
-  const pill =
-    document
-      .getElementById(
-        "modePill"
-      );
-
-  if (
-    mode === "live"
-  ) {
-
-    pill.className =
-      "live-pill";
-
-    pill.textContent =
-      "● LIVE";
-
-    displayedEarthquakeData =
-      [...liveEarthquakeData];
-
-    exposureToggle.disabled =
-      false;
-
-    exposureToggle.checked =
-      layerState.exposure;
-
-    updateTimestamp(
-      "Live feed"
-    );
-
-    render();
-
-  } else {
-
-  pill.className =
-    "history-pill";
-
-  pill.textContent =
-    "● HISTORY";
 
   exposureToggle.disabled =
     false;
@@ -2073,19 +2758,70 @@ async function setDataMode(
   exposureToggle.checked =
     layerState.exposure;
 
-  closeFacilityDrawer(
-    false
-  );
 
-  await loadHistoricalYear();
+  const pill =
+    document.getElementById(
+      "modePill"
+    );
+
+
+  if (
+    mode === "live"
+  ) {
+
+    /*
+      Invalidate any history request
+      still in flight.
+    */
+
+    historyRequestToken++;
+
+
+    pill.className =
+      "live-pill";
+
+    pill.textContent =
+      "● LIVE";
+
+
+    displayedEarthquakeData =
+      [...liveEarthquakeData];
+
+
+    updateTimestamp(
+      "Live feed"
+    );
+
+
+    render();
+
+  } else {
+
+    pill.className =
+      "history-pill";
+
+    pill.textContent =
+      "● HISTORY";
+
+
+    await loadHistoricalYear();
+  }
+
+
+  if (
+    selectedFacility
+  ) {
+
+    openFacilityDrawer(
+      selectedFacility,
+      false
+    );
+  }
 }
-
-}
-
 
 
 /* =====================================================
-   MY MAP / FACILITIES
+   MY MAP / SUPPLIERS
 ===================================================== */
 
 async function loadMyMap() {
@@ -2100,6 +2836,7 @@ async function loadMyMap() {
         }
       );
 
+
     if (!response.ok) {
 
       throw new Error(
@@ -2108,51 +2845,72 @@ async function loadMyMap() {
       );
     }
 
+
     const text =
       await response.text();
+
 
     facilities =
       parseKMLPoints(
         text
       );
 
+
     if (
       !facilities.length
     ) {
 
       throw new Error(
-        "No Point placemarks found."
+        "No CM or Primary Packaging point placemarks found."
       );
     }
 
-    document
-      .getElementById(
-        "status"
-      )
-      .textContent =
-        facilities.length +
-        " manufacturing locations loaded.";
+
+    const cmCount =
+      facilities.filter(
+        site =>
+          site.category ===
+          "cm"
+      ).length;
+
+
+    const packagingCount =
+      facilities.filter(
+        site =>
+          site.category ===
+          "primary-packaging"
+      ).length;
+
+
+    setStatus(
+      `${cmCount} CMs and ` +
+      `${packagingCount} Primary Packaging ` +
+      `locations loaded.`
+    );
 
   } catch(error) {
 
-    document
-      .getElementById(
-        "status"
-      )
-      .textContent =
-        "Automatic My Maps import was blocked. " +
-        "Use the KML/KMZ upload above.";
-
-    console.warn(
-      error
+    setStatus(
+      "Automatic My Maps import was blocked. " +
+      "Use the KML/KMZ upload below."
     );
+
+
+    console.warn(error);
   }
+
 
   render();
 }
 
 
-function parseKMLPoints(text) {
+/* =====================================================
+   KML PARSER
+===================================================== */
+
+function parseKMLPoints(
+  text
+) {
 
   const xml =
     new DOMParser()
@@ -2161,15 +2919,9 @@ function parseKMLPoints(text) {
         "text/xml"
       );
 
+
   const sites = [];
 
-  /*
-    My Maps exports each layer
-    as a KML Folder.
-
-    We inspect each folder and
-    classify its point placemarks.
-  */
 
   const folders =
     [
@@ -2178,20 +2930,16 @@ function parseKMLPoints(text) {
       )
     ];
 
+
   folders.forEach(
     (
       folder,
       folderIndex
     ) => {
 
-      /*
-        Get the folder's own name,
-        not the name of one of its
-        child placemarks.
-      */
-
       let folderName =
         "";
+
 
       for (
         const child of
@@ -2211,6 +2959,7 @@ function parseKMLPoints(text) {
         }
       }
 
+
       const normalizedFolder =
         folderName
           .toLowerCase()
@@ -2218,9 +2967,9 @@ function parseKMLPoints(text) {
 
 
       /*
-        Explicitly discard the
-        OLD My Maps earthquake
-        layer.
+        Explicitly remove the old
+        manually-entered earthquake
+        layer from My Maps.
       */
 
       if (
@@ -2236,10 +2985,6 @@ function parseKMLPoints(text) {
       let category =
         null;
 
-
-      /*
-        Contract Manufacturers
-      */
 
       if (
         normalizedFolder ===
@@ -2259,10 +3004,6 @@ function parseKMLPoints(text) {
       }
 
 
-      /*
-        Primary Packaging
-      */
-
       if (
         normalizedFolder.includes(
           "primary packaging"
@@ -2273,11 +3014,6 @@ function parseKMLPoints(text) {
           "primary-packaging";
       }
 
-
-      /*
-        Ignore any other My Maps
-        layers for now.
-      */
 
       if (
         !category
@@ -2352,15 +3088,11 @@ function parseKMLPoints(text) {
 
 
           const longitude =
-            Number(
-              parts[0]
-            );
+            Number(parts[0]);
 
 
           const latitude =
-            Number(
-              parts[1]
-            );
+            Number(parts[1]);
 
 
           if (
@@ -2436,6 +3168,7 @@ function parseKMLPoints(text) {
   return sites;
 }
 
+
 /* =====================================================
    LOCAL KML / KMZ UPLOAD
 ===================================================== */
@@ -2448,73 +3181,102 @@ async function loadLocalMap(
     event.target
       .files[0];
 
+
   if (!file) {
     return;
   }
 
+
   let kmlText;
 
-  if (
-    file.name
-      .toLowerCase()
-      .endsWith(".kmz")
-  ) {
 
-    const zip =
-      await JSZip
-        .loadAsync(
-          await file.arrayBuffer()
-        );
-
-    const kmlFile =
-      Object.values(
-        zip.files
-      )
-      .find(
-        item =>
-          item.name
-            .toLowerCase()
-            .endsWith(".kml")
-      );
+  try {
 
     if (
-      !kmlFile
+      file.name
+        .toLowerCase()
+        .endsWith(".kmz")
     ) {
 
-      alert(
-        "No KML file found inside the KMZ."
-      );
+      const zip =
+        await JSZip
+          .loadAsync(
+            await file.arrayBuffer()
+          );
 
-      return;
+
+      const kmlFile =
+        Object.values(
+          zip.files
+        )
+          .find(
+            item =>
+              item.name
+                .toLowerCase()
+                .endsWith(".kml")
+          );
+
+
+      if (
+        !kmlFile
+      ) {
+
+        throw new Error(
+          "No KML file found inside the KMZ."
+        );
+      }
+
+
+      kmlText =
+        await kmlFile.async(
+          "string"
+        );
+
+    } else {
+
+      kmlText =
+        await file.text();
     }
 
-    kmlText =
-      await kmlFile.async(
-        "string"
+
+    facilities =
+      parseKMLPoints(
+        kmlText
       );
 
-  } else {
 
-    kmlText =
-      await file.text();
-  }
+    const cmCount =
+      facilities.filter(
+        site =>
+          site.category ===
+          "cm"
+      ).length;
 
-  facilities =
-    parseKMLPoints(
-      kmlText
+
+    const packagingCount =
+      facilities.filter(
+        site =>
+          site.category ===
+          "primary-packaging"
+      ).length;
+
+
+    setStatus(
+      `${cmCount} CMs and ` +
+      `${packagingCount} Primary Packaging ` +
+      `locations loaded from ${file.name}.`
     );
 
-  document
-    .getElementById(
-      "status"
-    )
-    .textContent =
-      facilities.length +
-      " manufacturing locations loaded from " +
-      file.name +
-      ".";
 
-  render();
+    render();
+
+  } catch(error) {
+
+    setStatus(
+      "KML/KMZ import error: " +
+      error.message
+    );
+  }
 }
 
 
@@ -2527,7 +3289,9 @@ function distanceKm(
   b
 ) {
 
-  const R = 6371;
+  const R =
+    6371;
+
 
   const dLat =
     (
@@ -2537,6 +3301,7 @@ function distanceKm(
     Math.PI /
     180;
 
+
   const dLon =
     (
       b.longitude -
@@ -2545,69 +3310,90 @@ function distanceKm(
     Math.PI /
     180;
 
+
   const lat1 =
     a.latitude *
     Math.PI /
     180;
+
 
   const lat2 =
     b.latitude *
     Math.PI /
     180;
 
-  const h =
-    Math.sin(dLat/2) ** 2 +
 
-    Math.cos(lat1) *
-    Math.cos(lat2) *
-    Math.sin(dLon/2) ** 2;
+  const h =
+    Math.sin(
+      dLat / 2
+    ) ** 2
+    +
+    Math.cos(lat1)
+    *
+    Math.cos(lat2)
+    *
+    Math.sin(
+      dLon / 2
+    ) ** 2;
+
 
   return R *
     2 *
     Math.atan2(
       Math.sqrt(h),
-      Math.sqrt(1-h)
+      Math.sqrt(1 - h)
     );
 }
 
 
 /* =====================================================
-   CURRENT LIVE EXPOSURE
+   EXPOSURE SCORING
 ===================================================== */
 
-function liveVisibleQuakes() {
+/*
+  CURRENT EXPOSURE POLICY
 
-  const cutoff =
-    Date.now() -
-    days *
-    24 *
-    60 *
-    60 *
-    1000;
+  Uses a fixed operational window:
+  - last 7 days
+  - M2.5+
+  - events within 500 km
 
-  return liveEarthquakeData
-    .filter(
-      q =>
-        q.magnitude >=
-          minMagnitude
-        &&
-        q.time >= cutoff
-    );
-}
+  This intentionally does NOT use
+  the visible map filter, so changing
+  the display controls does not change
+  the supplier's exposure index.
+*/
 
-
-function exposureScore(
+function currentExposureRaw(
   site
 ) {
 
   const now =
     Date.now();
 
-  let score = 0;
 
-  let nearest = null;
+  const cutoff =
+    now -
+    7 * DAY_MS;
 
-  liveVisibleQuakes()
+
+  let raw =
+    0;
+
+
+  let nearest =
+    null;
+
+
+  liveEarthquakeData
+
+    .filter(
+      q =>
+        q.time >= cutoff
+        &&
+        q.magnitude >= 2.5
+    )
+
     .forEach(
       q => {
 
@@ -2617,11 +3403,14 @@ function exposureScore(
             q
           );
 
+
         if (
           km > 500
         ) {
+
           return;
         }
+
 
         const ageHours =
           Math.max(
@@ -2633,6 +3422,7 @@ function exposureScore(
             3600000
           );
 
+
         const magnitudeFactor =
           Math.pow(
             10,
@@ -2643,11 +3433,13 @@ function exposureScore(
             )
           );
 
+
         const recencyFactor =
           Math.exp(
             -ageHours /
             72
           );
+
 
         const distanceFactor =
           Math.exp(
@@ -2655,10 +3447,12 @@ function exposureScore(
             120
           );
 
-        score +=
+
+        raw +=
           magnitudeFactor *
           recencyFactor *
           distanceFactor;
+
 
         if (
           !nearest ||
@@ -2674,19 +3468,252 @@ function exposureScore(
       }
     );
 
+
   return {
-    score,
+    raw,
     nearest
   };
 }
 
 
-function exposureLevel(
+function normalizeCurrentExposure(
+  raw
+) {
+
+  return clamp(
+    100 *
+    (
+      1 -
+      Math.exp(
+        -raw /
+        2.2
+      )
+    ),
+    0,
+    100
+  );
+}
+
+
+/*
+  HISTORICAL EXPOSURE POLICY
+
+  - rolling 15 years
+  - M6.0+
+  - magnitude + proximity weighted
+  - 500 km context radius
+
+  This is comparative context,
+  not probabilistic hazard modeling.
+*/
+
+function historicalExposureMetrics(
+  site
+) {
+
+  const nearby =
+    historicalExposureData
+
+      .map(
+        q => ({
+
+          ...q,
+
+          distanceKm:
+            distanceKm(
+              site,
+              q
+            )
+
+        })
+      )
+
+      .filter(
+        q =>
+          q.distanceKm <=
+          500
+      );
+
+
+  const within250 =
+    nearby.filter(
+      q =>
+        q.distanceKm <=
+        250
+    );
+
+
+  let raw =
+    0;
+
+
+  nearby.forEach(
+    q => {
+
+      const magnitudeFactor =
+        Math.exp(
+          .9 *
+          (
+            q.magnitude -
+            6
+          )
+        );
+
+
+      const distanceFactor =
+        Math.exp(
+          -q.distanceKm /
+          180
+        );
+
+
+      raw +=
+        magnitudeFactor *
+        distanceFactor;
+    }
+  );
+
+
+  const largest =
+    nearby.reduce(
+      (
+        best,
+        q
+      ) =>
+        !best ||
+        q.magnitude >
+        best.magnitude
+          ?
+          q
+          :
+          best,
+      null
+    );
+
+
+  const nearest =
+    nearby.reduce(
+      (
+        best,
+        q
+      ) =>
+        !best ||
+        q.distanceKm <
+        best.distanceKm
+          ?
+          q
+          :
+          best,
+      null
+    );
+
+
+  const score =
+    clamp(
+      100 *
+      (
+        1 -
+        Math.exp(
+          -raw /
+          3.5
+        )
+      ),
+      0,
+      100
+    );
+
+
+  return {
+
+    raw,
+
+    score,
+
+    within250:
+
+      within250.length,
+
+    within500:
+
+      nearby.length,
+
+    largest,
+
+    nearest
+
+  };
+}
+
+
+function facilityExposureProfile(
+  site
+) {
+
+  const currentRaw =
+    currentExposureRaw(
+      site
+    );
+
+
+  const currentScore =
+    normalizeCurrentExposure(
+      currentRaw.raw
+    );
+
+
+  const historical =
+    historicalExposureMetrics(
+      site
+    );
+
+
+  const totalScore =
+    clamp(
+      .60 *
+      currentScore
+      +
+      .40 *
+      historical.score,
+      0,
+      100
+    );
+
+
+  return {
+
+    currentRaw,
+
+    currentScore,
+
+    currentLevel:
+      exposureLevel100(
+        currentScore
+      ),
+
+    historical,
+
+    historicalLevel:
+      exposureLevel100(
+        historical.score
+      ),
+
+    totalScore,
+
+    totalLevel:
+      exposureLevel100(
+        totalScore
+      )
+
+  };
+}
+
+
+function exposureLevel100(
   score
 ) {
 
   if (
-    score >= 4
+    score >= 70
   ) {
 
     return {
@@ -2695,8 +3722,9 @@ function exposureLevel(
     };
   }
 
+
   if (
-    score >= 1.5
+    score >= 45
   ) {
 
     return {
@@ -2705,8 +3733,9 @@ function exposureLevel(
     };
   }
 
+
   if (
-    score >= .45
+    score >= 20
   ) {
 
     return {
@@ -2714,6 +3743,7 @@ function exposureLevel(
       color:colors.elevated
     };
   }
+
 
   return {
     label:"LOW",
@@ -2735,21 +3765,21 @@ function visibleQuakes() {
     return displayedEarthquakeData;
   }
 
+
   const cutoff =
     Date.now() -
     days *
-    24 *
-    60 *
-    60 *
-    1000;
+    DAY_MS;
+
 
   return displayedEarthquakeData
     .filter(
       q =>
         q.magnitude >=
-          minMagnitude
+        minMagnitude
         &&
-        q.time >= cutoff
+        q.time >=
+        cutoff
     );
 }
 
@@ -2773,6 +3803,7 @@ function quakeWeight(
     );
   }
 
+
   const ageHours =
     Math.max(
       0,
@@ -2782,6 +3813,7 @@ function quakeWeight(
       ) /
       3600000
     );
+
 
   return (
     Math.pow(
@@ -2804,38 +3836,121 @@ function quakeWeight(
 
 function render() {
 
-  if (!overlay) {
+  if (
+    !overlay
+  ) {
     return;
   }
+
 
   const quakes =
     visibleQuakes();
 
-  const facilityExposure =
+
+  const facilityProfiles =
     facilities.map(
-      site => {
+      site => ({
 
-        const exposure =
-          exposureScore(
+        ...site,
+
+        profile:
+          facilityExposureProfile(
             site
-          );
+          )
 
-        return {
-
-          ...site,
-
-          exposure,
-
-          level:
-            exposureLevel(
-              exposure.score
-            )
-
-        };
-      }
+      })
     );
 
-  const layers = [];
+
+  const cmSites =
+    facilityProfiles.filter(
+      site =>
+        site.category ===
+        "cm"
+    );
+
+
+  const packagingSites =
+    facilityProfiles.filter(
+      site =>
+        site.category ===
+        "primary-packaging"
+    );
+
+
+  const layers =
+    [];
+
+
+  /*
+    TECTONIC BOUNDARIES
+    Render first so seismic events
+    remain visually dominant.
+  */
+
+  if (
+    layerState.boundaries
+    &&
+    tectonicBoundaryData
+      ?.features
+      ?.length
+  ) {
+
+    layers.push(
+
+      new deck.GeoJsonLayer({
+
+        id:
+          "tectonic-boundaries",
+
+        data:
+          tectonicBoundaryData,
+
+        pickable:true,
+
+        stroked:true,
+
+        filled:false,
+
+        getLineColor:
+          boundaryColor,
+
+        getLineWidth:
+          feature => {
+
+            const label =
+              String(
+                feature
+                  ?.properties
+                  ?.LABEL ||
+                ""
+              )
+                .toLowerCase();
+
+
+            return label.includes(
+              "convergent"
+            )
+              ?
+              2.1
+              :
+              1.45;
+          },
+
+        lineWidthUnits:
+          "pixels",
+
+        lineWidthMinPixels:
+          1,
+
+        lineWidthMaxPixels:
+          3
+
+      })
+
+    );
+  }
+
 
   /*
     HEAT FIELD
@@ -2849,9 +3964,11 @@ function render() {
 
       new deck.HeatmapLayer({
 
-        id:"seismic-heat",
+        id:
+          "seismic-heat",
 
-        data:quakes,
+        data:
+          quakes,
 
         getPosition:
           d => [
@@ -2864,15 +3981,20 @@ function render() {
 
         radiusPixels:
           dataMode === "history"
-            ? 38
-            : 50,
+            ?
+            38
+            :
+            50,
 
         intensity:
           dataMode === "history"
-            ? 1.35
-            : 1.2,
+            ?
+            1.35
+            :
+            1.2,
 
-        threshold:.03,
+        threshold:
+          .03,
 
         colorRange:[
 
@@ -2893,8 +4015,9 @@ function render() {
     );
   }
 
+
   /*
-    EARTHQUAKE EVENTS
+    EARTHQUAKES
   */
 
   if (
@@ -2905,9 +4028,11 @@ function render() {
 
       new deck.ScatterplotLayer({
 
-        id:"earthquake-events",
+        id:
+          "earthquake-events",
 
-        data:quakes,
+        data:
+          quakes,
 
         pickable:true,
 
@@ -2924,11 +4049,6 @@ function render() {
         getRadius:
           d => {
 
-            /*
-              More controlled historical
-              marker sizing.
-            */
-
             if (
               dataMode === "history"
             ) {
@@ -2936,12 +4056,15 @@ function render() {
               return (
                 18000 +
                 Math.pow(
-                  d.magnitude - 5.5,
+                  d.magnitude -
+                  5.5,
                   2
-                ) *
+                )
+                *
                 12000
               );
             }
+
 
             return Math.max(
               5000,
@@ -2949,91 +4072,28 @@ function render() {
               Math.pow(
                 1.8,
                 d.magnitude
-              ) *
+              )
+              *
               1800
             );
           },
 
         radiusMinPixels:
           dataMode === "history"
-            ? 5
-            : 3,
+            ?
+            5
+            :
+            3,
 
         radiusMaxPixels:
           dataMode === "history"
-            ? 22
-            : 30,
+            ?
+            22
+            :
+            30,
 
         getFillColor:
-          d => {
-
-            if (
-              d.magnitude >= 8
-            ) {
-
-              return [
-                150,
-                8,
-                35,
-                240
-              ];
-            }
-
-            if (
-              d.magnitude >= 7
-            ) {
-
-              return [
-                190,
-                15,
-                40,
-                235
-              ];
-            }
-
-            if (
-              d.magnitude >= 6
-            ) {
-
-              return [
-                255,
-                58,
-                55,
-                220
-              ];
-            }
-
-            if (
-              d.magnitude >= 5
-            ) {
-
-              return [
-                255,
-                104,
-                50,
-                205
-              ];
-            }
-
-            if (
-              d.magnitude >= 4
-            ) {
-
-              return [
-                255,
-                150,
-                48,
-                190
-              ];
-            }
-
-            return [
-              255,
-              210,
-              70,
-              165
-            ];
-          },
+          earthquakeColor,
 
         getLineColor:
           [
@@ -3043,12 +4103,137 @@ function render() {
             90
           ],
 
-        lineWidthMinPixels:1
+        lineWidthMinPixels:
+          1
 
       })
 
     );
   }
+
+
+  /*
+    TOTAL EXPOSURE HALOS
+    Outer / broader halo.
+  */
+
+  if (
+    layerState.totalExposure
+    &&
+    facilityProfiles.length
+  ) {
+
+    layers.push(
+
+      new deck.ScatterplotLayer({
+
+        id:
+          "total-exposure",
+
+        data:
+          facilityProfiles,
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getRadius:
+          90000,
+
+        radiusMinPixels:
+          26,
+
+        radiusMaxPixels:
+          58,
+
+        filled:true,
+
+        stroked:true,
+
+        getFillColor:
+          d => [
+            ...d.profile
+              .totalLevel
+              .color,
+            38
+          ],
+
+        getLineColor:
+          d => [
+            ...d.profile
+              .totalLevel
+              .color,
+            165
+          ],
+
+        lineWidthMinPixels:
+          1.5,
+
+        pickable:false
+
+      })
+
+    );
+  }
+
+
+  /*
+    CURRENT EXPOSURE HALOS
+
+    Remain available in both
+    Live and Historical modes.
+  */
+
+  if (
+    layerState.exposure
+    &&
+    facilityProfiles.length
+  ) {
+
+    layers.push(
+
+      new deck.ScatterplotLayer({
+
+        id:
+          "current-exposure",
+
+        data:
+          facilityProfiles,
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getRadius:
+          65000,
+
+        radiusMinPixels:
+          18,
+
+        radiusMaxPixels:
+          42,
+
+        getFillColor:
+          d => [
+            ...d.profile
+              .currentLevel
+              .color,
+            60
+          ],
+
+        stroked:false,
+
+        pickable:false
+
+      })
+
+    );
+  }
+
 
   /*
     SELECTED FACILITY RINGS
@@ -3063,13 +4248,13 @@ function render() {
       {
         ...selectedFacility,
         radius:50000,
-        alpha:155
+        alpha:165
       },
 
       {
         ...selectedFacility,
         radius:100000,
-        alpha:105
+        alpha:110
       },
 
       {
@@ -3080,13 +4265,16 @@ function render() {
 
     ];
 
+
     layers.push(
 
       new deck.ScatterplotLayer({
 
-        id:"facility-distance-rings",
+        id:
+          "facility-distance-rings",
 
-        data:ringData,
+        data:
+          ringData,
 
         getPosition:
           d => [
@@ -3114,10 +4302,13 @@ function render() {
           d =>
             d.radius ===
             50000
-              ? 1500
-              : 900,
+              ?
+              1500
+              :
+              900,
 
-        lineWidthMinPixels:1,
+        lineWidthMinPixels:
+          1,
 
         pickable:false
 
@@ -3126,210 +4317,161 @@ function render() {
     );
   }
 
-  /*
-    CURRENT EXPOSURE HALOS
 
-    Never displayed in
-    historical mode.
+  /*
+    CONTRACT MANUFACTURERS
   */
 
   if (
-  layerState.exposure
-  &&
-  facilityExposure.length
-) {
+    layerState.cms
+    &&
+    cmSites.length
+  ) {
 
     layers.push(
 
-      new deck.ScatterplotLayer({
-
-        id:"facility-exposure",
-
-        data:facilityExposure,
-
-        getPosition:
-          d => [
-            d.longitude,
-            d.latitude
-          ],
-
-        getRadius:70000,
-
-        radiusMinPixels:18,
-
-        radiusMaxPixels:44,
-
-        getFillColor:
-          d => [
-            ...d.level.color,
-            55
-          ],
-
-        stroked:false,
-
-        pickable:false
-
-      })
+      makeSupplierLayer(
+        "cm-sites",
+        cmSites,
+        "cm"
+      )
 
     );
   }
-const cmSites =
-  facilityExposure.filter(
-    site =>
-      site.category === "cm"
-  );
 
-const packagingSites =
-  facilityExposure.filter(
-    site =>
-      site.category ===
-      "primary-packaging"
-  );
 
   /*
-    CM SITES
+    PRIMARY PACKAGING
   */
 
- if (
-  layerState.cms &&
-  cmSites.length
+  if (
+    layerState.packaging
+    &&
+    packagingSites.length
+  ) {
+
+    layers.push(
+
+      makeSupplierLayer(
+        "packaging-sites",
+        packagingSites,
+        "primary-packaging"
+      )
+
+    );
+  }
+
+
+  overlay.setProps({
+
+    layers,
+
+    getTooltip:
+      getMapTooltip
+
+  });
+
+
+  updateDashboard(
+    quakes,
+    facilityProfiles
+  );
+}
+
+
+/* =====================================================
+   SUPPLIER MAP LAYER
+===================================================== */
+
+function makeSupplierLayer(
+  id,
+  data,
+  category
 ) {
 
-  layers.push(
+  const isCM =
+    category === "cm";
 
-    new deck.ScatterplotLayer({
 
-      id:"cm-sites",
+  return new deck.ScatterplotLayer({
 
-      data:cmSites,
+    id,
 
-      pickable:true,
+    data,
 
-      onClick:
-        ({object}) => {
+    pickable:true,
 
-          if (!object) {
-            return;
-          }
+    onClick:
+      ({object}) => {
 
-          map.panTo({
-            lat:object.latitude,
-            lng:object.longitude
-          });
+        if (
+          !object
+        ) {
+          return;
+        }
 
-          map.setZoom(
-            Math.max(
-              map.getZoom(),
-              7
-            )
-          );
 
-          if (
-            dataMode === "live"
-          ) {
+        map.panTo({
 
-            openFacilityDrawer(
-              object
-            );
-          }
-        },
+          lat:
+            object.latitude,
 
-      getPosition:
-        d => [
-          d.longitude,
-          d.latitude
-        ],
+          lng:
+            object.longitude
 
-      getRadius:16000,
+        });
 
-      radiusMinPixels:7,
-      radiusMaxPixels:11,
 
-      getFillColor:
+        map.setZoom(
+          Math.max(
+            map.getZoom(),
+            7
+          )
+        );
+
+
+        openFacilityDrawer(
+          object
+        );
+      },
+
+    getPosition:
+      d => [
+        d.longitude,
+        d.latitude
+      ],
+
+    getRadius:
+      isCM
+        ?
+        16000
+        :
+        15000,
+
+    radiusMinPixels:
+      isCM
+        ?
+        7
+        :
+        6,
+
+    radiusMaxPixels:
+      isCM
+        ?
+        11
+        :
+        10,
+
+    getFillColor:
+      isCM
+        ?
         [
           248,
           243,
           235,
           255
-        ],
-
-      stroked:true,
-
-      getLineColor:
-        [
-          91,
-          167,
-          255,
-          255
-        ],
-
-      lineWidthMinPixels:3
-
-    })
-
-  );
-}
-
-  /*
-    PACKAGING SITES
-  */
-
-if (
-  layerState.packaging &&
-  packagingSites.length
-) {
-
-  layers.push(
-
-    new deck.ScatterplotLayer({
-
-      id:"packaging-sites",
-
-      data:packagingSites,
-
-      pickable:true,
-
-      onClick:
-        ({object}) => {
-
-          if (!object) {
-            return;
-          }
-
-          map.panTo({
-            lat:object.latitude,
-            lng:object.longitude
-          });
-
-          map.setZoom(
-            Math.max(
-              map.getZoom(),
-              7
-            )
-          );
-
-          if (
-            dataMode === "live"
-          ) {
-
-            openFacilityDrawer(
-              object
-            );
-          }
-        },
-
-      getPosition:
-        d => [
-          d.longitude,
-          d.latitude
-        ],
-
-      getRadius:15000,
-
-      radiusMinPixels:6,
-      radiusMaxPixels:10,
-
-      getFillColor:
+        ]
+        :
         [
           184,
           140,
@@ -3337,9 +4479,18 @@ if (
           255
         ],
 
-      stroked:true,
+    stroked:true,
 
-      getLineColor:
+    getLineColor:
+      isCM
+        ?
+        [
+          91,
+          167,
+          255,
+          255
+        ]
+        :
         [
           235,
           220,
@@ -3347,135 +4498,279 @@ if (
           255
         ],
 
-      lineWidthMinPixels:2
-
-    })
-
-  );
-}
-
-  overlay.setProps({
-
-    layers,
-
-    getTooltip:
-      ({
-        object,
-        layer
-      }) => {
-
-        if (!object) {
-          return null;
-        }
-
-        if (
-          layer &&
-          layer.id ===
-          "earthquake-events"
-        ) {
-
-          return {
-
-            html:
-              "<div>" +
-
-              "<b>M" +
-              object.magnitude
-                .toFixed(1) +
-              "</b><br>" +
-
-              escapeHtml(
-                object.place
-              ) +
-              "<br>" +
-
-              "Depth: " +
-              object.depth
-                .toFixed(1) +
-              " km<br>" +
-
-              new Date(
-                object.time
-              )
-                .toLocaleString() +
-
-              "</div>",
-
-            style:{
-
-              background:"#11161c",
-
-              color:"#fff",
-
-              padding:"10px",
-
-              borderRadius:"7px",
-
-              fontSize:"11px"
-
-            }
-
-          };
-        }
-
-     if (
-  layer &&
-  (
-    layer.id === "cm-sites" ||
-    layer.id === "packaging-sites"
-  )
-) {
-
-          return {
-
-            html:
-              "<div>" +
-
-              "<b>" +
-              escapeHtml(
-                object.name
-              ) +
-              "</b><br>" +
-
-              (
-                dataMode === "history"
-                  ?
-                  "Manufacturing location"
-                  :
-                  "Current exposure: " +
-                  "<strong>" +
-                  object.level.label +
-                  "</strong>"
-              ) +
-
-              "</div>",
-
-            style:{
-
-              background:"#11161c",
-
-              color:"#fff",
-
-              padding:"10px",
-
-              borderRadius:"7px",
-
-              fontSize:"11px"
-
-            }
-
-          };
-        }
-
-        return null;
-      }
+    lineWidthMinPixels:
+      isCM
+        ?
+        3
+        :
+        2
 
   });
+}
 
-  updateDashboard(
-    quakes,
-    facilityExposure
-  );
+
+/* =====================================================
+   MAP TOOLTIPS
+===================================================== */
+
+function getMapTooltip(
+  {
+    object,
+    layer
+  }
+) {
+
+  if (
+    !object ||
+    !layer
+  ) {
+
+    return null;
+  }
+
+
+  if (
+    layer.id ===
+    "earthquake-events"
+  ) {
+
+    return {
+
+      html:
+
+        "<div>" +
+
+        "<b>M" +
+        object.magnitude
+          .toFixed(1) +
+        "</b><br>" +
+
+        escapeHtml(
+          object.place
+        ) +
+        "<br>" +
+
+        "Depth: " +
+        object.depth
+          .toFixed(1) +
+        " km<br>" +
+
+        new Date(
+          object.time
+        )
+          .toLocaleString() +
+
+        "</div>",
+
+      style:
+        tooltipStyle()
+
+    };
+  }
+
+
+  if (
+    layer.id ===
+    "cm-sites"
+    ||
+    layer.id ===
+    "packaging-sites"
+  ) {
+
+    return {
+
+      html:
+
+        "<div>" +
+
+        "<b>" +
+        escapeHtml(
+          object.name
+        ) +
+        "</b><br>" +
+
+        escapeHtml(
+          object.categoryLabel
+        ) +
+        "<br>" +
+
+        "Current exposure: " +
+        "<strong>" +
+        object.profile
+          .currentLevel
+          .label +
+        "</strong>" +
+        " (" +
+        Math.round(
+          object.profile
+            .currentScore
+        ) +
+        "/100)" +
+        "<br>" +
+
+        "Total exposure: " +
+        "<strong>" +
+        object.profile
+          .totalLevel
+          .label +
+        "</strong>" +
+        " (" +
+        Math.round(
+          object.profile
+            .totalScore
+        ) +
+        "/100)" +
+
+        "</div>",
+
+      style:
+        tooltipStyle()
+
+    };
+  }
+
+
+  if (
+    layer.id ===
+    "tectonic-boundaries"
+  ) {
+
+    const props =
+      object.properties ||
+      {};
+
+
+    return {
+
+      html:
+
+        "<div>" +
+
+        "<b>" +
+        escapeHtml(
+          props.LABEL ||
+          "Tectonic Boundary"
+        ) +
+        "</b><br>" +
+
+        escapeHtml(
+          props.NAME ||
+          "USGS plate boundary"
+        ) +
+
+        "</div>",
+
+      style:
+        tooltipStyle()
+
+    };
+  }
+
+
+  return null;
+}
+
+
+function tooltipStyle() {
+
+  return {
+
+    background:"#11161c",
+
+    color:"#fff",
+
+    padding:"10px",
+
+    borderRadius:"7px",
+
+    fontSize:"11px",
+
+    border:
+      "1px solid rgba(255,255,255,.12)"
+
+  };
+}
+
+
+/* =====================================================
+   EARTHQUAKE COLOR
+===================================================== */
+
+function earthquakeColor(
+  d
+) {
+
+  if (
+    d.magnitude >= 8
+  ) {
+
+    return [
+      150,
+      8,
+      35,
+      240
+    ];
+  }
+
+
+  if (
+    d.magnitude >= 7
+  ) {
+
+    return [
+      190,
+      15,
+      40,
+      235
+    ];
+  }
+
+
+  if (
+    d.magnitude >= 6
+  ) {
+
+    return [
+      255,
+      58,
+      55,
+      220
+    ];
+  }
+
+
+  if (
+    d.magnitude >= 5
+  ) {
+
+    return [
+      255,
+      104,
+      50,
+      205
+    ];
+  }
+
+
+  if (
+    d.magnitude >= 4
+  ) {
+
+    return [
+      255,
+      150,
+      48,
+      190
+    ];
+  }
+
+
+  return [
+    255,
+    210,
+    70,
+    165
+  ];
 }
 
 
@@ -3498,44 +4793,46 @@ function startPulseAnimation() {
           layers:[]
         });
 
+
       pulseAnimationId =
         requestAnimationFrame(
           animate
         );
 
+
       return;
     }
 
+
     const progress =
       (
-        (
-          timestamp /
-          2400
-        ) %
-        1
-      );
+        timestamp /
+        2400
+      ) %
+      1;
+
 
     const recentMajor =
       liveEarthquakeData
         .filter(
           q =>
             q.magnitude >=
-              5.5
+            5.5
             &&
             q.time >=
-              Date.now() -
-              24 *
-              60 *
-              60 *
-              1000
+            Date.now() -
+            DAY_MS
         );
+
 
     const pulseLayer =
       new deck.ScatterplotLayer({
 
-        id:"major-quake-pulse",
+        id:
+          "major-quake-pulse",
 
-        data:recentMajor,
+        data:
+          recentMajor,
 
         getPosition:
           d => [
@@ -3572,11 +4869,13 @@ function startPulseAnimation() {
             )
           ],
 
-        lineWidthMinPixels:2,
+        lineWidthMinPixels:
+          2,
 
         pickable:false
 
       });
+
 
     pulseOverlay
       ?.setProps({
@@ -3585,11 +4884,13 @@ function startPulseAnimation() {
         ]
       });
 
+
     pulseAnimationId =
       requestAnimationFrame(
         animate
       );
   }
+
 
   pulseAnimationId =
     requestAnimationFrame(
@@ -3599,7 +4900,7 @@ function startPulseAnimation() {
 
 
 /* =====================================================
-   FACILITY DETAILS
+   FACILITY CURRENT METRICS
 ===================================================== */
 
 function quakesNearSite(
@@ -3612,19 +4913,18 @@ function quakesNearSite(
   const cutoff =
     Date.now() -
     maxAgeDays *
-    24 *
-    60 *
-    60 *
-    1000;
+    DAY_MS;
+
 
   return liveEarthquakeData
 
     .filter(
       q =>
-        q.time >= cutoff
+        q.time >=
+        cutoff
         &&
         q.magnitude >=
-          minimumMagnitude
+        minimumMagnitude
     )
 
     .map(
@@ -3661,25 +4961,24 @@ function calculateFacilityMetrics(
       2.5
     );
 
+
   const nearby7M4 =
     nearby30.filter(
       q =>
         q.magnitude >= 4
         &&
         q.time >=
-          Date.now() -
-          7 *
-          24 *
-          60 *
-          60 *
-          1000
+        Date.now() -
+        7 * DAY_MS
     );
+
 
   const nearby30M5 =
     nearby30.filter(
       q =>
         q.magnitude >= 5
     );
+
 
   const largest =
     nearby30.reduce(
@@ -3690,15 +4989,13 @@ function calculateFacilityMetrics(
         !best ||
         q.magnitude >
         best.magnitude
-          ? q
-          : best,
+          ?
+          q
+          :
+          best,
       null
     );
 
-  const exposure =
-    exposureScore(
-      site
-    );
 
   return {
 
@@ -3708,43 +5005,50 @@ function calculateFacilityMetrics(
 
     nearby30M5,
 
-    largest,
-
-    exposure,
-
-    level:
-      exposureLevel(
-        exposure.score
-      )
+    largest
 
   };
 }
 
 
-async function openFacilityDrawer(
+/* =====================================================
+   FACILITY DRAWER
+===================================================== */
+
+function openFacilityDrawer(
   site,
-  loadBaseline = true
+  redraw = true
 ) {
-
-  /*
-    Defensive check:
-    drawer only represents
-    current/live facility status.
-  */
-
-  if (
-    dataMode !== "live"
-  ) {
-    return;
-  }
 
   selectedFacility =
     site;
+
+
+  const profile =
+    facilityExposureProfile(
+      site
+    );
+
 
   const metrics =
     calculateFacilityMetrics(
       site
     );
+
+
+  const eyebrow =
+    document.getElementById(
+      "drawerEyebrow"
+    );
+
+
+  eyebrow.textContent =
+    dataMode === "history"
+      ?
+      "SUPPLY LOCATION • CURRENT + HISTORICAL EXPOSURE"
+      :
+      "SUPPLY LOCATION";
+
 
   document
     .getElementById(
@@ -3753,33 +5057,97 @@ async function openFacilityDrawer(
     .textContent =
       site.name;
 
-  const badge =
-    document
-      .getElementById(
-        "drawerExposureBadge"
+
+  document
+    .getElementById(
+      "drawerCategory"
+    )
+    .textContent =
+      site.categoryLabel ||
+      "Supply location";
+
+
+  setExposureBadge(
+    document.getElementById(
+      "drawerExposureBadge"
+    ),
+    profile.currentLevel
+  );
+
+
+  document
+    .getElementById(
+      "drawerCurrentScore"
+    )
+    .textContent =
+      Math.round(
+        profile.currentScore
       );
 
-  badge.textContent =
-    metrics.level.label;
 
-  const rgb =
-    metrics.level.color
-      .join(",");
+  document
+    .getElementById(
+      "drawerHistoricalScore"
+    )
+    .textContent =
+      historicalExposureData.length
+        ?
+        Math.round(
+          profile.historical.score
+        )
+        :
+        "…";
 
-  badge.style.color =
-    "rgb(" +
-    rgb +
-    ")";
 
-  badge.style.background =
-    "rgba(" +
-    rgb +
-    ",.13)";
+  document
+    .getElementById(
+      "drawerTotalScore"
+    )
+    .textContent =
+      historicalExposureData.length
+        ?
+        Math.round(
+          profile.totalScore
+        )
+        :
+        "…";
 
-  badge.style.border =
-    "1px solid rgba(" +
-    rgb +
-    ",.35)";
+
+  const totalLevelElement =
+    document.getElementById(
+      "drawerTotalLevel"
+    );
+
+
+  totalLevelElement.textContent =
+    historicalExposureData.length
+      ?
+      profile.totalLevel.label
+      :
+      "Loading history…";
+
+
+  totalLevelElement.style.color =
+    rgbCss(
+      profile.totalLevel.color
+    );
+
+
+  document
+    .getElementById(
+      "drawerM4Seven"
+    )
+    .textContent =
+      metrics.nearby7M4.length;
+
+
+  document
+    .getElementById(
+      "drawerM5Thirty"
+    )
+    .textContent =
+      metrics.nearby30M5.length;
+
 
   if (
     metrics.largest
@@ -3795,6 +5163,7 @@ async function openFacilityDrawer(
           .magnitude
           .toFixed(1);
 
+
     document
       .getElementById(
         "drawerDistance"
@@ -3805,6 +5174,7 @@ async function openFacilityDrawer(
             .distanceKm
         ) +
         " km";
+
 
     document
       .getElementById(
@@ -3817,11 +5187,13 @@ async function openFacilityDrawer(
         ) +
         " km";
 
+
     document
       .getElementById(
         "drawerEventLocation"
       )
       .innerHTML =
+
         "Largest recent event:<br>" +
 
         "<strong>" +
@@ -3844,6 +5216,7 @@ async function openFacilityDrawer(
       .textContent =
         "None";
 
+
     document
       .getElementById(
         "drawerDistance"
@@ -3851,12 +5224,14 @@ async function openFacilityDrawer(
       .textContent =
         "—";
 
+
     document
       .getElementById(
         "drawerDepth"
       )
       .textContent =
         "—";
+
 
     document
       .getElementById(
@@ -3867,21 +5242,79 @@ async function openFacilityDrawer(
         "within 250 km in the last 30 days.";
   }
 
-  document
-    .getElementById(
-      "drawerM4Seven"
-    )
-    .textContent =
-      metrics.nearby7M4
-        .length;
+
+  /*
+    Historical context
+  */
 
   document
     .getElementById(
-      "drawerM5Thirty"
+      "drawerHistoricalCount"
     )
     .textContent =
-      metrics.nearby30M5
-        .length;
+      historicalExposureData.length
+        ?
+        profile.historical
+          .within250
+        :
+        "Loading…";
+
+
+  document
+    .getElementById(
+      "drawerHistorical500"
+    )
+    .textContent =
+      historicalExposureData.length
+        ?
+        profile.historical
+          .within500
+        :
+        "Loading…";
+
+
+  document
+    .getElementById(
+      "drawerHistoricalLargest"
+    )
+    .textContent =
+      profile.historical
+        .largest
+        ?
+        "M" +
+        profile.historical
+          .largest
+          .magnitude
+          .toFixed(1)
+        :
+        historicalExposureData.length
+          ?
+          "None"
+          :
+          "Loading…";
+
+
+  document
+    .getElementById(
+      "drawerHistoricalNearest"
+    )
+    .textContent =
+      profile.historical
+        .nearest
+        ?
+        Math.round(
+          profile.historical
+            .nearest
+            .distanceKm
+        ) +
+        " km"
+        :
+        historicalExposureData.length
+          ?
+          "None"
+          :
+          "Loading…";
+
 
   document
     .getElementById(
@@ -3897,6 +5330,7 @@ async function openFacilityDrawer(
           }
         );
 
+
   document
     .getElementById(
       "facilityDrawer"
@@ -3906,15 +5340,12 @@ async function openFacilityDrawer(
       "open"
     );
 
-  render();
 
   if (
-    loadBaseline
+    redraw
   ) {
 
-    await loadHistoricalBaseline(
-      site
-    );
+    render();
   }
 }
 
@@ -3926,22 +5357,22 @@ function closeFacilityDrawer(
   selectedFacility =
     null;
 
+
   const drawer =
-    document
-      .getElementById(
-        "facilityDrawer"
-      );
+    document.getElementById(
+      "facilityDrawer"
+    );
+
 
   if (
     drawer
   ) {
 
-    drawer
-      .classList
-      .remove(
-        "open"
-      );
+    drawer.classList.remove(
+      "open"
+    );
   }
+
 
   if (
     redraw
@@ -3952,246 +5383,30 @@ function closeFacilityDrawer(
 }
 
 
-/* =====================================================
-   FACILITY HISTORICAL BASELINE
-===================================================== */
-
-async function loadHistoricalBaseline(
-  site
+function setExposureBadge(
+  element,
+  level
 ) {
 
-  const cacheKey =
-    site.latitude
-      .toFixed(4) +
-    "," +
-    site.longitude
-      .toFixed(4);
-
-  if (
-    historicalBaselineCache[
-      cacheKey
-    ]
-  ) {
-
-    displayHistoricalBaseline(
-      site,
-      historicalBaselineCache[
-        cacheKey
-      ]
-    );
-
-    return;
-  }
-
-  document
-    .getElementById(
-      "drawerBaseline"
-    )
-    .textContent =
-      "Calculating…";
-
-  const end =
-    new Date();
-
-  const start =
-    new Date(
-      end.getTime() -
-      365 *
-      24 *
-      60 *
-      60 *
-      1000
-    );
-
-  const params =
-    new URLSearchParams({
-
-      format:"geojson",
-
-      starttime:
-        start.toISOString(),
-
-      endtime:
-        end.toISOString(),
-
-      latitude:
-        String(
-          site.latitude
-        ),
-
-      longitude:
-        String(
-          site.longitude
-        ),
-
-      maxradiuskm:"250",
-
-      minmagnitude:"4",
-
-      limit:"20000"
-
-    });
-
-  try {
-
-    const response =
-      await fetch(
-        USGS_HISTORY_API +
-        "?" +
-        params.toString()
-      );
-
-    if (!response.ok) {
-
-      throw new Error(
-        "USGS returned " +
-        response.status
-      );
-    }
-
-    const data =
-      await response.json();
-
-    const annualCount =
-      data.features.length;
-
-    const weeklyAverage =
-      annualCount /
-      52.1429;
-
-    const baseline = {
-
-      annualCount,
-
-      weeklyAverage
-
-    };
-
-    historicalBaselineCache[
-      cacheKey
-    ] =
-      baseline;
-
-    displayHistoricalBaseline(
-      site,
-      baseline
-    );
-
-  } catch(error) {
-
-    document
-      .getElementById(
-        "drawerBaseline"
-      )
-      .textContent =
-        "Unavailable";
-
-    console.error(
-      error
-    );
-  }
-}
+  const rgb =
+    level.color
+      .join(",");
 
 
-function displayHistoricalBaseline(
-  site,
-  baseline
-) {
+  element.textContent =
+    level.label;
 
-  if (
-    !selectedFacility ||
-    selectedFacility.name !==
-      site.name
-  ) {
-    return;
-  }
 
-  const metrics =
-    calculateFacilityMetrics(
-      site
-    );
+  element.style.color =
+    `rgb(${rgb})`;
 
-  const current =
-    metrics.nearby7M4
-      .length;
 
-  const average =
-    baseline.weeklyAverage;
+  element.style.background =
+    `rgba(${rgb},.13)`;
 
-  const ratio =
-    average > 0
-      ? current /
-        average
-      : 0;
 
-  let activity =
-    "Typical";
-
-  let color =
-    "#44d17a";
-
-  if (
-    ratio >= 3
-  ) {
-
-    activity =
-      "Highly Elevated";
-
-    color =
-      "#ff3b45";
-
-  } else if (
-    ratio >= 1.75
-  ) {
-
-    activity =
-      "Elevated";
-
-    color =
-      "#ff8d37";
-
-  } else if (
-    ratio >= 1.2
-  ) {
-
-    activity =
-      "Above Normal";
-
-    color =
-      "#ffd34e";
-  }
-
-  document
-    .getElementById(
-      "drawerBaseline"
-    )
-    .textContent =
-      average
-        .toFixed(1) +
-      " M4+ / week";
-
-  document
-    .getElementById(
-      "drawerVsBaseline"
-    )
-    .textContent =
-      average > 0
-        ? ratio
-            .toFixed(1) +
-          "×"
-        : "—";
-
-  const activityElement =
-    document
-      .getElementById(
-        "drawerActivity"
-      );
-
-  activityElement.textContent =
-    activity;
-
-  activityElement.style.color =
-    color;
+  element.style.border =
+    `1px solid rgba(${rgb},.35)`;
 }
 
 
@@ -4201,7 +5416,7 @@ function displayHistoricalBaseline(
 
 function updateDashboard(
   quakes,
-  facilityExposure
+  facilityProfiles
 ) {
 
   document
@@ -4212,6 +5427,7 @@ function updateDashboard(
       quakes.length
         .toLocaleString();
 
+
   const largest =
     quakes.reduce(
       (
@@ -4220,10 +5436,13 @@ function updateDashboard(
       ) =>
         q.magnitude >
         value
-          ? q.magnitude
-          : value,
+          ?
+          q.magnitude
+          :
+          value,
       0
     );
+
 
   document
     .getElementById(
@@ -4231,18 +5450,21 @@ function updateDashboard(
     )
     .textContent =
       largest
-        ? "M" +
-          largest.toFixed(1)
-        : "—";
+        ?
+        "M" +
+        largest.toFixed(1)
+        :
+        "—";
+
 
   const list =
-    document
-      .getElementById(
-        "siteList"
-      );
+    document.getElementById(
+      "siteList"
+    );
+
 
   if (
-    !facilityExposure.length
+    !facilityProfiles.length
   ) {
 
     list.innerHTML =
@@ -4254,21 +5476,24 @@ function updateDashboard(
       "Importing locations…" +
       "</span>";
 
+
     return;
   }
 
+
   const sorted =
     [
-      ...facilityExposure
+      ...facilityProfiles
     ]
       .sort(
         (
           a,
           b
         ) =>
-          b.exposure.score -
-          a.exposure.score
+          b.profile.totalScore -
+          a.profile.totalScore
       );
+
 
   list.innerHTML =
     sorted
@@ -4278,60 +5503,66 @@ function updateDashboard(
           index
         ) => {
 
-          const color =
-            "rgb(" +
-            site.level.color
-              .join(",") +
-            ")";
+          const categoryColor =
+            site.category === "cm"
+              ?
+              "#5ba7ff"
+              :
+              "#b88cff";
 
-          const categoryText =
-  site.category === "cm"
-    ? "Contract Manufacturer"
-    : "Primary Packaging";
-const dotColor =
-  site.category === "cm"
-    ? "#5ba7ff"
-    : "#b88cff";
 
-return (
+          return (
 
-  "<div " +
-  "class='site' " +
-  "data-site-index='" +
-  index +
-  "'>" +
+            "<div " +
+            "class='site' " +
+            "data-site-index='" +
+            index +
+            "'>" +
 
-    "<div " +
-    "class='site-name'>" +
+              "<div " +
+              "class='site-name'>" +
 
-      escapeHtml(
-        site.name
-      ) +
+                escapeHtml(
+                  site.name
+                ) +
 
-    "</div>" +
+              "</div>" +
 
-    "<div " +
-    "class='site-risk'>" +
+              "<div " +
+              "class='site-risk'>" +
 
-      "<span " +
-      "class='dot' " +
-      "style='" +
-      "background:" +
-      dotColor +
-      "'>" +
-      "</span>" +
+                "<span " +
+                "class='dot' " +
+                "style='" +
+                "background:" +
+                categoryColor +
+                "'>" +
+                "</span>" +
 
-      categoryText +
+                escapeHtml(
+                  site.categoryLabel
+                ) +
 
-    "</div>" +
+                "<span " +
+                "class='site-total'>" +
 
-  "</div>"
+                  "Total " +
+                  Math.round(
+                    site.profile
+                      .totalScore
+                  ) +
 
-);
+                "</span>" +
 
+              "</div>" +
+
+            "</div>"
+
+          );
         }
       )
       .join("");
+
 
   [
     ...list.querySelectorAll(
@@ -4351,6 +5582,7 @@ return (
             const site =
               sorted[index];
 
+
             map.panTo({
 
               lat:
@@ -4361,6 +5593,7 @@ return (
 
             });
 
+
             map.setZoom(
               Math.max(
                 map.getZoom(),
@@ -4368,19 +5601,10 @@ return (
               )
             );
 
-            /*
-              Only open current facility
-              drawer in LIVE mode.
-            */
 
-            if (
-              dataMode === "live"
-            ) {
-
-              openFacilityDrawer(
-                site
-              );
-            }
+            openFacilityDrawer(
+              site
+            );
           }
         );
       }
@@ -4406,6 +5630,7 @@ function setRegion(
       region === "japan"
     );
 
+
   document
     .getElementById(
       "globalBtn"
@@ -4415,6 +5640,7 @@ function setRegion(
       "active",
       region === "global"
     );
+
 
   if (
     region === "japan"
@@ -4428,6 +5654,7 @@ function setRegion(
 
     });
 
+
     map.setZoom(5);
 
   } else {
@@ -4440,6 +5667,7 @@ function setRegion(
 
     });
 
+
     map.setZoom(2);
   }
 }
@@ -4449,7 +5677,9 @@ function setDays(
   value
 ) {
 
-  days = value;
+  days =
+    value;
+
 
   document
     .querySelectorAll(
@@ -4465,21 +5695,13 @@ function setDays(
 
             Number(
               button.dataset.days
-            ) === value
+            ) ===
+            value
           )
     );
 
+
   render();
-
-  if (
-    selectedFacility
-  ) {
-
-    openFacilityDrawer(
-      selectedFacility,
-      false
-    );
-  }
 }
 
 
@@ -4487,7 +5709,9 @@ function setMagnitude(
   value
 ) {
 
-  minMagnitude = value;
+  minMagnitude =
+    value;
+
 
   document
     .querySelectorAll(
@@ -4503,9 +5727,11 @@ function setMagnitude(
 
             Number(
               button.dataset.mag
-            ) === value
+            ) ===
+            value
           )
     );
+
 
   render();
 }
@@ -4519,36 +5745,90 @@ function toggleLayer(
   layerState[name] =
     value;
 
+
   if (
     name === "exposure"
   ) {
 
-    const exposureToggle =
+    const checkbox =
       document.getElementById(
         "exposureToggle"
       );
 
+
     if (
-      exposureToggle
+      checkbox
     ) {
 
-      exposureToggle.checked =
+      checkbox.checked =
         value;
     }
   }
 
+
+  if (
+    name === "totalExposure"
+  ) {
+
+    const checkbox =
+      document.getElementById(
+        "totalExposureToggle"
+      );
+
+
+    if (
+      checkbox
+    ) {
+
+      checkbox.checked =
+        value;
+    }
+  }
+
+
   render();
 }
+
 
 /* =====================================================
    HELPERS
 ===================================================== */
 
+function clamp(
+  value,
+  minimum,
+  maximum
+) {
+
+  return Math.min(
+    maximum,
+    Math.max(
+      minimum,
+      value
+    )
+  );
+}
+
+
+function rgbCss(
+  color
+) {
+
+  return (
+    "rgb(" +
+    color.join(",") +
+    ")"
+  );
+}
+
+
 function escapeHtml(
   text
 ) {
 
-  return String(text)
+  return String(
+    text ?? ""
+  )
 
     .replaceAll(
       "&",
@@ -4599,21 +5879,41 @@ function updateTimestamp(
 }
 
 
+function setStatus(
+  text
+) {
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  if (
+    status
+  ) {
+
+    status.textContent =
+      text;
+  }
+}
+
+
 function showLoading(
   visible
 ) {
 
-  const overlayElement =
-    document
-      .getElementById(
-        "loadingOverlay"
-      );
+  const element =
+    document.getElementById(
+      "loadingOverlay"
+    );
+
 
   if (
-    overlayElement
+    element
   ) {
 
-    overlayElement
+    element
       .classList
       .toggle(
         "visible",
@@ -4636,6 +5936,7 @@ window.addEventListener(
         "tatchaMapsKey"
       );
 
+
     if (
       saved
     ) {
@@ -4648,12 +5949,14 @@ window.addEventListener(
         .display =
           "none";
 
+
       loadGoogleMaps(
         saved
       );
     }
   }
 );
+
 
 window.initMap =
   initMap;
