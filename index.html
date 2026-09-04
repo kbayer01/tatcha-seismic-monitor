@@ -304,10 +304,22 @@
 
   font-size:11px;
 }
-.section .key-row {
-  flex-wrap:nowrap;
+.layer-list {
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  width:100%;
+  gap:2px;
 }
 
+.layer-list .key-row {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  width:100%;
+  margin:7px 0;
+  flex-wrap:nowrap;
+}
     .key {
       width:9px;
       height:9px;
@@ -927,90 +939,98 @@
       </div>
 
     </div>
+<div class="section">
 
-    <div class="section">
+  <div class="label">
+    Layers
+  </div>
 
-      <div class="label">
-        Layers
-      </div>
+  <div class="layer-list">
 
-      <label class="key-row">
+    <label class="key-row">
 
-        <input
-          type="checkbox"
-          checked
-          onchange="toggleLayer('heat',this.checked)"
-        >
+      <input
+        type="checkbox"
+        checked
+        onchange="toggleLayer('heat',this.checked)"
+      >
 
-        Seismic heat field
+      Seismic heat field
 
-      </label>
-
-      <label class="key-row">
-
-        <input
-          type="checkbox"
-          checked
-          onchange="toggleLayer('quakes',this.checked)"
-        >
-
-        Earthquake events
-
-     <label class="key-row">
-
-  <input
-    type="checkbox"
-    checked
-    onchange="toggleLayer('cms',this.checked)"
-  >
-
-  <span
-    class="key"
-    style="
-      background:#f8f3eb;
-      border:2px solid #5ba7ff;
-    "
-  ></span>
-
-  Contract Manufacturers
-
-</label>
+    </label>
 
 
-<label class="key-row">
+    <label class="key-row">
 
-  <input
-    type="checkbox"
-    checked
-    onchange="toggleLayer('packaging',this.checked)"
-  >
+      <input
+        type="checkbox"
+        checked
+        onchange="toggleLayer('quakes',this.checked)"
+      >
 
-  <span
-    class="key"
-    style="
-      background:#b88cff;
-    "
-  ></span>
+      Earthquake events
 
-  Primary Packaging
+    </label>
 
-</label>
 
-      <label class="key-row">
+    <label class="key-row">
 
-        <input
-          id="exposureToggle"
-          type="checkbox"
-          checked
-          onchange="toggleLayer('exposure',this.checked)"
-        >
+      <input
+        type="checkbox"
+        checked
+        onchange="toggleLayer('cms',this.checked)"
+      >
 
-        Site exposure halos
+      <span
+        class="key"
+        style="
+          background:#f8f3eb;
+          border:2px solid #5ba7ff;
+        "
+      ></span>
 
-      </label>
+      Contract Manufacturers
 
-    </div>
+    </label>
 
+
+    <label class="key-row">
+
+      <input
+        type="checkbox"
+        checked
+        onchange="toggleLayer('packaging',this.checked)"
+      >
+
+      <span
+        class="key"
+        style="
+          background:#b88cff;
+        "
+      ></span>
+
+      Primary Packaging
+
+    </label>
+
+
+    <label class="key-row">
+
+      <input
+        id="exposureToggle"
+        type="checkbox"
+        checked
+        onchange="toggleLayer('exposure',this.checked)"
+      >
+
+      Site exposure halos
+
+    </label>
+
+  </div>
+
+</div>
+   
     <div class="section">
 
       <div class="label">
