@@ -2080,6 +2080,8 @@ async function setDataMode(
   await loadHistoricalYear();
 }
 
+}
+
 
 
 /* =====================================================
@@ -3416,11 +3418,13 @@ if (
           };
         }
 
-        if (
-          layer &&
-          layer.id ===
-          "manufacturing-sites"
-        ) {
+     if (
+  layer &&
+  (
+    layer.id === "cm-sites" ||
+    layer.id === "packaging-sites"
+  )
+) {
 
           return {
 
