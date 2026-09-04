@@ -2061,30 +2061,25 @@ async function setDataMode(
 
   } else {
 
-    pill.className =
-      "history-pill";
+  pill.className =
+    "history-pill";
 
-    pill.textContent =
-      "● HISTORY";
+  pill.textContent =
+    "● HISTORY";
 
-    /*
-      Do not show current exposure
-      halos while viewing history.
-    */
+  exposureToggle.disabled =
+    false;
 
-    exposureToggle.checked =
-      false;
+  exposureToggle.checked =
+    layerState.exposure;
 
-    exposureToggle.disabled =
-      layerState.exposure;
+  closeFacilityDrawer(
+    false
+  );
 
-    closeFacilityDrawer(
-      false
-    );
-
-    await loadHistoricalYear();
-  }
+  await loadHistoricalYear();
 }
+
 
 
 /* =====================================================
@@ -4517,14 +4512,29 @@ function toggleLayer(
   value
 ) {
 
-  layerState[
-    name
-  ] =
+  layerState[name] =
     value;
+
+  if (
+    name === "exposure"
+  ) {
+
+    const exposureToggle =
+      document.getElementById(
+        "exposureToggle"
+      );
+
+    if (
+      exposureToggle
+    ) {
+
+      exposureToggle.checked =
+        value;
+    }
+  }
 
   render();
 }
-
 
 /* =====================================================
    HELPERS
