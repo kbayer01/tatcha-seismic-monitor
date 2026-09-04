@@ -1023,7 +1023,7 @@
         onchange="toggleLayer('exposure',this.checked)"
       >
 
-      Site exposure halos
+      Current site exposure halos
 
     </label>
 
@@ -1034,7 +1034,7 @@
     <div class="section">
 
       <div class="label">
-        Current exposure
+        Current Site Exposure
       </div>
 
       <div class="key-row">
@@ -1588,25 +1588,49 @@ async function loadLiveEarthquakes() {
 function populateHistoryYears() {
 
   const select =
-    document
-      .getElementById(
-        "historyYear"
-      );
+    document.getElementById(
+      "historyYear"
+    );
 
   select.innerHTML = "";
 
-  const allOption =
-    document.createElement(
-      "option"
-    );
+  const rangeOptions = [
+    {
+      value:"5y",
+      label:"Past 5 Years"
+    },
+    {
+      value:"10y",
+      label:"Past 10 Years"
+    },
+    {
+      value:"15y",
+      label:"Past 15 Years"
+    },
+    {
+      value:"all",
+      label:"2010 – Present"
+    }
+  ];
 
-  allOption.value = "all";
+  rangeOptions.forEach(
+    item => {
 
-  allOption.textContent =
-    "2010 – Present";
+      const option =
+        document.createElement(
+          "option"
+        );
 
-  select.appendChild(
-    allOption
+      option.value =
+        item.value;
+
+      option.textContent =
+        item.label;
+
+      select.appendChild(
+        option
+      );
+    }
   );
 
   const currentYear =
@@ -1634,7 +1658,6 @@ function populateHistoryYears() {
     );
   }
 }
-
 
 /* =====================================================
    HISTORICAL M6+ DATA
@@ -1673,45 +1696,77 @@ async function loadHistoricalYear() {
   let endDate;
   let label;
 
+ const now =
+  new Date();
+
+if (
+  selected === "5y" ||
+  selected === "10y" ||
+  selected === "15y"
+) {
+
+  const years =
+    Number(
+      selected.replace(
+        "y",
+        ""
+      )
+    );
+
+  const start =
+    new Date(now);
+
+  start.setFullYear(
+    now.getFullYear() -
+    years
+  );
+
+  startDate =
+    start.toISOString();
+
+  endDate =
+    now.toISOString();
+
+  label =
+    `Past ${years} Years`;
+
+} else if (
+  selected === "all"
+) {
+
+  startDate =
+    "2010-01-01T00:00:00Z";
+
+  endDate =
+    now.toISOString();
+
+  label =
+    "2010 – Present";
+
+} else {
+
+  const year =
+    Number(selected);
+
+  startDate =
+    `${year}-01-01T00:00:00Z`;
+
   if (
-    selected === "all"
+    year === currentYear
   ) {
 
-    startDate =
-      "2010-01-01T00:00:00Z";
-
     endDate =
-      new Date()
-        .toISOString();
-
-    label =
-      "2010 – Present";
+      now.toISOString();
 
   } else {
 
-    const year =
-      Number(selected);
-
-    startDate =
-      `${year}-01-01T00:00:00Z`;
-
-    if (
-      year === currentYear
-    ) {
-
-      endDate =
-        new Date()
-          .toISOString();
-
-    } else {
-
-      endDate =
-        `${year}-12-31T23:59:59Z`;
-    }
-
-    label =
-      String(year);
+    endDate =
+      `${year}-12-31T23:59:59Z`;
   }
+
+  label =
+    String(year);
+}
 
   const params =
     new URLSearchParams({
@@ -2021,7 +2076,7 @@ async function setDataMode(
       false;
 
     exposureToggle.disabled =
-      true;
+      layerState.exposure;
 
     closeFacilityDrawer(
       false
@@ -3082,12 +3137,10 @@ function render() {
   */
 
   if (
-    dataMode === "live"
-    &&
-    layerState.exposure
-    &&
-    facilityExposure.length
-  ) {
+  layerState.exposure
+  &&
+  facilityExposure.length
+) {
 
     layers.push(
 
