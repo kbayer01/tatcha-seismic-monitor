@@ -1,0 +1,4775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Tatcha Seismic Exposure Monitor</title>
+
+  <!-- deck.gl -->
+  <script src="https://unpkg.com/deck.gl@9.1.0/dist.min.js"></script>
+
+  <!-- KMZ support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <style>
+    :root {
+      --bg:#090b0e;
+      --panel:rgba(15,18,22,.96);
+      --panel2:#15191f;
+      --line:#292f38;
+      --text:#f7f3ec;
+      --muted:#98a1ac;
+      --cream:#f4eee4;
+
+      --green:#44d17a;
+      --yellow:#ffd34e;
+      --orange:#ff8d37;
+      --red:#ff3b45;
+      --deep:#bd1028;
+    }
+
+    * {
+      box-sizing:border-box;
+    }
+
+    html,
+    body {
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+
+      background:var(--bg);
+      color:var(--text);
+
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    #app {
+      width:100%;
+      height:100%;
+
+      display:grid;
+
+      grid-template-columns:
+        340px
+        minmax(0,1fr);
+    }
+
+    #sidebar {
+      position:relative;
+      z-index:20;
+
+      overflow-y:auto;
+
+      padding:22px;
+
+      background:
+        rgba(14,17,21,.97);
+
+      border-right:
+        1px solid var(--line);
+
+      backdrop-filter:
+        blur(16px);
+    }
+
+    #map {
+      position:relative;
+
+      width:100%;
+      height:100%;
+
+      background:#080b0f;
+    }
+
+    .brand {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+
+      gap:12px;
+
+      margin-bottom:5px;
+    }
+
+    h1 {
+      margin:0;
+
+      font-size:19px;
+      font-weight:600;
+
+      line-height:1.15;
+
+      letter-spacing:-.02em;
+    }
+
+    .live-pill {
+      padding:5px 8px;
+
+      border:
+        1px solid rgba(68,209,122,.35);
+
+      border-radius:999px;
+
+      background:
+        rgba(68,209,122,.08);
+
+      color:#80efa7;
+
+      font-size:10px;
+      font-weight:600;
+
+      letter-spacing:.08em;
+    }
+
+    .history-pill {
+      padding:5px 8px;
+
+      border:
+        1px solid rgba(255,141,55,.4);
+
+      border-radius:999px;
+
+      background:
+        rgba(255,141,55,.08);
+
+      color:#ffad68;
+
+      font-size:10px;
+      font-weight:600;
+
+      letter-spacing:.08em;
+    }
+
+    .subtitle {
+      margin-top:7px;
+      margin-bottom:20px;
+
+      color:var(--muted);
+
+      font-size:11px;
+      line-height:1.5;
+    }
+
+    .section {
+      margin-top:17px;
+      padding-top:17px;
+
+      border-top:
+        1px solid var(--line);
+    }
+
+    .label {
+      margin-bottom:9px;
+
+      color:#7d8793;
+
+      font-size:10px;
+      font-weight:600;
+
+      letter-spacing:.12em;
+
+      text-transform:uppercase;
+    }
+
+    .row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+    }
+
+    button {
+      padding:8px 10px;
+
+      border:
+        1px solid #303640;
+
+      border-radius:8px;
+
+      background:#15191e;
+      color:#cbd1d8;
+
+      cursor:pointer;
+
+      font-size:11px;
+
+      transition:
+        border-color .15s,
+        background .15s,
+        color .15s;
+    }
+
+    button:hover {
+      border-color:#65707c;
+    }
+
+    button.active {
+      border-color:var(--cream);
+      background:var(--cream);
+      color:#111;
+    }
+
+    .metric-grid {
+      display:grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap:9px;
+    }
+
+    .metric {
+      padding:12px;
+
+      border:
+        1px solid var(--line);
+
+      border-radius:10px;
+
+      background:var(--panel2);
+    }
+
+    .metric-value {
+      font-size:23px;
+      font-weight:600;
+    }
+
+    .metric-name {
+      margin-top:3px;
+
+      color:var(--muted);
+
+      font-size:10px;
+    }
+
+    select {
+      width:100%;
+
+      padding:9px 10px;
+
+      border:
+        1px solid #303640;
+
+      border-radius:8px;
+
+      background:#12161b;
+      color:#edf0f3;
+
+      font-size:11px;
+    }
+
+    .history-controls {
+      display:none;
+
+      margin-top:10px;
+    }
+
+    .history-controls.visible {
+      display:block;
+    }
+
+    .history-description {
+      margin-top:8px;
+
+      color:#7f8995;
+
+      font-size:10px;
+      line-height:1.5;
+    }
+
+    .key-row {
+      display:flex;
+      align-items:center;
+
+      gap:9px;
+
+      margin:7px 0;
+
+      color:#a9b0b9;
+
+      font-size:11px;
+    }
+
+    .key {
+      width:9px;
+      height:9px;
+
+      border-radius:50%;
+    }
+
+    .site {
+      margin-bottom:7px;
+      padding:11px;
+
+      border:
+        1px solid var(--line);
+
+      border-radius:9px;
+
+      background:#14181d;
+
+      cursor:pointer;
+    }
+
+    .site:hover {
+      border-color:#555f6b;
+    }
+
+    .site-name {
+      margin-bottom:5px;
+
+      font-size:11px;
+      font-weight:550;
+    }
+
+    .site-risk {
+      display:flex;
+      align-items:center;
+
+      gap:7px;
+
+      color:var(--muted);
+
+      font-size:10px;
+    }
+
+    .dot {
+      width:8px;
+      height:8px;
+
+      border-radius:50%;
+    }
+
+    input[type=file] {
+      width:100%;
+
+      color:var(--muted);
+
+      font-size:10px;
+    }
+
+    #status {
+      margin-top:9px;
+
+      color:#89939f;
+
+      font-size:10px;
+      line-height:1.5;
+    }
+
+    .timestamp {
+      margin-top:10px;
+
+      color:#69737f;
+
+      font-size:10px;
+    }
+
+    /*
+      API key modal
+    */
+
+    #apiPanel {
+      position:absolute;
+      z-index:100;
+
+      top:50%;
+      left:calc(50% + 170px);
+
+      width:380px;
+
+      padding:25px;
+
+      transform:
+        translate(-50%,-50%);
+
+      border:
+        1px solid #323945;
+
+      border-radius:15px;
+
+      background:#12161b;
+
+      box-shadow:
+        0 25px 80px rgba(0,0,0,.55);
+    }
+
+    #apiPanel h2 {
+      margin:0 0 8px;
+
+      font-size:18px;
+    }
+
+    #apiPanel p {
+      color:#9da5b0;
+
+      font-size:11px;
+      line-height:1.5;
+    }
+
+    #apiKey {
+      width:100%;
+
+      margin:10px 0;
+      padding:11px;
+
+      border:
+        1px solid #3a424d;
+
+      border-radius:8px;
+
+      background:#090c0f;
+      color:white;
+    }
+
+    #apiPanel button {
+      width:100%;
+
+      border-color:var(--cream);
+
+      background:var(--cream);
+      color:#111;
+
+      font-weight:600;
+    }
+
+    /*
+      Facility drawer
+    */
+
+    .facility-drawer {
+      position:absolute;
+      z-index:40;
+
+      top:18px;
+      right:18px;
+
+      width:365px;
+      max-height:
+        calc(100vh - 36px);
+
+      overflow-y:auto;
+
+      padding:24px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.12);
+
+      border-radius:14px;
+
+      background:
+        rgba(15,18,22,.96);
+
+      box-shadow:
+        0 20px 70px
+        rgba(0,0,0,.55);
+
+      backdrop-filter:
+        blur(18px);
+
+      transform:
+        translateX(
+          calc(100% + 50px)
+        );
+
+      opacity:0;
+
+      pointer-events:none;
+
+      transition:
+        transform .28s ease,
+        opacity .28s ease;
+    }
+
+    .facility-drawer.open {
+      transform:
+        translateX(0);
+
+      opacity:1;
+
+      pointer-events:auto;
+    }
+
+    .drawer-close {
+      position:absolute;
+
+      top:12px;
+      right:14px;
+
+      padding:3px 8px;
+
+      border:0;
+
+      background:transparent;
+
+      color:#89929d;
+
+      font-size:24px;
+    }
+
+    .drawer-eyebrow,
+    .drawer-section-title {
+      color:#777f89;
+
+      font-size:9px;
+      font-weight:600;
+
+      letter-spacing:.14em;
+    }
+
+    .facility-drawer h2 {
+      margin:
+        7px 35px 20px 0;
+
+      font-size:20px;
+      line-height:1.25;
+    }
+
+    .drawer-risk-row {
+      display:flex;
+      justify-content:
+        space-between;
+      align-items:center;
+
+      color:#9ea6af;
+
+      font-size:11px;
+    }
+
+    .exposure-badge {
+      padding:6px 10px;
+
+      border-radius:999px;
+
+      font-size:10px;
+      font-weight:700;
+
+      letter-spacing:.05em;
+    }
+
+    .drawer-divider {
+      height:1px;
+
+      margin:19px 0;
+
+      background:#292f38;
+    }
+
+    .drawer-section-title {
+      margin-bottom:9px;
+    }
+
+    .drawer-stat {
+      display:flex;
+
+      justify-content:
+        space-between;
+
+      align-items:flex-start;
+
+      gap:20px;
+
+      padding:7px 0;
+
+      font-size:11px;
+    }
+
+    .drawer-stat span {
+      color:#959da7;
+    }
+
+    .drawer-stat strong {
+      color:#f5f1ea;
+
+      font-weight:600;
+      text-align:right;
+    }
+
+    .drawer-stat.featured strong {
+      font-size:18px;
+    }
+
+    .drawer-location {
+      color:#a5adb6;
+
+      font-size:10px;
+      line-height:1.55;
+    }
+
+    .drawer-footer {
+      margin-top:20px;
+
+      color:#69737d;
+
+      font-size:9px;
+    }
+
+    .drawer-source {
+      display:inline-block;
+
+      margin-top:8px;
+      padding:4px 7px;
+
+      border:
+        1px solid #343b44;
+
+      border-radius:999px;
+
+      color:#9099a4;
+
+      font-size:9px;
+    }
+
+    .loading-overlay {
+      position:absolute;
+      z-index:35;
+
+      top:18px;
+      left:50%;
+
+      padding:9px 13px;
+
+      transform:
+        translateX(-50%);
+
+      border:
+        1px solid rgba(
+          255,255,255,.13
+        );
+
+      border-radius:999px;
+
+      background:
+        rgba(13,16,20,.9);
+
+      color:#c9cfd6;
+
+      font-size:10px;
+
+      display:none;
+    }
+
+    .loading-overlay.visible {
+      display:block;
+    }
+
+    @media(max-width:900px) {
+
+      #app {
+        grid-template-columns:1fr;
+        grid-template-rows:
+          310px
+          minmax(0,1fr);
+      }
+
+      #sidebar {
+        border-right:0;
+
+        border-bottom:
+          1px solid var(--line);
+      }
+
+      #apiPanel {
+        left:50%;
+
+        width:
+          calc(100% - 30px);
+      }
+
+      .facility-drawer {
+        top:auto;
+        bottom:18px;
+
+        width:
+          calc(100% - 36px);
+
+        max-height:55vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="apiPanel">
+
+  <h2>Tatcha Seismic Exposure Monitor</h2>
+
+  <p>
+    Enter your Google Maps JavaScript API key.
+    It is stored only in this browser.
+  </p>
+
+  <input
+    id="apiKey"
+    type="password"
+    placeholder="Google Maps API key"
+  />
+
+  <button onclick="saveApiKey()">
+    Launch Monitor
+  </button>
+
+</div>
+
+<div id="app">
+
+  <aside id="sidebar">
+
+    <div class="brand">
+
+      <h1>
+        Seismic Exposure
+      </h1>
+
+      <span
+        id="modePill"
+        class="live-pill"
+      >
+        ● LIVE
+      </span>
+
+    </div>
+
+    <div class="subtitle">
+      Tatcha Manufacturing Network<br>
+      Live + historical seismic activity
+    </div>
+
+
+    <div class="metric-grid">
+
+      <div class="metric">
+
+        <div
+          class="metric-value"
+          id="quakeCount"
+        >
+          —
+        </div>
+
+        <div class="metric-name">
+          Visible earthquakes
+        </div>
+
+      </div>
+
+      <div class="metric">
+
+        <div
+          class="metric-value"
+          id="largestMag"
+        >
+          —
+        </div>
+
+        <div class="metric-name">
+          Largest magnitude
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- MODE -->
+
+    <div class="section">
+
+      <div class="label">
+        Data mode
+      </div>
+
+      <div class="row">
+
+        <button
+          id="liveModeBtn"
+          class="active"
+          onclick="setDataMode('live')"
+        >
+          Live
+        </button>
+
+        <button
+          id="historyModeBtn"
+          onclick="setDataMode('history')"
+        >
+          M6+ History
+        </button>
+
+      </div>
+
+
+      <div
+        id="historyControls"
+        class="history-controls"
+      >
+
+        <div
+          class="label"
+          style="margin-top:13px"
+        >
+          Historical period
+        </div>
+
+        <select
+          id="historyYear"
+          onchange="loadHistoricalYear()"
+        >
+        </select>
+
+        <div class="history-description">
+          Explore magnitude 6.0+ earthquakes
+          from 2010 onward.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- VIEW -->
+
+    <div class="section">
+
+      <div class="label">
+        Map view
+      </div>
+
+      <div class="row">
+
+        <button
+          id="japanBtn"
+          class="active"
+          onclick="setRegion('japan')"
+        >
+          Japan
+        </button>
+
+        <button
+          id="globalBtn"
+          onclick="setRegion('global')"
+        >
+          Global
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- LIVE TIME FILTER -->
+
+    <div
+      class="section"
+      id="liveTimeSection"
+    >
+
+      <div class="label">
+        Live time window
+      </div>
+
+      <div class="row">
+
+        <button
+          data-days="1"
+          onclick="setDays(1)"
+        >
+          24 hours
+        </button>
+
+        <button
+          data-days="7"
+          class="active"
+          onclick="setDays(7)"
+        >
+          7 days
+        </button>
+
+        <button
+          data-days="30"
+          onclick="setDays(30)"
+        >
+          30 days
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- MAGNITUDE -->
+
+    <div
+      class="section"
+      id="magnitudeSection"
+    >
+
+      <div class="label">
+        Live minimum magnitude
+      </div>
+
+      <div class="row">
+
+        <button
+          data-mag="2.5"
+          class="active"
+          onclick="setMagnitude(2.5)"
+        >
+          M2.5+
+        </button>
+
+        <button
+          data-mag="4.5"
+          onclick="setMagnitude(4.5)"
+        >
+          M4.5+
+        </button>
+
+        <button
+          data-mag="6"
+          onclick="setMagnitude(6)"
+        >
+          M6+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- LAYERS -->
+
+    <div class="section">
+
+      <div class="label">
+        Layers
+      </div>
+
+      <label class="key-row">
+
+        <input
+          type="checkbox"
+          checked
+          onchange="
+            toggleLayer(
+              'heat',
+              this.checked
+            )
+          "
+        >
+
+        Seismic heat field
+
+      </label>
+
+      <label class="key-row">
+
+        <input
+          type="checkbox"
+          checked
+          onchange="
+            toggleLayer(
+              'quakes',
+              this.checked
+            )
+          "
+        >
+
+        Earthquake events
+
+      </label>
+
+      <label class="key-row">
+
+        <input
+          type="checkbox"
+          checked
+          onchange="
+            toggleLayer(
+              'sites',
+              this.checked
+            )
+          "
+        >
+
+        Manufacturing locations
+
+      </label>
+
+      <label class="key-row">
+
+        <input
+          type="checkbox"
+          checked
+          onchange="
+            toggleLayer(
+              'exposure',
+              this.checked
+            )
+          "
+        >
+
+        Site exposure halos
+
+      </label>
+
+    </div>
+
+
+    <!-- EXPOSURE LEGEND -->
+
+    <div class="section">
+
+      <div class="label">
+        Current exposure
+      </div>
+
+      <div class="key-row">
+        <span
+          class="key"
+          style="
+            background:#44d17a
+          "
+        ></span>
+        Low
+      </div>
+
+      <div class="key-row">
+        <span
+          class="key"
+          style="
+            background:#ffd34e
+          "
+        ></span>
+        Elevated
+      </div>
+
+      <div class="key-row">
+        <span
+          class="key"
+          style="
+            background:#ff8d37
+          "
+        ></span>
+        High
+      </div>
+
+      <div class="key-row">
+        <span
+          class="key"
+          style="
+            background:#ff3b45
+          "
+        ></span>
+        Very high
+      </div>
+
+    </div>
+
+
+    <!-- FACILITIES -->
+
+    <div class="section">
+
+      <div class="label">
+        Manufacturing locations
+      </div>
+
+      <div id="siteList">
+        Loading locations…
+      </div>
+
+    </div>
+
+
+    <!-- KML -->
+
+    <div class="section">
+
+      <div class="label">
+        KML / KMZ fallback
+      </div>
+
+      <input
+        type="file"
+        accept=".kml,.kmz"
+        onchange="loadLocalMap(event)"
+      >
+
+      <div id="status"></div>
+
+    </div>
+
+
+    <div
+      class="timestamp"
+      id="updated"
+    >
+      Waiting for seismic data…
+    </div>
+
+  </aside>
+
+
+  <main id="map">
+
+    <div
+      id="loadingOverlay"
+      class="loading-overlay"
+    >
+      Loading earthquake catalog…
+    </div>
+
+
+    <!-- FACILITY DETAIL DRAWER -->
+
+    <aside
+      id="facilityDrawer"
+      class="facility-drawer"
+    >
+
+      <button
+        class="drawer-close"
+        onclick="closeFacilityDrawer()"
+      >
+        ×
+      </button>
+
+      <div class="drawer-eyebrow">
+        MANUFACTURING LOCATION
+      </div>
+
+      <h2 id="drawerSiteName">
+        Facility
+      </h2>
+
+
+      <div class="drawer-risk-row">
+
+        <span>
+          Exposure
+        </span>
+
+        <span
+          id="drawerExposureBadge"
+          class="exposure-badge"
+        >
+          —
+        </span>
+
+      </div>
+
+
+      <div class="drawer-divider">
+      </div>
+
+
+      <div class="drawer-section-title">
+        SEISMIC ACTIVITY
+      </div>
+
+      <div
+        class="drawer-stat featured"
+      >
+        <span>
+          Largest nearby event
+        </span>
+
+        <strong id="drawerLargest">
+          —
+        </strong>
+      </div>
+
+      <div class="drawer-stat">
+
+        <span>
+          Distance
+        </span>
+
+        <strong id="drawerDistance">
+          —
+        </strong>
+
+      </div>
+
+      <div class="drawer-stat">
+
+        <span>
+          Depth
+        </span>
+
+        <strong id="drawerDepth">
+          —
+        </strong>
+
+      </div>
+
+      <div class="drawer-stat">
+
+        <span>
+          M4+ events / 7 days
+        </span>
+
+        <strong id="drawerM4Seven">
+          —
+        </strong>
+
+      </div>
+
+      <div class="drawer-stat">
+
+        <span>
+          M5+ events / 30 days
+        </span>
+
+        <strong id="drawerM5Thirty">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="drawer-divider">
+      </div>
+
+
+      <div class="drawer-section-title">
+        ACTIVITY VS BASELINE
+      </div>
+
+      <div class="drawer-stat">
+
+        <span>
+          Current activity
+        </span>
+
+        <strong id="drawerActivity">
+          —
+        </strong>
+
+      </div>
+
+      <div class="drawer-stat">
+
+        <span>
+          Historical weekly average
+        </span>
+
+        <strong id="drawerBaseline">
+          Select facility
+        </strong>
+
+      </div>
+
+      <div class="drawer-stat">
+
+        <span>
+          Current vs baseline
+        </span>
+
+        <strong id="drawerVsBaseline">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="drawer-divider">
+      </div>
+
+
+      <div
+        id="drawerEventLocation"
+        class="drawer-location"
+      >
+      </div>
+
+      <div class="drawer-source">
+        Source: USGS
+      </div>
+
+      <div class="drawer-footer">
+
+        Last refreshed
+
+        <span id="drawerRefresh">
+          —
+        </span>
+
+      </div>
+
+    </aside>
+
+  </main>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+
+const MY_MAP_ID =
+  "1htH1KfTzJb1-FDoOmeszEKajKzVuHeQ";
+
+const MY_MAP_KML =
+  "https://www.google.com/maps/d/kml" +
+  "?forcekml=1&mid=" +
+  MY_MAP_ID;
+
+
+/*
+  Live feed always keeps 30 days
+  locally.
+
+  The visible 1 / 7 / 30 day
+  buttons filter this dataset.
+*/
+
+const LIVE_FEED =
+  "https://earthquake.usgs.gov/" +
+  "earthquakes/feed/v1.0/" +
+  "summary/2.5_month.geojson";
+
+
+const USGS_HISTORY_API =
+  "https://earthquake.usgs.gov/" +
+  "fdsnws/event/1/query";
+
+
+const colors = {
+
+  low:
+    [68,209,122],
+
+  elevated:
+    [255,211,78],
+
+  high:
+    [255,141,55],
+
+  veryHigh:
+    [255,59,69]
+
+};
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let map;
+
+let overlay;
+
+let pulseOverlay;
+
+let pulseAnimationId;
+
+
+let liveEarthquakeData = [];
+
+let displayedEarthquakeData = [];
+
+let facilities = [];
+
+
+let dataMode =
+  "live";
+
+
+let days =
+  7;
+
+
+let minMagnitude =
+  2.5;
+
+
+let selectedFacility =
+  null;
+
+
+let historicalBaselineCache =
+  {};
+
+
+let layerState = {
+
+  heat:true,
+
+  quakes:true,
+
+  sites:true,
+
+  exposure:true
+
+};
+
+
+/* =====================================================
+   API KEY
+===================================================== */
+
+function saveApiKey() {
+
+  const key =
+    document
+      .getElementById(
+        "apiKey"
+      )
+      .value
+      .trim();
+
+
+  if (!key) {
+    return;
+  }
+
+
+  localStorage.setItem(
+    "tatchaMapsKey",
+    key
+  );
+
+
+  document
+    .getElementById(
+      "apiPanel"
+    )
+    .style
+    .display =
+      "none";
+
+
+  loadGoogleMaps(
+    key
+  );
+}
+
+
+function loadGoogleMaps(key) {
+
+  const script =
+    document
+      .createElement(
+        "script"
+      );
+
+
+  script.src =
+    "https://maps.googleapis.com/" +
+    "maps/api/js" +
+    "?key=" +
+    encodeURIComponent(key) +
+    "&callback=initMap" +
+    "&v=weekly";
+
+
+  script.async =
+    true;
+
+  script.defer =
+    true;
+
+
+  document.head
+    .appendChild(
+      script
+    );
+}
+
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+
+async function initMap() {
+
+  map =
+    new google.maps.Map(
+      document.getElementById(
+        "map"
+      ),
+      {
+
+        center:{
+          lat:36.5,
+          lng:138
+        },
+
+        zoom:5,
+
+        backgroundColor:
+          "#090b0d",
+
+        mapTypeControl:false,
+
+        streetViewControl:false,
+
+        fullscreenControl:true,
+
+        styles:[
+
+          {
+            elementType:
+              "geometry",
+
+            stylers:[
+              {
+                color:
+                  "#11151a"
+              }
+            ]
+          },
+
+          {
+            elementType:
+              "labels.text.stroke",
+
+            stylers:[
+              {
+                color:
+                  "#11151a"
+              }
+            ]
+          },
+
+          {
+            elementType:
+              "labels.text.fill",
+
+            stylers:[
+              {
+                color:
+                  "#75808d"
+              }
+            ]
+          },
+
+          {
+            featureType:
+              "administrative",
+
+            elementType:
+              "geometry",
+
+            stylers:[
+              {
+                color:
+                  "#303842"
+              }
+            ]
+          },
+
+          {
+            featureType:
+              "road",
+
+            elementType:
+              "geometry",
+
+            stylers:[
+              {
+                color:
+                  "#1b222a"
+              }
+            ]
+          },
+
+          {
+            featureType:
+              "water",
+
+            elementType:
+              "geometry",
+
+            stylers:[
+              {
+                color:
+                  "#080c11"
+              }
+            ]
+          },
+
+          {
+            featureType:
+              "poi",
+
+            stylers:[
+              {
+                visibility:
+                  "off"
+              }
+            ]
+          }
+
+        ]
+      }
+    );
+
+
+  overlay =
+    new deck.GoogleMapsOverlay({
+      layers:[]
+    });
+
+
+  overlay.setMap(
+    map
+  );
+
+
+  pulseOverlay =
+    new deck.GoogleMapsOverlay({
+      layers:[]
+    });
+
+
+  pulseOverlay.setMap(
+    map
+  );
+
+
+  populateHistoryYears();
+
+
+  await Promise.all([
+    loadLiveEarthquakes(),
+    loadMyMap()
+  ]);
+
+
+  startPulseAnimation();
+
+
+  /*
+    Refresh live source
+    once per minute.
+
+    It only redraws the current
+    map automatically when the
+    dashboard is in LIVE mode.
+  */
+
+  setInterval(
+    loadLiveEarthquakes,
+    60000
+  );
+}
+
+
+/* =====================================================
+   LIVE USGS DATA
+===================================================== */
+
+async function loadLiveEarthquakes() {
+
+  try {
+
+    const response =
+      await fetch(
+        LIVE_FEED,
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        "USGS returned " +
+        response.status
+      );
+    }
+
+
+    const json =
+      await response.json();
+
+
+    liveEarthquakeData =
+      json.features.map(
+        normalizeUSGSFeature
+      );
+
+
+    if (
+      dataMode ===
+      "live"
+    ) {
+
+      displayedEarthquakeData =
+        liveEarthquakeData;
+
+      render();
+
+      updateTimestamp(
+        "Live feed updated"
+      );
+
+    }
+
+
+    if (
+      selectedFacility
+    ) {
+
+      openFacilityDrawer(
+        selectedFacility,
+        false
+      );
+    }
+
+  } catch(error) {
+
+    document
+      .getElementById(
+        "status"
+      )
+      .textContent =
+        "USGS live feed error: " +
+        error.message;
+  }
+}
+
+
+/* =====================================================
+   HISTORICAL M6+ DATA
+===================================================== */
+
+function populateHistoryYears() {
+
+  const select =
+    document
+      .getElementById(
+        "historyYear"
+      );
+
+
+  select.innerHTML =
+    "";
+
+
+  /*
+    Entire period option
+  */
+
+  const allOption =
+    document
+      .createElement(
+        "option"
+      );
+
+
+  allOption.value =
+    "all";
+
+  allOption.textContent =
+    "2010 – Present";
+
+
+  select.appendChild(
+    allOption
+  );
+
+
+  const currentYear =
+    new Date()
+      .getFullYear();
+
+
+  /*
+    Most recent year first
+  */
+
+  for (
+    let year =
+      currentYear;
+
+    year >= 2010;
+
+    year--
+  ) {
+
+    const option =
+      document
+        .createElement(
+          "option"
+        );
+
+
+    option.value =
+      String(year);
+
+    option.textContent =
+      String(year);
+
+
+    select.appendChild(
+      option
+    );
+  }
+}
+
+
+async function loadHistoricalYear() {
+
+  if (
+    dataMode !==
+    "history"
+  ) {
+    return;
+  }
+
+
+  showLoading(
+    true
+  );
+
+
+  const selected =
+    document
+      .getElementById(
+        "historyYear"
+      )
+      .value;
+
+
+  const currentYear =
+    new Date()
+      .getFullYear();
+
+
+  let startDate;
+
+  let endDate;
+
+  let label;
+
+
+  if (
+    selected ===
+    "all"
+  ) {
+
+    startDate =
+      "2010-01-01";
+
+    endDate =
+      new Date()
+        .toISOString();
+
+    label =
+      "2010 – Present";
+
+  } else {
+
+    const year =
+      Number(selected);
+
+
+    startDate =
+      year +
+      "-01-01";
+
+
+    if (
+      year ===
+      currentYear
+    ) {
+
+      endDate =
+        new Date()
+          .toISOString();
+
+    } else {
+
+      endDate =
+        (year + 1) +
+        "-01-01";
+    }
+
+
+    label =
+      String(year);
+  }
+
+
+  const params =
+    new URLSearchParams({
+
+      format:
+        "geojson",
+
+      starttime:
+        startDate,
+
+      endtime:
+        endDate,
+
+      minmagnitude:
+        "6.0",
+
+      orderby:
+        "time",
+
+      limit:
+        "20000"
+
+    });
+
+
+  try {
+
+    const response =
+      await fetch(
+        USGS_HISTORY_API +
+        "?" +
+        params.toString(),
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        "USGS catalog returned " +
+        response.status
+      );
+    }
+
+
+    const json =
+      await response.json();
+
+
+    displayedEarthquakeData =
+      json.features
+        .map(
+          normalizeUSGSFeature
+        )
+        .filter(
+          q =>
+            q.magnitude >= 6.0
+        );
+
+
+    updateTimestamp(
+      "Historical catalog: " +
+      label
+    );
+
+
+    render();
+
+
+  } catch(error) {
+
+    document
+      .getElementById(
+        "status"
+      )
+      .textContent =
+        "Historical catalog error: " +
+        error.message;
+
+  } finally {
+
+    showLoading(
+      false
+    );
+  }
+}
+
+
+/* =====================================================
+   NORMALIZE USGS DATA
+===================================================== */
+
+function normalizeUSGSFeature(
+  feature
+) {
+
+  const coordinates =
+    feature.geometry
+      ?.coordinates ||
+    [0,0,0];
+
+
+  return {
+
+    id:
+      feature.id,
+
+    longitude:
+      coordinates[0],
+
+    latitude:
+      coordinates[1],
+
+    depth:
+      coordinates[2] || 0,
+
+    magnitude:
+      Number(
+        feature.properties
+          ?.mag || 0
+      ),
+
+    place:
+      feature.properties
+        ?.place ||
+      "Unknown location",
+
+    time:
+      feature.properties
+        ?.time,
+
+    updated:
+      feature.properties
+        ?.updated,
+
+    url:
+      feature.properties
+        ?.url,
+
+    tsunami:
+      feature.properties
+        ?.tsunami || 0,
+
+    significance:
+      feature.properties
+        ?.sig || 0
+
+  };
+}
+
+
+/* =====================================================
+   DATA MODE
+===================================================== */
+
+async function setDataMode(
+  mode
+) {
+
+  dataMode =
+    mode;
+
+
+  document
+    .getElementById(
+      "liveModeBtn"
+    )
+    .classList
+    .toggle(
+      "active",
+      mode ===
+      "live"
+    );
+
+
+  document
+    .getElementById(
+      "historyModeBtn"
+    )
+    .classList
+    .toggle(
+      "active",
+      mode ===
+      "history"
+    );
+
+
+  document
+    .getElementById(
+      "historyControls"
+    )
+    .classList
+    .toggle(
+      "visible",
+      mode ===
+      "history"
+    );
+
+
+  document
+    .getElementById(
+      "liveTimeSection"
+    )
+    .style
+    .display =
+      mode ===
+      "live"
+        ? "block"
+        : "none";
+
+
+  document
+    .getElementById(
+      "magnitudeSection"
+    )
+    .style
+    .display =
+      mode ===
+      "live"
+        ? "block"
+        : "none";
+
+
+  const pill =
+    document
+      .getElementById(
+        "modePill"
+      );
+
+
+  if (
+    mode ===
+    "live"
+  ) {
+
+    pill.className =
+      "live-pill";
+
+    pill.textContent =
+      "● LIVE";
+
+
+    displayedEarthquakeData =
+      liveEarthquakeData;
+
+
+    updateTimestamp(
+      "Live feed"
+    );
+
+
+    render();
+
+  } else {
+
+    pill.className =
+      "history-pill";
+
+    pill.textContent =
+      "● HISTORY";
+
+
+    closeFacilityDrawer();
+
+
+    await loadHistoricalYear();
+  }
+}
+
+
+/* =====================================================
+   MY MAP / FACILITIES
+===================================================== */
+
+async function loadMyMap() {
+
+  try {
+
+    const response =
+      await fetch(
+        MY_MAP_KML,
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        "My Maps KML returned " +
+        response.status
+      );
+    }
+
+
+    const text =
+      await response.text();
+
+
+    facilities =
+      parseKMLPoints(
+        text
+      );
+
+
+    if (
+      !facilities.length
+    ) {
+
+      throw new Error(
+        "No Point placemarks found."
+      );
+    }
+
+
+    document
+      .getElementById(
+        "status"
+      )
+      .textContent =
+        facilities.length +
+        " manufacturing locations loaded.";
+
+  } catch(error) {
+
+    document
+      .getElementById(
+        "status"
+      )
+      .textContent =
+        "Automatic My Maps import was blocked. " +
+        "Use the KML/KMZ upload above.";
+
+    console.warn(
+      error
+    );
+  }
+
+
+  render();
+}
+
+
+function parseKMLPoints(
+  text
+) {
+
+  const xml =
+    new DOMParser()
+      .parseFromString(
+        text,
+        "text/xml"
+      );
+
+
+  return [
+    ...xml.querySelectorAll(
+      "Placemark"
+    )
+  ]
+
+    .map(
+      (
+        placemark,
+        index
+      ) => {
+
+        /*
+          KML namespaces can cause
+          selector differences.
+
+          Try both approaches.
+        */
+
+        let pointCoordinates =
+          placemark.querySelector(
+            "Point coordinates"
+          );
+
+
+        if (
+          !pointCoordinates
+        ) {
+
+          const point =
+            [
+              ...placemark
+                .getElementsByTagName(
+                  "Point"
+                )
+            ][0];
+
+
+          if (
+            point
+          ) {
+
+            pointCoordinates =
+              [
+                ...point
+                  .getElementsByTagName(
+                    "coordinates"
+                  )
+              ][0];
+          }
+        }
+
+
+        if (
+          !pointCoordinates
+        ) {
+          return null;
+        }
+
+
+        const parts =
+          pointCoordinates
+            .textContent
+            .trim()
+            .split(",");
+
+
+        if (
+          parts.length < 2
+        ) {
+          return null;
+        }
+
+
+        const longitude =
+          Number(
+            parts[0]
+          );
+
+
+        const latitude =
+          Number(
+            parts[1]
+          );
+
+
+        if (
+          !Number.isFinite(
+            longitude
+          ) ||
+          !Number.isFinite(
+            latitude
+          )
+        ) {
+
+          return null;
+        }
+
+
+        const nameElement =
+          placemark
+            .getElementsByTagName(
+              "name"
+            )[0];
+
+
+        const descriptionElement =
+          placemark
+            .getElementsByTagName(
+              "description"
+            )[0];
+
+
+        return {
+
+          id:
+            "site-" +
+            index,
+
+          name:
+            nameElement
+              ?.textContent
+              ?.trim()
+            ||
+            "Manufacturing location",
+
+          longitude,
+
+          latitude,
+
+          description:
+            descriptionElement
+              ?.textContent
+              ?.trim()
+            ||
+            ""
+
+        };
+      }
+    )
+
+    .filter(
+      Boolean
+    );
+}
+
+
+/* =====================================================
+   LOCAL KML / KMZ UPLOAD
+===================================================== */
+
+async function loadLocalMap(
+  event
+) {
+
+  const file =
+    event.target
+      .files[0];
+
+
+  if (
+    !file
+  ) {
+    return;
+  }
+
+
+  let kmlText;
+
+
+  if (
+    file.name
+      .toLowerCase()
+      .endsWith(
+        ".kmz"
+      )
+  ) {
+
+    const zip =
+      await JSZip
+        .loadAsync(
+          await file.arrayBuffer()
+        );
+
+
+    const kmlFile =
+      Object.values(
+        zip.files
+      )
+      .find(
+        item =>
+          item.name
+            .toLowerCase()
+            .endsWith(
+              ".kml"
+            )
+      );
+
+
+    if (
+      !kmlFile
+    ) {
+
+      alert(
+        "No KML file found inside the KMZ."
+      );
+
+      return;
+    }
+
+
+    kmlText =
+      await kmlFile.async(
+        "string"
+      );
+
+  } else {
+
+    kmlText =
+      await file.text();
+  }
+
+
+  facilities =
+    parseKMLPoints(
+      kmlText
+    );
+
+
+  document
+    .getElementById(
+      "status"
+    )
+    .textContent =
+      facilities.length +
+      " manufacturing locations loaded from " +
+      file.name +
+      ".";
+
+
+  render();
+}
+
+
+/* =====================================================
+   DISTANCE
+===================================================== */
+
+function distanceKm(
+  a,
+  b
+) {
+
+  const R =
+    6371;
+
+
+  const dLat =
+    (
+      b.latitude -
+      a.latitude
+    ) *
+    Math.PI /
+    180;
+
+
+  const dLon =
+    (
+      b.longitude -
+      a.longitude
+    ) *
+    Math.PI /
+    180;
+
+
+  const lat1 =
+    a.latitude *
+    Math.PI /
+    180;
+
+
+  const lat2 =
+    b.latitude *
+    Math.PI /
+    180;
+
+
+  const h =
+    Math.sin(
+      dLat / 2
+    ) ** 2 +
+
+    Math.cos(
+      lat1
+    ) *
+
+    Math.cos(
+      lat2
+    ) *
+
+    Math.sin(
+      dLon / 2
+    ) ** 2;
+
+
+  return R *
+    2 *
+    Math.atan2(
+      Math.sqrt(h),
+      Math.sqrt(1-h)
+    );
+}
+
+
+/* =====================================================
+   CURRENT EXPOSURE CALCULATION
+
+   IMPORTANT:
+   Facility exposure is based on
+   LIVE activity, even if the user
+   is looking at historical mode.
+
+   History therefore does not make
+   today's facility risk look red.
+===================================================== */
+
+function liveVisibleQuakes() {
+
+  const cutoff =
+    Date.now() -
+    days *
+    24 *
+    60 *
+    60 *
+    1000;
+
+
+  return liveEarthquakeData
+    .filter(
+      q =>
+        q.magnitude >=
+          minMagnitude
+        &&
+        q.time >=
+          cutoff
+    );
+}
+
+
+function exposureScore(
+  site
+) {
+
+  const now =
+    Date.now();
+
+
+  let score =
+    0;
+
+
+  let nearest =
+    null;
+
+
+  liveVisibleQuakes()
+    .forEach(
+      q => {
+
+        const km =
+          distanceKm(
+            site,
+            q
+          );
+
+
+        if (
+          km > 500
+        ) {
+          return;
+        }
+
+
+        const ageHours =
+          Math.max(
+            0,
+            (
+              now -
+              q.time
+            ) /
+            3600000
+          );
+
+
+        const magnitudeFactor =
+          Math.pow(
+            10,
+            .55 *
+            (
+              q.magnitude -
+              4
+            )
+          );
+
+
+        const recencyFactor =
+          Math.exp(
+            -ageHours /
+            72
+          );
+
+
+        const distanceFactor =
+          Math.exp(
+            -km /
+            120
+          );
+
+
+        score +=
+          magnitudeFactor *
+          recencyFactor *
+          distanceFactor;
+
+
+        if (
+          !nearest ||
+          km <
+            nearest.km
+        ) {
+
+          nearest = {
+            quake:q,
+            km
+          };
+        }
+      }
+    );
+
+
+  return {
+    score,
+    nearest
+  };
+}
+
+
+function exposureLevel(
+  score
+) {
+
+  if (
+    score >= 4
+  ) {
+
+    return {
+      label:
+        "VERY HIGH",
+
+      color:
+        colors.veryHigh
+    };
+  }
+
+
+  if (
+    score >= 1.5
+  ) {
+
+    return {
+      label:
+        "HIGH",
+
+      color:
+        colors.high
+    };
+  }
+
+
+  if (
+    score >= .45
+  ) {
+
+    return {
+      label:
+        "ELEVATED",
+
+      color:
+        colors.elevated
+    };
+  }
+
+
+  return {
+    label:
+      "LOW",
+
+    color:
+      colors.low
+  };
+}
+
+
+/* =====================================================
+   DISPLAY FILTERS
+===================================================== */
+
+function visibleQuakes() {
+
+  /*
+    HISTORICAL MODE:
+    API already limits to M6+.
+  */
+
+  if (
+    dataMode ===
+    "history"
+  ) {
+
+    return displayedEarthquakeData;
+  }
+
+
+  /*
+    LIVE MODE
+  */
+
+  const cutoff =
+    Date.now() -
+    days *
+    24 *
+    60 *
+    60 *
+    1000;
+
+
+  return displayedEarthquakeData
+    .filter(
+      q =>
+        q.magnitude >=
+          minMagnitude
+        &&
+        q.time >=
+          cutoff
+    );
+}
+
+
+/* =====================================================
+   HEAT WEIGHTS
+===================================================== */
+
+function quakeWeight(
+  q
+) {
+
+  /*
+    Historical events are not
+    penalized for age because the
+    selected historical interval
+    itself is the context.
+  */
+
+  if (
+    dataMode ===
+    "history"
+  ) {
+
+    return Math.pow(
+      3.5,
+      q.magnitude -
+      6
+    );
+  }
+
+
+  const ageHours =
+    Math.max(
+      0,
+      (
+        Date.now() -
+        q.time
+      ) /
+      3600000
+    );
+
+
+  return (
+    Math.pow(
+      2.8,
+      q.magnitude -
+      2.5
+    )
+    *
+    Math.exp(
+      -ageHours /
+      72
+    )
+  );
+}
+
+
+/* =====================================================
+   DRAW MAP
+===================================================== */
+
+function render() {
+
+  if (
+    !overlay
+  ) {
+    return;
+  }
+
+
+  const quakes =
+    visibleQuakes();
+
+
+  const facilityExposure =
+    facilities.map(
+      site => {
+
+        const exposure =
+          exposureScore(
+            site
+          );
+
+
+        return {
+
+          ...site,
+
+          exposure,
+
+          level:
+            exposureLevel(
+              exposure.score
+            )
+
+        };
+      }
+    );
+
+
+  const layers =
+    [];
+
+
+  /*
+    HEAT MAP
+  */
+
+  if (
+    layerState.heat
+  ) {
+
+    layers.push(
+
+      new deck.HeatmapLayer({
+
+        id:
+          "seismic-heat",
+
+        data:
+          quakes,
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getWeight:
+          quakeWeight,
+
+        radiusPixels:
+          dataMode ===
+          "history"
+            ? 42
+            : 50,
+
+        intensity:
+          dataMode ===
+          "history"
+            ? 1.45
+            : 1.2,
+
+        threshold:
+          .03,
+
+        colorRange:[
+
+          [255,230,90,15],
+
+          [255,198,55,70],
+
+          [255,137,45,125],
+
+          [255,70,48,175],
+
+          [190,15,40,225]
+
+        ]
+
+      })
+
+    );
+  }
+
+
+  /*
+    EARTHQUAKE DOTS
+  */
+
+  if (
+    layerState.quakes
+  ) {
+
+    layers.push(
+
+      new deck.ScatterplotLayer({
+
+        id:
+          "earthquake-events",
+
+        data:
+          quakes,
+
+        pickable:
+          true,
+
+        stroked:
+          true,
+
+        filled:
+          true,
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getRadius:
+          d => {
+
+            if (
+              dataMode ===
+              "history"
+            ) {
+
+              return Math.max(
+                16000,
+                Math.pow(
+                  1.9,
+                  d.magnitude
+                ) *
+                900
+              );
+            }
+
+
+            return Math.max(
+              5000,
+
+              Math.pow(
+                1.8,
+                d.magnitude
+              ) *
+              1800
+            );
+          },
+
+        radiusMinPixels:
+          dataMode ===
+          "history"
+            ? 5
+            : 3,
+
+        radiusMaxPixels:
+          30,
+
+        getFillColor:
+          d => {
+
+            if (
+              d.magnitude >= 7
+            ) {
+
+              return [
+                190,
+                15,
+                40,
+                235
+              ];
+            }
+
+
+            if (
+              d.magnitude >= 6
+            ) {
+
+              return [
+                255,
+                58,
+                55,
+                220
+              ];
+            }
+
+
+            if (
+              d.magnitude >= 5
+            ) {
+
+              return [
+                255,
+                104,
+                50,
+                205
+              ];
+            }
+
+
+            if (
+              d.magnitude >= 4
+            ) {
+
+              return [
+                255,
+                150,
+                48,
+                190
+              ];
+            }
+
+
+            return [
+              255,
+              210,
+              70,
+              165
+            ];
+          },
+
+        getLineColor:
+          [
+            255,
+            255,
+            255,
+            90
+          ],
+
+        lineWidthMinPixels:
+          1
+
+      })
+
+    );
+  }
+
+
+  /*
+    SELECTED FACILITY
+    DISTANCE RINGS
+  */
+
+  if (
+    selectedFacility
+  ) {
+
+    const ringData = [
+
+      {
+        ...selectedFacility,
+
+        radius:
+          50000,
+
+        alpha:
+          155
+      },
+
+      {
+        ...selectedFacility,
+
+        radius:
+          100000,
+
+        alpha:
+          105
+      },
+
+      {
+        ...selectedFacility,
+
+        radius:
+          250000,
+
+        alpha:
+          65
+      }
+
+    ];
+
+
+    layers.push(
+
+      new deck.ScatterplotLayer({
+
+        id:
+          "facility-distance-rings",
+
+        data:
+          ringData,
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getRadius:
+          d =>
+            d.radius,
+
+        filled:
+          false,
+
+        stroked:
+          true,
+
+        getLineColor:
+          d => [
+            245,
+            238,
+            225,
+            d.alpha
+          ],
+
+        getLineWidth:
+          d =>
+            d.radius ===
+            50000
+              ? 1500
+              : 900,
+
+        lineWidthMinPixels:
+          1,
+
+        pickable:
+          false
+
+      })
+
+    );
+  }
+
+
+  /*
+    FACILITY EXPOSURE HALOS
+
+    Always current live exposure.
+  */
+
+  if (
+    layerState.exposure &&
+    facilityExposure.length
+  ) {
+
+    layers.push(
+
+      new deck.ScatterplotLayer({
+
+        id:
+          "facility-exposure",
+
+        data:
+          facilityExposure,
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getRadius:
+          70000,
+
+        radiusMinPixels:
+          18,
+
+        radiusMaxPixels:
+          44,
+
+        getFillColor:
+          d => [
+            ...d.level.color,
+            55
+          ],
+
+        stroked:
+          false,
+
+        pickable:
+          false
+
+      })
+
+    );
+  }
+
+
+  /*
+    FACILITY DOTS
+  */
+
+  if (
+    layerState.sites &&
+    facilityExposure.length
+  ) {
+
+    layers.push(
+
+      new deck.ScatterplotLayer({
+
+        id:
+          "manufacturing-sites",
+
+        data:
+          facilityExposure,
+
+        pickable:
+          true,
+
+        onClick:
+          ({object}) => {
+
+            if (
+              !object
+            ) {
+              return;
+            }
+
+
+            openFacilityDrawer(
+              object
+            );
+
+
+            map.panTo({
+
+              lat:
+                object.latitude,
+
+              lng:
+                object.longitude
+
+            });
+
+
+            map.setZoom(
+              Math.max(
+                map.getZoom(),
+                7
+              )
+            );
+          },
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getRadius:
+          16000,
+
+        radiusMinPixels:
+          6,
+
+        radiusMaxPixels:
+          10,
+
+        getFillColor:
+          [
+            248,
+            243,
+            235,
+            255
+          ],
+
+        stroked:
+          true,
+
+        getLineColor:
+          d => [
+            ...d.level.color,
+            255
+          ],
+
+        lineWidthMinPixels:
+          3
+
+      })
+
+    );
+  }
+
+
+  overlay.setProps({
+
+    layers,
+
+    getTooltip:
+      ({
+        object,
+        layer
+      }) => {
+
+        if (
+          !object
+        ) {
+          return null;
+        }
+
+
+        if (
+          layer &&
+          layer.id ===
+            "earthquake-events"
+        ) {
+
+          return {
+
+            html:
+              "<div>" +
+
+              "<b>M" +
+              object.magnitude
+                .toFixed(1) +
+              "</b><br>" +
+
+              escapeHtml(
+                object.place
+              ) +
+              "<br>" +
+
+              "Depth: " +
+              object.depth
+                .toFixed(1) +
+              " km<br>" +
+
+              new Date(
+                object.time
+              )
+                .toLocaleString() +
+
+              "</div>",
+
+            style:{
+
+              background:
+                "#11161c",
+
+              color:
+                "#fff",
+
+              padding:
+                "10px",
+
+              borderRadius:
+                "7px",
+
+              fontSize:
+                "11px"
+
+            }
+
+          };
+        }
+
+
+        if (
+          layer &&
+          layer.id ===
+            "manufacturing-sites"
+        ) {
+
+          return {
+
+            html:
+              "<div>" +
+
+              "<b>" +
+              escapeHtml(
+                object.name
+              ) +
+              "</b><br>" +
+
+              "Current exposure: " +
+              "<strong>" +
+              object.level.label +
+              "</strong>" +
+
+              "</div>",
+
+            style:{
+
+              background:
+                "#11161c",
+
+              color:
+                "#fff",
+
+              padding:
+                "10px",
+
+              borderRadius:
+                "7px",
+
+              fontSize:
+                "11px"
+
+            }
+
+          };
+        }
+
+
+        return null;
+      }
+
+  });
+
+
+  updateDashboard(
+    quakes,
+    facilityExposure
+  );
+}
+
+
+/* =====================================================
+   MAJOR EARTHQUAKE PULSE
+===================================================== */
+
+function startPulseAnimation() {
+
+  function animate(
+    timestamp
+  ) {
+
+    /*
+      Pulsing is meaningful only
+      for LIVE mode.
+    */
+
+    if (
+      dataMode !==
+      "live"
+    ) {
+
+      pulseOverlay
+        ?.setProps({
+          layers:[]
+        });
+
+
+      pulseAnimationId =
+        requestAnimationFrame(
+          animate
+        );
+
+      return;
+    }
+
+
+    const progress =
+      (
+        (
+          timestamp /
+          2400
+        ) %
+        1
+      );
+
+
+    const recentMajor =
+      liveEarthquakeData
+        .filter(
+          q =>
+            q.magnitude >=
+              5.5
+            &&
+            q.time >=
+              Date.now() -
+              24 *
+              60 *
+              60 *
+              1000
+        );
+
+
+    const pulseLayer =
+      new deck.ScatterplotLayer({
+
+        id:
+          "major-quake-pulse",
+
+        data:
+          recentMajor,
+
+        getPosition:
+          d => [
+            d.longitude,
+            d.latitude
+          ],
+
+        getRadius:
+          d =>
+            25000 +
+            progress *
+            (
+              90000 +
+              d.magnitude *
+              12000
+            ),
+
+        filled:
+          false,
+
+        stroked:
+          true,
+
+        getLineColor:
+          [
+            255,
+            65,
+            60,
+
+            Math.round(
+              180 *
+              (
+                1 -
+                progress
+              )
+            )
+          ],
+
+        lineWidthMinPixels:
+          2,
+
+        pickable:
+          false
+
+      });
+
+
+    pulseOverlay
+      ?.setProps({
+
+        layers:[
+          pulseLayer
+        ]
+
+      });
+
+
+    pulseAnimationId =
+      requestAnimationFrame(
+        animate
+      );
+  }
+
+
+  pulseAnimationId =
+    requestAnimationFrame(
+      animate
+    );
+}
+
+
+/* =====================================================
+   FACILITY DETAILS
+===================================================== */
+
+function quakesNearSite(
+  site,
+  radiusKm = 250,
+  maxAgeDays = 30,
+  minimumMagnitude = 0
+) {
+
+  const cutoff =
+    Date.now() -
+    maxAgeDays *
+    24 *
+    60 *
+    60 *
+    1000;
+
+
+  return liveEarthquakeData
+
+    .filter(
+      q =>
+        q.time >=
+          cutoff
+        &&
+        q.magnitude >=
+          minimumMagnitude
+    )
+
+    .map(
+      q => ({
+
+        ...q,
+
+        distanceKm:
+          distanceKm(
+            site,
+            q
+          )
+
+      })
+    )
+
+    .filter(
+      q =>
+        q.distanceKm <=
+        radiusKm
+    );
+}
+
+
+function calculateFacilityMetrics(
+  site
+) {
+
+  const nearby30 =
+    quakesNearSite(
+      site,
+      250,
+      30,
+      2.5
+    );
+
+
+  const nearby7M4 =
+    nearby30.filter(
+      q =>
+        q.magnitude >= 4
+        &&
+        q.time >=
+          Date.now() -
+          7 *
+          24 *
+          60 *
+          60 *
+          1000
+    );
+
+
+  const nearby30M5 =
+    nearby30.filter(
+      q =>
+        q.magnitude >= 5
+    );
+
+
+  const largest =
+    nearby30.reduce(
+      (
+        best,
+        q
+      ) =>
+        !best ||
+        q.magnitude >
+        best.magnitude
+          ? q
+          : best,
+      null
+    );
+
+
+  const exposure =
+    exposureScore(
+      site
+    );
+
+
+  return {
+
+    nearby30,
+
+    nearby7M4,
+
+    nearby30M5,
+
+    largest,
+
+    exposure,
+
+    level:
+      exposureLevel(
+        exposure.score
+      )
+
+  };
+}
+
+
+async function openFacilityDrawer(
+  site,
+  loadBaseline = true
+) {
+
+  selectedFacility =
+    site;
+
+
+  const metrics =
+    calculateFacilityMetrics(
+      site
+    );
+
+
+  document
+    .getElementById(
+      "drawerSiteName"
+    )
+    .textContent =
+      site.name;
+
+
+  const badge =
+    document
+      .getElementById(
+        "drawerExposureBadge"
+      );
+
+
+  badge.textContent =
+    metrics.level.label;
+
+
+  const rgb =
+    metrics.level.color
+      .join(",");
+
+
+  badge.style.color =
+    "rgb(" +
+    rgb +
+    ")";
+
+
+  badge.style.background =
+    "rgba(" +
+    rgb +
+    ",.13)";
+
+
+  badge.style.border =
+    "1px solid rgba(" +
+    rgb +
+    ",.35)";
+
+
+  if (
+    metrics.largest
+  ) {
+
+    document
+      .getElementById(
+        "drawerLargest"
+      )
+      .textContent =
+        "M" +
+        metrics.largest
+          .magnitude
+          .toFixed(1);
+
+
+    document
+      .getElementById(
+        "drawerDistance"
+      )
+      .textContent =
+        Math.round(
+          metrics.largest
+            .distanceKm
+        ) +
+        " km";
+
+
+    document
+      .getElementById(
+        "drawerDepth"
+      )
+      .textContent =
+        Math.round(
+          metrics.largest
+            .depth
+        ) +
+        " km";
+
+
+    document
+      .getElementById(
+        "drawerEventLocation"
+      )
+      .innerHTML =
+        "Largest recent event:<br>" +
+
+        "<strong>" +
+        escapeHtml(
+          metrics.largest.place
+        ) +
+        "</strong><br>" +
+
+        new Date(
+          metrics.largest.time
+        )
+          .toLocaleString();
+
+  } else {
+
+    document
+      .getElementById(
+        "drawerLargest"
+      )
+      .textContent =
+        "None";
+
+
+    document
+      .getElementById(
+        "drawerDistance"
+      )
+      .textContent =
+        "—";
+
+
+    document
+      .getElementById(
+        "drawerDepth"
+      )
+      .textContent =
+        "—";
+
+
+    document
+      .getElementById(
+        "drawerEventLocation"
+      )
+      .textContent =
+        "No qualifying earthquakes " +
+        "within 250 km in the last 30 days.";
+  }
+
+
+  document
+    .getElementById(
+      "drawerM4Seven"
+    )
+    .textContent =
+      metrics.nearby7M4
+        .length;
+
+
+  document
+    .getElementById(
+      "drawerM5Thirty"
+    )
+    .textContent =
+      metrics.nearby30M5
+        .length;
+
+
+  document
+    .getElementById(
+      "drawerRefresh"
+    )
+    .textContent =
+      new Date()
+        .toLocaleTimeString(
+          [],
+          {
+            hour:
+              "numeric",
+
+            minute:
+              "2-digit"
+          }
+        );
+
+
+  document
+    .getElementById(
+      "facilityDrawer"
+    )
+    .classList
+    .add(
+      "open"
+    );
+
+
+  render();
+
+
+  if (
+    loadBaseline
+  ) {
+
+    await loadHistoricalBaseline(
+      site
+    );
+  }
+}
+
+
+function closeFacilityDrawer() {
+
+  selectedFacility =
+    null;
+
+
+  document
+    .getElementById(
+      "facilityDrawer"
+    )
+    .classList
+    .remove(
+      "open"
+    );
+
+
+  render();
+}
+
+
+/* =====================================================
+   FACILITY HISTORICAL BASELINE
+
+   Uses previous 365 days of M4+
+   activity within 250 km.
+
+   This is intentionally separate
+   from the M6 historical explorer.
+===================================================== */
+
+async function loadHistoricalBaseline(
+  site
+) {
+
+  const cacheKey =
+    site.latitude
+      .toFixed(4) +
+    "," +
+    site.longitude
+      .toFixed(4);
+
+
+  if (
+    historicalBaselineCache[
+      cacheKey
+    ]
+  ) {
+
+    displayHistoricalBaseline(
+      site,
+      historicalBaselineCache[
+        cacheKey
+      ]
+    );
+
+    return;
+  }
+
+
+  document
+    .getElementById(
+      "drawerBaseline"
+    )
+    .textContent =
+      "Calculating…";
+
+
+  const end =
+    new Date();
+
+
+  const start =
+    new Date(
+      end.getTime() -
+      365 *
+      24 *
+      60 *
+      60 *
+      1000
+    );
+
+
+  const params =
+    new URLSearchParams({
+
+      format:
+        "geojson",
+
+      starttime:
+        start.toISOString(),
+
+      endtime:
+        end.toISOString(),
+
+      latitude:
+        String(
+          site.latitude
+        ),
+
+      longitude:
+        String(
+          site.longitude
+        ),
+
+      maxradiuskm:
+        "250",
+
+      minmagnitude:
+        "4",
+
+      limit:
+        "20000"
+
+    });
+
+
+  try {
+
+    const response =
+      await fetch(
+        USGS_HISTORY_API +
+        "?" +
+        params.toString()
+      );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        "USGS returned " +
+        response.status
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const annualCount =
+      data.features.length;
+
+
+    const weeklyAverage =
+      annualCount /
+      52.1429;
+
+
+    const baseline = {
+
+      annualCount,
+
+      weeklyAverage
+
+    };
+
+
+    historicalBaselineCache[
+      cacheKey
+    ] =
+      baseline;
+
+
+    displayHistoricalBaseline(
+      site,
+      baseline
+    );
+
+
+  } catch(error) {
+
+    document
+      .getElementById(
+        "drawerBaseline"
+      )
+      .textContent =
+        "Unavailable";
+
+
+    console.error(
+      error
+    );
+  }
+}
+
+
+function displayHistoricalBaseline(
+  site,
+  baseline
+) {
+
+  if (
+    !selectedFacility ||
+    selectedFacility.name !==
+      site.name
+  ) {
+    return;
+  }
+
+
+  const metrics =
+    calculateFacilityMetrics(
+      site
+    );
+
+
+  const current =
+    metrics.nearby7M4
+      .length;
+
+
+  const average =
+    baseline.weeklyAverage;
+
+
+  const ratio =
+    average > 0
+      ? current /
+        average
+      : 0;
+
+
+  let activity =
+    "Typical";
+
+
+  let color =
+    "#44d17a";
+
+
+  if (
+    ratio >= 3
+  ) {
+
+    activity =
+      "Highly Elevated";
+
+    color =
+      "#ff3b45";
+
+  } else if (
+    ratio >= 1.75
+  ) {
+
+    activity =
+      "Elevated";
+
+    color =
+      "#ff8d37";
+
+  } else if (
+    ratio >= 1.2
+  ) {
+
+    activity =
+      "Above Normal";
+
+    color =
+      "#ffd34e";
+  }
+
+
+  document
+    .getElementById(
+      "drawerBaseline"
+    )
+    .textContent =
+      average
+        .toFixed(1) +
+      " M4+ / week";
+
+
+  document
+    .getElementById(
+      "drawerVsBaseline"
+    )
+    .textContent =
+      average > 0
+        ? ratio
+            .toFixed(1) +
+          "×"
+        : "—";
+
+
+  const activityElement =
+    document
+      .getElementById(
+        "drawerActivity"
+      );
+
+
+  activityElement.textContent =
+    activity;
+
+
+  activityElement.style.color =
+    color;
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function updateDashboard(
+  quakes,
+  facilityExposure
+) {
+
+  document
+    .getElementById(
+      "quakeCount"
+    )
+    .textContent =
+      quakes.length
+        .toLocaleString();
+
+
+  const largest =
+    quakes.reduce(
+      (
+        value,
+        q
+      ) =>
+        q.magnitude >
+        value
+          ? q.magnitude
+          : value,
+      0
+    );
+
+
+  document
+    .getElementById(
+      "largestMag"
+    )
+    .textContent =
+      largest
+        ? "M" +
+          largest.toFixed(1)
+        : "—";
+
+
+  const list =
+    document
+      .getElementById(
+        "siteList"
+      );
+
+
+  if (
+    !facilityExposure.length
+  ) {
+
+    list.innerHTML =
+      "<span " +
+      "style='" +
+      "color:#7f8995;" +
+      "font-size:10px" +
+      "'>" +
+      "Importing locations…" +
+      "</span>";
+
+    return;
+  }
+
+
+  const sorted =
+    [
+      ...facilityExposure
+    ]
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.exposure.score -
+          a.exposure.score
+      );
+
+
+  list.innerHTML =
+    sorted
+      .map(
+        (
+          site,
+          index
+        ) => {
+
+          const color =
+            "rgb(" +
+            site.level.color
+              .join(",") +
+            ")";
+
+
+          return (
+
+            "<div " +
+            "class='site' " +
+            "data-site-index='" +
+            index +
+            "'>" +
+
+              "<div " +
+              "class='site-name'>" +
+
+                escapeHtml(
+                  site.name
+                ) +
+
+              "</div>" +
+
+              "<div " +
+              "class='site-risk'>" +
+
+                "<span " +
+                "class='dot' " +
+                "style='" +
+                "background:" +
+                color +
+                "'>" +
+                "</span>" +
+
+                site.level.label +
+
+              "</div>" +
+
+            "</div>"
+
+          );
+        }
+      )
+      .join("");
+
+
+  /*
+    Bind clicks without inserting
+    coordinates into HTML.
+  */
+
+  [
+    ...list.querySelectorAll(
+      ".site"
+    )
+  ]
+    .forEach(
+      (
+        element,
+        index
+      ) => {
+
+        element.addEventListener(
+          "click",
+          () => {
+
+            const site =
+              sorted[
+                index
+              ];
+
+
+            openFacilityDrawer(
+              site
+            );
+
+
+            map.panTo({
+
+              lat:
+                site.latitude,
+
+              lng:
+                site.longitude
+
+            });
+
+
+            map.setZoom(
+              Math.max(
+                map.getZoom(),
+                7
+              )
+            );
+          }
+        );
+      }
+    );
+}
+
+
+/* =====================================================
+   CONTROLS
+===================================================== */
+
+function setRegion(
+  region
+) {
+
+  document
+    .getElementById(
+      "japanBtn"
+    )
+    .classList
+    .toggle(
+      "active",
+      region ===
+      "japan"
+    );
+
+
+  document
+    .getElementById(
+      "globalBtn"
+    )
+    .classList
+    .toggle(
+      "active",
+      region ===
+      "global"
+    );
+
+
+  if (
+    region ===
+    "japan"
+  ) {
+
+    map.panTo({
+
+      lat:36.5,
+
+      lng:138
+
+    });
+
+
+    map.setZoom(
+      5
+    );
+
+  } else {
+
+    map.panTo({
+
+      lat:20,
+
+      lng:0
+
+    });
+
+
+    map.setZoom(
+      2
+    );
+  }
+}
+
+
+function setDays(
+  value
+) {
+
+  days =
+    value;
+
+
+  document
+    .querySelectorAll(
+      "[data-days]"
+    )
+    .forEach(
+      button =>
+
+        button
+          .classList
+          .toggle(
+            "active",
+
+            Number(
+              button.dataset.days
+            ) ===
+            value
+          )
+    );
+
+
+  render();
+
+
+  if (
+    selectedFacility
+  ) {
+
+    openFacilityDrawer(
+      selectedFacility,
+      false
+    );
+  }
+}
+
+
+function setMagnitude(
+  value
+) {
+
+  minMagnitude =
+    value;
+
+
+  document
+    .querySelectorAll(
+      "[data-mag]"
+    )
+    .forEach(
+      button =>
+
+        button
+          .classList
+          .toggle(
+            "active",
+
+            Number(
+              button.dataset.mag
+            ) ===
+            value
+          )
+    );
+
+
+  render();
+}
+
+
+function toggleLayer(
+  name,
+  value
+) {
+
+  layerState[
+    name
+  ] =
+    value;
+
+
+  render();
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function escapeHtml(
+  text
+) {
+
+  return String(
+    text
+  )
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+
+function updateTimestamp(
+  prefix
+) {
+
+  document
+    .getElementById(
+      "updated"
+    )
+    .textContent =
+      prefix +
+      " • " +
+      new Date()
+        .toLocaleTimeString(
+          [],
+          {
+            hour:
+              "numeric",
+
+            minute:
+              "2-digit"
+          }
+        );
+}
+
+
+function showLoading(
+  visible
+) {
+
+  document
+    .getElementById(
+      "loadingOverlay"
+    )
+    .classList
+    .toggle(
+      "visible",
+      visible
+    );
+}
+
+
+/* =====================================================
+   AUTO-OPEN SAVED GOOGLE MAPS KEY
+===================================================== */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const saved =
+      localStorage.getItem(
+        "tatchaMapsKey"
+      );
+
+
+    if (
+      saved
+    ) {
+
+      document
+        .getElementById(
+          "apiPanel"
+        )
+        .style
+        .display =
+          "none";
+
+
+      loadGoogleMaps(
+        saved
+      );
+    }
+  }
+);
+
+
+window.initMap =
+  initMap;
+
+</script>
+
+</body>
+</html>
