@@ -77,22 +77,24 @@
     }
 
     #mapContainer {
-  position:relative;
+      position:relative;
 
-  width:100%;
-  height:100%;
+      width:100%;
+      height:100%;
 
-  overflow:hidden;
+      overflow:hidden;
 
-  background:#080b0f;
-}
+      background:#080b0f;
+    }
 
-#map {
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-}
+    #map {
+      position:absolute;
+      inset:0;
+
+      width:100%;
+      height:100%;
+    }
+
     .brand {
       display:flex;
       justify-content:space-between;
@@ -206,6 +208,11 @@
       border-color:var(--cream);
       background:var(--cream);
       color:#111;
+    }
+
+    button:disabled {
+      opacity:.45;
+      cursor:not-allowed;
     }
 
     .metric-grid {
@@ -428,48 +435,48 @@
     }
 
     .facility-drawer {
-  position:absolute;
-  z-index:40;
+      position:absolute;
+      z-index:40;
 
-  top:18px;
-  right:18px;
+      top:18px;
+      right:18px;
 
-  width:360px;
-  max-width:calc(100% - 36px);
-  max-height:calc(100% - 36px);
+      width:360px;
+      max-width:calc(100% - 36px);
+      max-height:calc(100% - 36px);
 
-  overflow-y:auto;
+      overflow-y:auto;
 
-  padding:24px;
+      padding:24px;
 
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
 
-  background:rgba(15,18,22,.97);
+      background:rgba(15,18,22,.97);
 
-  box-shadow:0 20px 70px rgba(0,0,0,.55);
+      box-shadow:0 20px 70px rgba(0,0,0,.55);
 
-  backdrop-filter:blur(18px);
+      backdrop-filter:blur(18px);
 
-  transform:translateX(calc(100% + 60px));
-  opacity:0;
+      transform:translateX(calc(100% + 60px));
+      opacity:0;
 
-  visibility:hidden;
-  pointer-events:none;
+      visibility:hidden;
+      pointer-events:none;
 
-  transition:
-    transform .28s ease,
-    opacity .28s ease,
-    visibility .28s ease;
-}
+      transition:
+        transform .28s ease,
+        opacity .28s ease,
+        visibility .28s ease;
+    }
 
-.facility-drawer.open {
-  transform:translateX(0);
-  opacity:1;
+    .facility-drawer.open {
+      transform:translateX(0);
+      opacity:1;
 
-  visibility:visible;
-  pointer-events:auto;
-}
+      visibility:visible;
+      pointer-events:auto;
+    }
 
     .drawer-close {
       position:absolute;
@@ -486,6 +493,11 @@
       color:#89929d;
 
       font-size:24px;
+    }
+
+    .drawer-close:hover {
+      color:#fff;
+      border:0;
     }
 
     .drawer-eyebrow,
@@ -723,6 +735,7 @@
     <div class="metric-grid">
 
       <div class="metric">
+
         <div
           class="metric-value"
           id="quakeCount"
@@ -733,9 +746,11 @@
         <div class="metric-name">
           Visible earthquakes
         </div>
+
       </div>
 
       <div class="metric">
+
         <div
           class="metric-value"
           id="largestMag"
@@ -746,6 +761,7 @@
         <div class="metric-name">
           Largest magnitude
         </div>
+
       </div>
 
     </div>
@@ -1041,137 +1057,29 @@
 
   </aside>
 
-<main id="mapContainer">
 
-  <div id="map"></div>
+  <main id="mapContainer">
 
-  <div
-    id="loadingOverlay"
-    class="loading-overlay"
-  >
-    Loading earthquake catalog…
-  </div>
-
-  <div
-    id="historyBanner"
-    class="history-banner"
-  >
-    Historical mode
-  </div>
-
-  <aside
-    id="facilityDrawer"
-    class="facility-drawer"
-  >
-
-    <button
-      class="drawer-close"
-      onclick="closeFacilityDrawer()"
-    >
-      ×
-    </button>
-
-    <div class="drawer-eyebrow">
-      MANUFACTURING LOCATION
-    </div>
-
-    <h2 id="drawerSiteName">
-      Facility
-    </h2>
-
-    <div class="drawer-risk-row">
-
-      <span>
-        Current exposure
-      </span>
-
-      <span
-        id="drawerExposureBadge"
-        class="exposure-badge"
-      >
-        —
-      </span>
-
-    </div>
-
-    <div class="drawer-divider"></div>
-
-    <div class="drawer-section-title">
-      CURRENT SEISMIC ACTIVITY
-    </div>
-
-    <div class="drawer-stat featured">
-
-      <span>
-        Largest nearby event
-      </span>
-
-      <strong id="drawerLargest">
-        —
-      </strong>
-
-    </div>
-
-    <div class="drawer-stat">
-      <span>Distance</span>
-      <strong id="drawerDistance">—</strong>
-    </div>
-
-    <div class="drawer-stat">
-      <span>Depth</span>
-      <strong id="drawerDepth">—</strong>
-    </div>
-
-    <div class="drawer-stat">
-      <span>M4+ events / 7 days</span>
-      <strong id="drawerM4Seven">—</strong>
-    </div>
-
-    <div class="drawer-stat">
-      <span>M5+ events / 30 days</span>
-      <strong id="drawerM5Thirty">—</strong>
-    </div>
-
-    <div class="drawer-divider"></div>
-
-    <div class="drawer-section-title">
-      ACTIVITY VS BASELINE
-    </div>
-
-    <div class="drawer-stat">
-      <span>Current activity</span>
-      <strong id="drawerActivity">—</strong>
-    </div>
-
-    <div class="drawer-stat">
-      <span>Historical weekly average</span>
-      <strong id="drawerBaseline">Select facility</strong>
-    </div>
-
-    <div class="drawer-stat">
-      <span>Current vs baseline</span>
-      <strong id="drawerVsBaseline">—</strong>
-    </div>
-
-    <div class="drawer-divider"></div>
+    <div id="map"></div>
 
     <div
-      id="drawerEventLocation"
-      class="drawer-location"
-    ></div>
-
-    <div class="drawer-source">
-      Source: USGS
+      id="loadingOverlay"
+      class="loading-overlay"
+    >
+      Loading earthquake catalog…
     </div>
 
-    <div class="drawer-footer">
-      Last refreshed
-      <span id="drawerRefresh">—</span>
+    <div
+      id="historyBanner"
+      class="history-banner"
+    >
+      Historical mode
     </div>
 
-  </aside>
-
-</main>
+    <aside
+      id="facilityDrawer"
+      class="facility-drawer"
+    >
 
       <button
         class="drawer-close"
@@ -1222,51 +1130,23 @@
       </div>
 
       <div class="drawer-stat">
-
-        <span>
-          Distance
-        </span>
-
-        <strong id="drawerDistance">
-          —
-        </strong>
-
+        <span>Distance</span>
+        <strong id="drawerDistance">—</strong>
       </div>
 
       <div class="drawer-stat">
-
-        <span>
-          Depth
-        </span>
-
-        <strong id="drawerDepth">
-          —
-        </strong>
-
+        <span>Depth</span>
+        <strong id="drawerDepth">—</strong>
       </div>
 
       <div class="drawer-stat">
-
-        <span>
-          M4+ events / 7 days
-        </span>
-
-        <strong id="drawerM4Seven">
-          —
-        </strong>
-
+        <span>M4+ events / 7 days</span>
+        <strong id="drawerM4Seven">—</strong>
       </div>
 
       <div class="drawer-stat">
-
-        <span>
-          M5+ events / 30 days
-        </span>
-
-        <strong id="drawerM5Thirty">
-          —
-        </strong>
-
+        <span>M5+ events / 30 days</span>
+        <strong id="drawerM5Thirty">—</strong>
       </div>
 
       <div class="drawer-divider"></div>
@@ -1276,39 +1156,18 @@
       </div>
 
       <div class="drawer-stat">
-
-        <span>
-          Current activity
-        </span>
-
-        <strong id="drawerActivity">
-          —
-        </strong>
-
+        <span>Current activity</span>
+        <strong id="drawerActivity">—</strong>
       </div>
 
       <div class="drawer-stat">
-
-        <span>
-          Historical weekly average
-        </span>
-
-        <strong id="drawerBaseline">
-          Select facility
-        </strong>
-
+        <span>Historical weekly average</span>
+        <strong id="drawerBaseline">Select facility</strong>
       </div>
 
       <div class="drawer-stat">
-
-        <span>
-          Current vs baseline
-        </span>
-
-        <strong id="drawerVsBaseline">
-          —
-        </strong>
-
+        <span>Current vs baseline</span>
+        <strong id="drawerVsBaseline">—</strong>
       </div>
 
       <div class="drawer-divider"></div>
@@ -1316,8 +1175,7 @@
       <div
         id="drawerEventLocation"
         class="drawer-location"
-      >
-      </div>
+      ></div>
 
       <div class="drawer-source">
         Source: USGS
@@ -1325,9 +1183,7 @@
 
       <div class="drawer-footer">
         Last refreshed
-        <span id="drawerRefresh">
-          —
-        </span>
+        <span id="drawerRefresh">—</span>
       </div>
 
     </aside>
@@ -1335,6 +1191,7 @@
   </main>
 
 </div>
+
 
 <script>
 
@@ -1584,9 +1441,7 @@ async function initMap() {
   populateHistoryYears();
 
   document
-    .getElementById(
-      "historyYear"
-    )
+    .getElementById("historyYear")
     .addEventListener(
       "change",
       loadHistoricalYear
@@ -1743,10 +1598,8 @@ async function loadHistoricalYear() {
   showLoading(true);
 
   /*
-    IMPORTANT FIX:
-    Clear whatever dataset was
-    previously on-screen before
-    loading the selected year.
+    Clear previous display dataset
+    immediately.
   */
 
   displayedEarthquakeData = [];
@@ -1865,10 +1718,6 @@ async function loadHistoricalYear() {
             q.magnitude >= 6.0
         );
 
-    console.log(
-      `Loaded ${displayedEarthquakeData.length} M6+ earthquakes for ${label}`
-    );
-
     document
       .getElementById(
         "historyLoadedLabel"
@@ -1878,12 +1727,19 @@ async function loadHistoricalYear() {
         `${displayedEarthquakeData.length.toLocaleString()} ` +
         `earthquakes M6.0+`;
 
-    document
-      .getElementById(
-        "historyBanner"
-      )
-      .textContent =
+    const historyBanner =
+      document
+        .getElementById(
+          "historyBanner"
+        );
+
+    if (
+      historyBanner
+    ) {
+
+      historyBanner.textContent =
         `Historical M6+ • ${label}`;
+    }
 
     updateTimestamp(
       "Historical catalog: " +
@@ -2043,19 +1899,21 @@ async function setDataMode(
         : "none";
 
   const historyBanner =
-  document.getElementById(
-    "historyBanner"
-  );
-
-if (historyBanner) {
-
-  historyBanner
-    .classList
-    .toggle(
-      "visible",
-      mode === "history"
+    document.getElementById(
+      "historyBanner"
     );
-}
+
+  if (
+    historyBanner
+  ) {
+
+    historyBanner
+      .classList
+      .toggle(
+        "visible",
+        mode === "history"
+      );
+  }
 
   const exposureToggle =
     document.getElementById(
@@ -2078,16 +1936,8 @@ if (historyBanner) {
     pill.textContent =
       "● LIVE";
 
-    /*
-      Restore live data.
-    */
-
     displayedEarthquakeData =
       [...liveEarthquakeData];
-
-    /*
-      Exposure halos allowed again.
-    */
 
     exposureToggle.disabled =
       false;
@@ -2110,8 +1960,8 @@ if (historyBanner) {
       "● HISTORY";
 
     /*
-      Hide current exposure halos
-      while viewing historical data.
+      Do not show current exposure
+      halos while viewing history.
     */
 
     exposureToggle.checked =
@@ -2732,6 +2582,10 @@ function render() {
 
   const layers = [];
 
+  /*
+    HEAT FIELD
+  */
+
   if (
     layerState.heat
   ) {
@@ -2755,12 +2609,12 @@ function render() {
 
         radiusPixels:
           dataMode === "history"
-            ? 42
+            ? 38
             : 50,
 
         intensity:
           dataMode === "history"
-            ? 1.45
+            ? 1.35
             : 1.2,
 
         threshold:.03,
@@ -2783,6 +2637,10 @@ function render() {
 
     );
   }
+
+  /*
+    EARTHQUAKE EVENTS
+  */
 
   if (
     layerState.quakes
@@ -2811,17 +2669,22 @@ function render() {
         getRadius:
           d => {
 
+            /*
+              More controlled historical
+              marker sizing.
+            */
+
             if (
               dataMode === "history"
             ) {
 
-              return Math.max(
-                16000,
+              return (
+                18000 +
                 Math.pow(
-                  1.9,
-                  d.magnitude
+                  d.magnitude - 5.5,
+                  2
                 ) *
-                900
+                12000
               );
             }
 
@@ -2841,10 +2704,25 @@ function render() {
             ? 5
             : 3,
 
-        radiusMaxPixels:30,
+        radiusMaxPixels:
+          dataMode === "history"
+            ? 22
+            : 30,
 
         getFillColor:
           d => {
+
+            if (
+              d.magnitude >= 8
+            ) {
+
+              return [
+                150,
+                8,
+                35,
+                240
+              ];
+            }
 
             if (
               d.magnitude >= 7
@@ -2916,6 +2794,10 @@ function render() {
 
     );
   }
+
+  /*
+    SELECTED FACILITY RINGS
+  */
 
   if (
     selectedFacility
@@ -2990,9 +2872,10 @@ function render() {
   }
 
   /*
-    IMPORTANT:
-    Hide current exposure halos
-    in historical mode.
+    CURRENT EXPOSURE HALOS
+
+    Never displayed in
+    historical mode.
   */
 
   if (
@@ -3038,6 +2921,10 @@ function render() {
     );
   }
 
+  /*
+    MANUFACTURING SITES
+  */
+
   if (
     layerState.sites
     &&
@@ -3061,10 +2948,6 @@ function render() {
               return;
             }
 
-            openFacilityDrawer(
-              object
-            );
-
             map.panTo({
 
               lat:
@@ -3081,6 +2964,20 @@ function render() {
                 7
               )
             );
+
+            /*
+              Current facility drawer
+              opens only in LIVE mode.
+            */
+
+            if (
+              dataMode === "live"
+            ) {
+
+              openFacilityDrawer(
+                object
+              );
+            }
           },
 
         getPosition:
@@ -3208,7 +3105,8 @@ function render() {
 
               (
                 dataMode === "history"
-                  ? "Manufacturing location"
+                  ?
+                  "Manufacturing location"
                   :
                   "Current exposure: " +
                   "<strong>" +
@@ -3248,7 +3146,7 @@ function render() {
 
 
 /* =====================================================
-   MAJOR QUake PULSE
+   MAJOR QUAKE PULSE
 ===================================================== */
 
 function startPulseAnimation() {
@@ -3494,7 +3392,20 @@ async function openFacilityDrawer(
   loadBaseline = true
 ) {
 
-  selectedFacility = site;
+  /*
+    Defensive check:
+    drawer only represents
+    current/live facility status.
+  */
+
+  if (
+    dataMode !== "live"
+  ) {
+    return;
+  }
+
+  selectedFacility =
+    site;
 
   const metrics =
     calculateFacilityMetrics(
@@ -3678,20 +3589,30 @@ function closeFacilityDrawer(
   redraw = true
 ) {
 
-  selectedFacility = null;
+  selectedFacility =
+    null;
 
-  document
-    .getElementById(
-      "facilityDrawer"
-    )
-    .classList
-    .remove(
-      "open"
-    );
+  const drawer =
+    document
+      .getElementById(
+        "facilityDrawer"
+      );
+
+  if (
+    drawer
+  ) {
+
+    drawer
+      .classList
+      .remove(
+        "open"
+      );
+  }
 
   if (
     redraw
   ) {
+
     render();
   }
 }
@@ -4031,13 +3952,17 @@ function updateDashboard(
 
           const riskText =
             dataMode === "history"
-              ? "Manufacturing location"
-              : site.level.label;
+              ?
+              "Manufacturing location"
+              :
+              site.level.label;
 
           const dotColor =
             dataMode === "history"
-              ? "#f5f1ea"
-              : color;
+              ?
+              "#f5f1ea"
+              :
+              color;
 
           return (
 
@@ -4096,10 +4021,6 @@ function updateDashboard(
             const site =
               sorted[index];
 
-            openFacilityDrawer(
-              site
-            );
-
             map.panTo({
 
               lat:
@@ -4116,6 +4037,20 @@ function updateDashboard(
                 7
               )
             );
+
+            /*
+              Only open current facility
+              drawer in LIVE mode.
+            */
+
+            if (
+              dataMode === "live"
+            ) {
+
+              openFacilityDrawer(
+                site
+              );
+            }
           }
         );
       }
@@ -4323,15 +4258,23 @@ function showLoading(
   visible
 ) {
 
-  document
-    .getElementById(
-      "loadingOverlay"
-    )
-    .classList
-    .toggle(
-      "visible",
-      visible
-    );
+  const overlayElement =
+    document
+      .getElementById(
+        "loadingOverlay"
+      );
+
+  if (
+    overlayElement
+  ) {
+
+    overlayElement
+      .classList
+      .toggle(
+        "visible",
+        visible
+      );
+  }
 }
 
 
