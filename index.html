@@ -951,19 +951,45 @@
 
         Earthquake events
 
-      </label>
+     <label class="key-row">
 
-      <label class="key-row">
+  <input
+    type="checkbox"
+    checked
+    onchange="toggleLayer('cms',this.checked)"
+  >
 
-        <input
-          type="checkbox"
-          checked
-          onchange="toggleLayer('sites',this.checked)"
-        >
+  <span
+    class="key"
+    style="
+      background:#f8f3eb;
+      border:2px solid #5ba7ff;
+    "
+  ></span>
 
-        Manufacturing locations
+  Contract Manufacturers
 
-      </label>
+</label>
+
+
+<label class="key-row">
+
+  <input
+    type="checkbox"
+    checked
+    onchange="toggleLayer('packaging',this.checked)"
+  >
+
+  <span
+    class="key"
+    style="
+      background:#b88cff;
+    "
+  ></span>
+
+  Primary Packaging
+
+</label>
 
       <label class="key-row">
 
@@ -1023,7 +1049,7 @@
     <div class="section">
 
       <div class="label">
-        Manufacturing locations
+        Supply Network
       </div>
 
       <div id="siteList">
@@ -1263,7 +1289,9 @@ let layerState = {
 
   quakes:true,
 
-  sites:true,
+  cms:true,
+
+  packaging:true,
 
   exposure:true
 
@@ -2047,9 +2075,7 @@ async function loadMyMap() {
 }
 
 
-function parseKMLPoints(
-  text
-) {
+function parseKMLPoints(text) {
 
   const xml =
     new DOMParser()
@@ -2058,26 +2084,146 @@ function parseKMLPoints(
         "text/xml"
       );
 
-  return [
-    ...xml.querySelectorAll(
-      "Placemark"
-    )
-  ]
+  const sites = [];
 
-    .map(
-      (
-        placemark,
-        index
-      ) => {
+  /*
+    My Maps exports each layer
+    as a KML Folder.
 
-        let pointCoordinates =
-          placemark.querySelector(
-            "Point coordinates"
-          );
+    We inspect each folder and
+    classify its point placemarks.
+  */
+
+  const folders =
+    [
+      ...xml.getElementsByTagName(
+        "Folder"
+      )
+    ];
+
+  folders.forEach(
+    (
+      folder,
+      folderIndex
+    ) => {
+
+      /*
+        Get the folder's own name,
+        not the name of one of its
+        child placemarks.
+      */
+
+      let folderName =
+        "";
+
+      for (
+        const child of
+        folder.children
+      ) {
 
         if (
-          !pointCoordinates
+          child.localName ===
+          "name"
         ) {
+
+          folderName =
+            child.textContent
+              .trim();
+
+          break;
+        }
+      }
+
+      const normalizedFolder =
+        folderName
+          .toLowerCase()
+          .trim();
+
+
+      /*
+        Explicitly discard the
+        OLD My Maps earthquake
+        layer.
+      */
+
+      if (
+        normalizedFolder.includes(
+          "earthquake"
+        )
+      ) {
+
+        return;
+      }
+
+
+      let category =
+        null;
+
+
+      /*
+        Contract Manufacturers
+      */
+
+      if (
+        normalizedFolder ===
+          "cms"
+        ||
+        normalizedFolder.includes(
+          "contract manufacturer"
+        )
+        ||
+        normalizedFolder.includes(
+          "contract manufacturing"
+        )
+      ) {
+
+        category =
+          "cm";
+      }
+
+
+      /*
+        Primary Packaging
+      */
+
+      if (
+        normalizedFolder.includes(
+          "primary packaging"
+        )
+      ) {
+
+        category =
+          "primary-packaging";
+      }
+
+
+      /*
+        Ignore any other My Maps
+        layers for now.
+      */
+
+      if (
+        !category
+      ) {
+
+        return;
+      }
+
+
+      const placemarks =
+        [
+          ...folder
+            .getElementsByTagName(
+              "Placemark"
+            )
+        ];
+
+
+      placemarks.forEach(
+        (
+          placemark,
+          index
+        ) => {
 
           const point =
             [
@@ -2087,99 +2233,131 @@ function parseKMLPoints(
                 )
             ][0];
 
+
           if (
-            point
+            !point
           ) {
 
-            pointCoordinates =
-              [
-                ...point
-                  .getElementsByTagName(
-                    "coordinates"
-                  )
-              ][0];
+            return;
           }
-        }
 
-        if (
-          !pointCoordinates
-        ) {
-          return null;
-        }
 
-        const parts =
-          pointCoordinates
-            .textContent
-            .trim()
-            .split(",");
+          const coordinates =
+            [
+              ...point
+                .getElementsByTagName(
+                  "coordinates"
+                )
+            ][0];
 
-        if (
-          parts.length < 2
-        ) {
-          return null;
-        }
 
-        const longitude =
-          Number(parts[0]);
+          if (
+            !coordinates
+          ) {
 
-        const latitude =
-          Number(parts[1]);
+            return;
+          }
 
-        if (
-          !Number.isFinite(
-            longitude
-          ) ||
-          !Number.isFinite(
-            latitude
-          )
-        ) {
 
-          return null;
-        }
+          const parts =
+            coordinates
+              .textContent
+              .trim()
+              .split(",");
 
-        const nameElement =
-          placemark
-            .getElementsByTagName(
-              "name"
-            )[0];
 
-        const descriptionElement =
-          placemark
-            .getElementsByTagName(
-              "description"
-            )[0];
+          if (
+            parts.length < 2
+          ) {
 
-        return {
+            return;
+          }
 
-          id:
-            "site-" +
-            index,
 
-          name:
-            nameElement
-              ?.textContent
-              ?.trim()
+          const longitude =
+            Number(
+              parts[0]
+            );
+
+
+          const latitude =
+            Number(
+              parts[1]
+            );
+
+
+          if (
+            !Number.isFinite(
+              longitude
+            )
             ||
-            "Manufacturing location",
+            !Number.isFinite(
+              latitude
+            )
+          ) {
 
-          longitude,
+            return;
+          }
 
-          latitude,
 
-          description:
-            descriptionElement
-              ?.textContent
-              ?.trim()
-            ||
-            ""
+          const nameElement =
+            placemark
+              .getElementsByTagName(
+                "name"
+              )[0];
 
-        };
-      }
-    )
 
-    .filter(Boolean);
+          const descriptionElement =
+            placemark
+              .getElementsByTagName(
+                "description"
+              )[0];
+
+
+          sites.push({
+
+            id:
+              `${category}-${folderIndex}-${index}`,
+
+            name:
+              nameElement
+                ?.textContent
+                ?.trim()
+              ||
+              "Vendor",
+
+            longitude,
+
+            latitude,
+
+            category,
+
+            categoryLabel:
+              category === "cm"
+                ?
+                "Contract Manufacturer"
+                :
+                "Primary Packaging",
+
+            sourceLayer:
+              folderName,
+
+            description:
+              descriptionElement
+                ?.textContent
+                ?.trim()
+              ||
+              ""
+
+          });
+        }
+      );
+    }
+  );
+
+
+  return sites;
 }
-
 
 /* =====================================================
    LOCAL KML / KMZ UPLOAD
@@ -2920,107 +3098,186 @@ function render() {
 
     );
   }
+const cmSites =
+  facilityExposure.filter(
+    site =>
+      site.category === "cm"
+  );
+
+const packagingSites =
+  facilityExposure.filter(
+    site =>
+      site.category ===
+      "primary-packaging"
+  );
 
   /*
-    MANUFACTURING SITES
+    CM SITES
   */
 
-  if (
-    layerState.sites
-    &&
-    facilityExposure.length
-  ) {
+ if (
+  layerState.cms &&
+  cmSites.length
+) {
 
-    layers.push(
+  layers.push(
 
-      new deck.ScatterplotLayer({
+    new deck.ScatterplotLayer({
 
-        id:"manufacturing-sites",
+      id:"cm-sites",
 
-        data:facilityExposure,
+      data:cmSites,
 
-        pickable:true,
+      pickable:true,
 
-        onClick:
-          ({object}) => {
+      onClick:
+        ({object}) => {
 
-            if (!object) {
-              return;
-            }
+          if (!object) {
+            return;
+          }
 
-            map.panTo({
+          map.panTo({
+            lat:object.latitude,
+            lng:object.longitude
+          });
 
-              lat:
-                object.latitude,
+          map.setZoom(
+            Math.max(
+              map.getZoom(),
+              7
+            )
+          );
 
-              lng:
-                object.longitude
+          if (
+            dataMode === "live"
+          ) {
 
-            });
-
-            map.setZoom(
-              Math.max(
-                map.getZoom(),
-                7
-              )
+            openFacilityDrawer(
+              object
             );
+          }
+        },
 
-            /*
-              Current facility drawer
-              opens only in LIVE mode.
-            */
+      getPosition:
+        d => [
+          d.longitude,
+          d.latitude
+        ],
 
-            if (
-              dataMode === "live"
-            ) {
+      getRadius:16000,
 
-              openFacilityDrawer(
-                object
-              );
-            }
-          },
+      radiusMinPixels:7,
+      radiusMaxPixels:11,
 
-        getPosition:
-          d => [
-            d.longitude,
-            d.latitude
-          ],
+      getFillColor:
+        [
+          248,
+          243,
+          235,
+          255
+        ],
 
-        getRadius:16000,
+      stroked:true,
 
-        radiusMinPixels:6,
+      getLineColor:
+        [
+          91,
+          167,
+          255,
+          255
+        ],
 
-        radiusMaxPixels:10,
+      lineWidthMinPixels:3
 
-        getFillColor:
-          [
-            248,
-            243,
-            235,
-            255
-          ],
+    })
 
-        stroked:true,
+  );
+}
 
-        getLineColor:
-          dataMode === "history"
-            ? [
-                255,
-                255,
-                255,
-                180
-              ]
-            : d => [
-                ...d.level.color,
-                255
-              ],
+  /*
+    PACKAGING SITES
+  */
 
-        lineWidthMinPixels:3
+if (
+  layerState.packaging &&
+  packagingSites.length
+) {
 
-      })
+  layers.push(
 
-    );
-  }
+    new deck.ScatterplotLayer({
+
+      id:"packaging-sites",
+
+      data:packagingSites,
+
+      pickable:true,
+
+      onClick:
+        ({object}) => {
+
+          if (!object) {
+            return;
+          }
+
+          map.panTo({
+            lat:object.latitude,
+            lng:object.longitude
+          });
+
+          map.setZoom(
+            Math.max(
+              map.getZoom(),
+              7
+            )
+          );
+
+          if (
+            dataMode === "live"
+          ) {
+
+            openFacilityDrawer(
+              object
+            );
+          }
+        },
+
+      getPosition:
+        d => [
+          d.longitude,
+          d.latitude
+        ],
+
+      getRadius:15000,
+
+      radiusMinPixels:6,
+      radiusMaxPixels:10,
+
+      getFillColor:
+        [
+          184,
+          140,
+          255,
+          255
+        ],
+
+      stroked:true,
+
+      getLineColor:
+        [
+          235,
+          220,
+          255,
+          255
+        ],
+
+      lineWidthMinPixels:2
+
+    })
+
+  );
+}
 
   overlay.setProps({
 
@@ -3950,55 +4207,51 @@ function updateDashboard(
               .join(",") +
             ")";
 
-          const riskText =
-            dataMode === "history"
-              ?
-              "Manufacturing location"
-              :
-              site.level.label;
+          const categoryText =
+  site.category === "cm"
+    ? "Contract Manufacturer"
+    : "Primary Packaging";
+const dotColor =
+  site.category === "cm"
+    ? "#5ba7ff"
+    : "#b88cff";
 
-          const dotColor =
-            dataMode === "history"
-              ?
-              "#f5f1ea"
-              :
-              color;
+return (
 
-          return (
+  "<div " +
+  "class='site' " +
+  "data-site-index='" +
+  index +
+  "'>" +
 
-            "<div " +
-            "class='site' " +
-            "data-site-index='" +
-            index +
-            "'>" +
+    "<div " +
+    "class='site-name'>" +
 
-              "<div " +
-              "class='site-name'>" +
+      escapeHtml(
+        site.name
+      ) +
 
-                escapeHtml(
-                  site.name
-                ) +
+    "</div>" +
 
-              "</div>" +
+    "<div " +
+    "class='site-risk'>" +
 
-              "<div " +
-              "class='site-risk'>" +
+      "<span " +
+      "class='dot' " +
+      "style='" +
+      "background:" +
+      dotColor +
+      "'>" +
+      "</span>" +
 
-                "<span " +
-                "class='dot' " +
-                "style='" +
-                "background:" +
-                dotColor +
-                "'>" +
-                "</span>" +
+      categoryText +
 
-                riskText +
+    "</div>" +
 
-              "</div>" +
+  "</div>"
 
-            "</div>"
+);
 
-          );
         }
       )
       .join("");
