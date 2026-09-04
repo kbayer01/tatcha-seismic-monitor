@@ -58,10 +58,7 @@
       height:100%;
 
       display:grid;
-
-      grid-template-columns:
-        340px
-        minmax(0,1fr);
+      grid-template-columns:340px minmax(0,1fr);
     }
 
     #sidebar {
@@ -72,14 +69,11 @@
 
       padding:22px;
 
-      background:
-        rgba(14,17,21,.97);
+      background:rgba(14,17,21,.97);
 
-      border-right:
-        1px solid var(--line);
+      border-right:1px solid var(--line);
 
-      backdrop-filter:
-        blur(16px);
+      backdrop-filter:blur(16px);
     }
 
     #map {
@@ -106,7 +100,6 @@
 
       font-size:19px;
       font-weight:600;
-
       line-height:1.15;
 
       letter-spacing:-.02em;
@@ -115,14 +108,10 @@
     .live-pill {
       padding:5px 8px;
 
-      border:
-        1px solid rgba(68,209,122,.35);
-
+      border:1px solid rgba(68,209,122,.35);
       border-radius:999px;
 
-      background:
-        rgba(68,209,122,.08);
-
+      background:rgba(68,209,122,.08);
       color:#80efa7;
 
       font-size:10px;
@@ -134,14 +123,10 @@
     .history-pill {
       padding:5px 8px;
 
-      border:
-        1px solid rgba(255,141,55,.4);
-
+      border:1px solid rgba(255,141,55,.4);
       border-radius:999px;
 
-      background:
-        rgba(255,141,55,.08);
-
+      background:rgba(255,141,55,.08);
       color:#ffad68;
 
       font-size:10px;
@@ -164,8 +149,7 @@
       margin-top:17px;
       padding-top:17px;
 
-      border-top:
-        1px solid var(--line);
+      border-top:1px solid var(--line);
     }
 
     .label {
@@ -190,9 +174,7 @@
     button {
       padding:8px 10px;
 
-      border:
-        1px solid #303640;
-
+      border:1px solid #303640;
       border-radius:8px;
 
       background:#15191e;
@@ -220,19 +202,14 @@
 
     .metric-grid {
       display:grid;
-
-      grid-template-columns:
-        1fr 1fr;
-
+      grid-template-columns:1fr 1fr;
       gap:9px;
     }
 
     .metric {
       padding:12px;
 
-      border:
-        1px solid var(--line);
-
+      border:1px solid var(--line);
       border-radius:10px;
 
       background:var(--panel2);
@@ -256,9 +233,7 @@
 
       padding:9px 10px;
 
-      border:
-        1px solid #303640;
-
+      border:1px solid #303640;
       border-radius:8px;
 
       background:#12161b;
@@ -269,7 +244,6 @@
 
     .history-controls {
       display:none;
-
       margin-top:10px;
     }
 
@@ -284,6 +258,21 @@
 
       font-size:10px;
       line-height:1.5;
+    }
+
+    .history-loaded {
+      margin-top:8px;
+      padding:8px 10px;
+
+      border:1px solid rgba(255,141,55,.25);
+      border-radius:8px;
+
+      background:rgba(255,141,55,.05);
+
+      color:#d6a074;
+
+      font-size:10px;
+      line-height:1.45;
     }
 
     .key-row {
@@ -310,9 +299,7 @@
       margin-bottom:7px;
       padding:11px;
 
-      border:
-        1px solid var(--line);
-
+      border:1px solid var(--line);
       border-radius:9px;
 
       background:#14181d;
@@ -374,10 +361,6 @@
       font-size:10px;
     }
 
-    /*
-      API key modal
-    */
-
     #apiPanel {
       position:absolute;
       z-index:100;
@@ -389,18 +372,14 @@
 
       padding:25px;
 
-      transform:
-        translate(-50%,-50%);
+      transform:translate(-50%,-50%);
 
-      border:
-        1px solid #323945;
-
+      border:1px solid #323945;
       border-radius:15px;
 
       background:#12161b;
 
-      box-shadow:
-        0 25px 80px rgba(0,0,0,.55);
+      box-shadow:0 25px 80px rgba(0,0,0,.55);
     }
 
     #apiPanel h2 {
@@ -422,9 +401,7 @@
       margin:10px 0;
       padding:11px;
 
-      border:
-        1px solid #3a424d;
-
+      border:1px solid #3a424d;
       border-radius:8px;
 
       background:#090c0f;
@@ -442,10 +419,6 @@
       font-weight:600;
     }
 
-    /*
-      Facility drawer
-    */
-
     .facility-drawer {
       position:absolute;
       z-index:40;
@@ -454,33 +427,22 @@
       right:18px;
 
       width:365px;
-      max-height:
-        calc(100vh - 36px);
+      max-height:calc(100vh - 36px);
 
       overflow-y:auto;
 
       padding:24px;
 
-      border:
-        1px solid
-        rgba(255,255,255,.12);
-
+      border:1px solid rgba(255,255,255,.12);
       border-radius:14px;
 
-      background:
-        rgba(15,18,22,.96);
+      background:rgba(15,18,22,.96);
 
-      box-shadow:
-        0 20px 70px
-        rgba(0,0,0,.55);
+      box-shadow:0 20px 70px rgba(0,0,0,.55);
 
-      backdrop-filter:
-        blur(18px);
+      backdrop-filter:blur(18px);
 
-      transform:
-        translateX(
-          calc(100% + 50px)
-        );
+      transform:translateX(calc(100% + 50px));
 
       opacity:0;
 
@@ -492,11 +454,8 @@
     }
 
     .facility-drawer.open {
-      transform:
-        translateX(0);
-
+      transform:translateX(0);
       opacity:1;
-
       pointer-events:auto;
     }
 
@@ -528,8 +487,7 @@
     }
 
     .facility-drawer h2 {
-      margin:
-        7px 35px 20px 0;
+      margin:7px 35px 20px 0;
 
       font-size:20px;
       line-height:1.25;
@@ -537,8 +495,7 @@
 
     .drawer-risk-row {
       display:flex;
-      justify-content:
-        space-between;
+      justify-content:space-between;
       align-items:center;
 
       color:#9ea6af;
@@ -572,9 +529,7 @@
     .drawer-stat {
       display:flex;
 
-      justify-content:
-        space-between;
-
+      justify-content:space-between;
       align-items:flex-start;
 
       gap:20px;
@@ -620,9 +575,7 @@
       margin-top:8px;
       padding:4px 7px;
 
-      border:
-        1px solid #343b44;
-
+      border:1px solid #343b44;
       border-radius:999px;
 
       color:#9099a4;
@@ -639,18 +592,12 @@
 
       padding:9px 13px;
 
-      transform:
-        translateX(-50%);
+      transform:translateX(-50%);
 
-      border:
-        1px solid rgba(
-          255,255,255,.13
-        );
-
+      border:1px solid rgba(255,255,255,.13);
       border-radius:999px;
 
-      background:
-        rgba(13,16,20,.9);
+      background:rgba(13,16,20,.9);
 
       color:#c9cfd6;
 
@@ -663,36 +610,53 @@
       display:block;
     }
 
+    .history-banner {
+      position:absolute;
+      z-index:34;
+
+      top:18px;
+      left:18px;
+
+      padding:8px 11px;
+
+      border:1px solid rgba(255,141,55,.25);
+      border-radius:8px;
+
+      background:rgba(20,16,12,.88);
+
+      color:#e2b080;
+
+      font-size:10px;
+
+      display:none;
+    }
+
+    .history-banner.visible {
+      display:block;
+    }
+
     @media(max-width:900px) {
 
       #app {
         grid-template-columns:1fr;
-        grid-template-rows:
-          310px
-          minmax(0,1fr);
+        grid-template-rows:310px minmax(0,1fr);
       }
 
       #sidebar {
         border-right:0;
-
-        border-bottom:
-          1px solid var(--line);
+        border-bottom:1px solid var(--line);
       }
 
       #apiPanel {
         left:50%;
-
-        width:
-          calc(100% - 30px);
+        width:calc(100% - 30px);
       }
 
       .facility-drawer {
         top:auto;
         bottom:18px;
 
-        width:
-          calc(100% - 36px);
-
+        width:calc(100% - 36px);
         max-height:55vh;
       }
     }
@@ -728,9 +692,7 @@
 
     <div class="brand">
 
-      <h1>
-        Seismic Exposure
-      </h1>
+      <h1>Seismic Exposure</h1>
 
       <span
         id="modePill"
@@ -746,11 +708,9 @@
       Live + historical seismic activity
     </div>
 
-
     <div class="metric-grid">
 
       <div class="metric">
-
         <div
           class="metric-value"
           id="quakeCount"
@@ -761,11 +721,9 @@
         <div class="metric-name">
           Visible earthquakes
         </div>
-
       </div>
 
       <div class="metric">
-
         <div
           class="metric-value"
           id="largestMag"
@@ -776,13 +734,9 @@
         <div class="metric-name">
           Largest magnitude
         </div>
-
       </div>
 
     </div>
-
-
-    <!-- MODE -->
 
     <div class="section">
 
@@ -809,7 +763,6 @@
 
       </div>
 
-
       <div
         id="historyControls"
         class="history-controls"
@@ -822,10 +775,7 @@
           Historical period
         </div>
 
-        <select
-          id="historyYear"
-          onchange="loadHistoricalYear()"
-        >
+        <select id="historyYear">
         </select>
 
         <div class="history-description">
@@ -833,12 +783,16 @@
           from 2010 onward.
         </div>
 
+        <div
+          id="historyLoadedLabel"
+          class="history-loaded"
+        >
+          No historical period loaded yet.
+        </div>
+
       </div>
 
     </div>
-
-
-    <!-- VIEW -->
 
     <div class="section">
 
@@ -866,9 +820,6 @@
       </div>
 
     </div>
-
-
-    <!-- LIVE TIME FILTER -->
 
     <div
       class="section"
@@ -907,9 +858,6 @@
 
     </div>
 
-
-    <!-- MAGNITUDE -->
-
     <div
       class="section"
       id="magnitudeSection"
@@ -947,9 +895,6 @@
 
     </div>
 
-
-    <!-- LAYERS -->
-
     <div class="section">
 
       <div class="label">
@@ -961,12 +906,7 @@
         <input
           type="checkbox"
           checked
-          onchange="
-            toggleLayer(
-              'heat',
-              this.checked
-            )
-          "
+          onchange="toggleLayer('heat',this.checked)"
         >
 
         Seismic heat field
@@ -978,12 +918,7 @@
         <input
           type="checkbox"
           checked
-          onchange="
-            toggleLayer(
-              'quakes',
-              this.checked
-            )
-          "
+          onchange="toggleLayer('quakes',this.checked)"
         >
 
         Earthquake events
@@ -995,12 +930,7 @@
         <input
           type="checkbox"
           checked
-          onchange="
-            toggleLayer(
-              'sites',
-              this.checked
-            )
-          "
+          onchange="toggleLayer('sites',this.checked)"
         >
 
         Manufacturing locations
@@ -1010,14 +940,10 @@
       <label class="key-row">
 
         <input
+          id="exposureToggle"
           type="checkbox"
           checked
-          onchange="
-            toggleLayer(
-              'exposure',
-              this.checked
-            )
-          "
+          onchange="toggleLayer('exposure',this.checked)"
         >
 
         Site exposure halos
@@ -1025,9 +951,6 @@
       </label>
 
     </div>
-
-
-    <!-- EXPOSURE LEGEND -->
 
     <div class="section">
 
@@ -1038,9 +961,7 @@
       <div class="key-row">
         <span
           class="key"
-          style="
-            background:#44d17a
-          "
+          style="background:#44d17a"
         ></span>
         Low
       </div>
@@ -1048,9 +969,7 @@
       <div class="key-row">
         <span
           class="key"
-          style="
-            background:#ffd34e
-          "
+          style="background:#ffd34e"
         ></span>
         Elevated
       </div>
@@ -1058,9 +977,7 @@
       <div class="key-row">
         <span
           class="key"
-          style="
-            background:#ff8d37
-          "
+          style="background:#ff8d37"
         ></span>
         High
       </div>
@@ -1068,17 +985,12 @@
       <div class="key-row">
         <span
           class="key"
-          style="
-            background:#ff3b45
-          "
+          style="background:#ff3b45"
         ></span>
         Very high
       </div>
 
     </div>
-
-
-    <!-- FACILITIES -->
 
     <div class="section">
 
@@ -1091,9 +1003,6 @@
       </div>
 
     </div>
-
-
-    <!-- KML -->
 
     <div class="section">
 
@@ -1111,7 +1020,6 @@
 
     </div>
 
-
     <div
       class="timestamp"
       id="updated"
@@ -1120,7 +1028,6 @@
     </div>
 
   </aside>
-
 
   <main id="map">
 
@@ -1131,8 +1038,12 @@
       Loading earthquake catalog…
     </div>
 
-
-    <!-- FACILITY DETAIL DRAWER -->
+    <div
+      id="historyBanner"
+      class="history-banner"
+    >
+      Historical mode
+    </div>
 
     <aside
       id="facilityDrawer"
@@ -1154,11 +1065,10 @@
         Facility
       </h2>
 
-
       <div class="drawer-risk-row">
 
         <span>
-          Exposure
+          Current exposure
         </span>
 
         <span
@@ -1170,18 +1080,14 @@
 
       </div>
 
-
-      <div class="drawer-divider">
-      </div>
-
+      <div class="drawer-divider"></div>
 
       <div class="drawer-section-title">
-        SEISMIC ACTIVITY
+        CURRENT SEISMIC ACTIVITY
       </div>
 
-      <div
-        class="drawer-stat featured"
-      >
+      <div class="drawer-stat featured">
+
         <span>
           Largest nearby event
         </span>
@@ -1189,6 +1095,7 @@
         <strong id="drawerLargest">
           —
         </strong>
+
       </div>
 
       <div class="drawer-stat">
@@ -1239,10 +1146,7 @@
 
       </div>
 
-
-      <div class="drawer-divider">
-      </div>
-
+      <div class="drawer-divider"></div>
 
       <div class="drawer-section-title">
         ACTIVITY VS BASELINE
@@ -1284,10 +1188,7 @@
 
       </div>
 
-
-      <div class="drawer-divider">
-      </div>
-
+      <div class="drawer-divider"></div>
 
       <div
         id="drawerEventLocation"
@@ -1300,13 +1201,10 @@
       </div>
 
       <div class="drawer-footer">
-
         Last refreshed
-
         <span id="drawerRefresh">
           —
         </span>
-
       </div>
 
     </aside>
@@ -1314,7 +1212,6 @@
   </main>
 
 </div>
-
 
 <script>
 
@@ -1330,39 +1227,24 @@ const MY_MAP_KML =
   "?forcekml=1&mid=" +
   MY_MAP_ID;
 
-
-/*
-  Live feed always keeps 30 days
-  locally.
-
-  The visible 1 / 7 / 30 day
-  buttons filter this dataset.
-*/
-
 const LIVE_FEED =
   "https://earthquake.usgs.gov/" +
   "earthquakes/feed/v1.0/" +
   "summary/2.5_month.geojson";
 
-
 const USGS_HISTORY_API =
   "https://earthquake.usgs.gov/" +
   "fdsnws/event/1/query";
 
-
 const colors = {
 
-  low:
-    [68,209,122],
+  low:[68,209,122],
 
-  elevated:
-    [255,211,78],
+  elevated:[255,211,78],
 
-  high:
-    [255,141,55],
+  high:[255,141,55],
 
-  veryHigh:
-    [255,59,69]
+  veryHigh:[255,59,69]
 
 };
 
@@ -1379,33 +1261,21 @@ let pulseOverlay;
 
 let pulseAnimationId;
 
-
 let liveEarthquakeData = [];
 
 let displayedEarthquakeData = [];
 
 let facilities = [];
 
+let dataMode = "live";
 
-let dataMode =
-  "live";
+let days = 7;
 
+let minMagnitude = 2.5;
 
-let days =
-  7;
+let selectedFacility = null;
 
-
-let minMagnitude =
-  2.5;
-
-
-let selectedFacility =
-  null;
-
-
-let historicalBaselineCache =
-  {};
-
+let historicalBaselineCache = {};
 
 let layerState = {
 
@@ -1428,47 +1298,35 @@ function saveApiKey() {
 
   const key =
     document
-      .getElementById(
-        "apiKey"
-      )
+      .getElementById("apiKey")
       .value
       .trim();
-
 
   if (!key) {
     return;
   }
-
 
   localStorage.setItem(
     "tatchaMapsKey",
     key
   );
 
-
   document
-    .getElementById(
-      "apiPanel"
-    )
+    .getElementById("apiPanel")
     .style
     .display =
       "none";
 
-
-  loadGoogleMaps(
-    key
-  );
+  loadGoogleMaps(key);
 }
 
 
 function loadGoogleMaps(key) {
 
   const script =
-    document
-      .createElement(
-        "script"
-      );
-
+    document.createElement(
+      "script"
+    );
 
   script.src =
     "https://maps.googleapis.com/" +
@@ -1478,18 +1336,13 @@ function loadGoogleMaps(key) {
     "&callback=initMap" +
     "&v=weekly";
 
+  script.async = true;
 
-  script.async =
-    true;
+  script.defer = true;
 
-  script.defer =
-    true;
-
-
-  document.head
-    .appendChild(
-      script
-    );
+  document.head.appendChild(
+    script
+  );
 }
 
 
@@ -1501,9 +1354,7 @@ async function initMap() {
 
   map =
     new google.maps.Map(
-      document.getElementById(
-        "map"
-      ),
+      document.getElementById("map"),
       {
 
         center:{
@@ -1513,8 +1364,7 @@ async function initMap() {
 
         zoom:5,
 
-        backgroundColor:
-          "#090b0d",
+        backgroundColor:"#090b0d",
 
         mapTypeControl:false,
 
@@ -1525,94 +1375,67 @@ async function initMap() {
         styles:[
 
           {
-            elementType:
-              "geometry",
-
+            elementType:"geometry",
             stylers:[
               {
-                color:
-                  "#11151a"
+                color:"#11151a"
               }
             ]
           },
 
           {
-            elementType:
-              "labels.text.stroke",
-
+            elementType:"labels.text.stroke",
             stylers:[
               {
-                color:
-                  "#11151a"
+                color:"#11151a"
               }
             ]
           },
 
           {
-            elementType:
-              "labels.text.fill",
-
+            elementType:"labels.text.fill",
             stylers:[
               {
-                color:
-                  "#75808d"
+                color:"#75808d"
               }
             ]
           },
 
           {
-            featureType:
-              "administrative",
-
-            elementType:
-              "geometry",
-
+            featureType:"administrative",
+            elementType:"geometry",
             stylers:[
               {
-                color:
-                  "#303842"
+                color:"#303842"
               }
             ]
           },
 
           {
-            featureType:
-              "road",
-
-            elementType:
-              "geometry",
-
+            featureType:"road",
+            elementType:"geometry",
             stylers:[
               {
-                color:
-                  "#1b222a"
+                color:"#1b222a"
               }
             ]
           },
 
           {
-            featureType:
-              "water",
-
-            elementType:
-              "geometry",
-
+            featureType:"water",
+            elementType:"geometry",
             stylers:[
               {
-                color:
-                  "#080c11"
+                color:"#080c11"
               }
             ]
           },
 
           {
-            featureType:
-              "poi",
-
+            featureType:"poi",
             stylers:[
               {
-                visibility:
-                  "off"
+                visibility:"off"
               }
             ]
           }
@@ -1621,49 +1444,37 @@ async function initMap() {
       }
     );
 
-
   overlay =
     new deck.GoogleMapsOverlay({
       layers:[]
     });
 
-
-  overlay.setMap(
-    map
-  );
-
+  overlay.setMap(map);
 
   pulseOverlay =
     new deck.GoogleMapsOverlay({
       layers:[]
     });
 
-
-  pulseOverlay.setMap(
-    map
-  );
-
+  pulseOverlay.setMap(map);
 
   populateHistoryYears();
 
+  document
+    .getElementById(
+      "historyYear"
+    )
+    .addEventListener(
+      "change",
+      loadHistoricalYear
+    );
 
   await Promise.all([
     loadLiveEarthquakes(),
     loadMyMap()
   ]);
 
-
   startPulseAnimation();
-
-
-  /*
-    Refresh live source
-    once per minute.
-
-    It only redraws the current
-    map automatically when the
-    dashboard is in LIVE mode.
-  */
 
   setInterval(
     loadLiveEarthquakes,
@@ -1684,15 +1495,11 @@ async function loadLiveEarthquakes() {
       await fetch(
         LIVE_FEED,
         {
-          cache:
-            "no-store"
+          cache:"no-store"
         }
       );
 
-
-    if (
-      !response.ok
-    ) {
+    if (!response.ok) {
 
       throw new Error(
         "USGS returned " +
@@ -1700,33 +1507,27 @@ async function loadLiveEarthquakes() {
       );
     }
 
-
     const json =
       await response.json();
-
 
     liveEarthquakeData =
       json.features.map(
         normalizeUSGSFeature
       );
 
-
     if (
-      dataMode ===
-      "live"
+      dataMode === "live"
     ) {
 
       displayedEarthquakeData =
-        liveEarthquakeData;
+        [...liveEarthquakeData];
 
       render();
 
       updateTimestamp(
         "Live feed updated"
       );
-
     }
-
 
     if (
       selectedFacility
@@ -1741,9 +1542,7 @@ async function loadLiveEarthquakes() {
   } catch(error) {
 
     document
-      .getElementById(
-        "status"
-      )
+      .getElementById("status")
       .textContent =
         "USGS live feed error: " +
         error.message;
@@ -1752,7 +1551,7 @@ async function loadLiveEarthquakes() {
 
 
 /* =====================================================
-   HISTORICAL M6+ DATA
+   HISTORICAL YEAR SELECTOR
 ===================================================== */
 
 function populateHistoryYears() {
@@ -1763,65 +1562,41 @@ function populateHistoryYears() {
         "historyYear"
       );
 
-
-  select.innerHTML =
-    "";
-
-
-  /*
-    Entire period option
-  */
+  select.innerHTML = "";
 
   const allOption =
-    document
-      .createElement(
-        "option"
-      );
+    document.createElement(
+      "option"
+    );
 
-
-  allOption.value =
-    "all";
+  allOption.value = "all";
 
   allOption.textContent =
     "2010 – Present";
-
 
   select.appendChild(
     allOption
   );
 
-
   const currentYear =
-    new Date()
-      .getFullYear();
-
-
-  /*
-    Most recent year first
-  */
+    new Date().getFullYear();
 
   for (
-    let year =
-      currentYear;
-
+    let year = currentYear;
     year >= 2010;
-
     year--
   ) {
 
     const option =
-      document
-        .createElement(
-          "option"
-        );
-
+      document.createElement(
+        "option"
+      );
 
     option.value =
       String(year);
 
     option.textContent =
       String(year);
-
 
     select.appendChild(
       option
@@ -1830,20 +1605,30 @@ function populateHistoryYears() {
 }
 
 
+/* =====================================================
+   HISTORICAL M6+ DATA
+===================================================== */
+
 async function loadHistoricalYear() {
 
   if (
-    dataMode !==
-    "history"
+    dataMode !== "history"
   ) {
     return;
   }
 
+  showLoading(true);
 
-  showLoading(
-    true
-  );
+  /*
+    IMPORTANT FIX:
+    Clear whatever dataset was
+    previously on-screen before
+    loading the selected year.
+  */
 
+  displayedEarthquakeData = [];
+
+  render();
 
   const selected =
     document
@@ -1852,26 +1637,19 @@ async function loadHistoricalYear() {
       )
       .value;
 
-
   const currentYear =
-    new Date()
-      .getFullYear();
-
+    new Date().getFullYear();
 
   let startDate;
-
   let endDate;
-
   let label;
 
-
   if (
-    selected ===
-    "all"
+    selected === "all"
   ) {
 
     startDate =
-      "2010-01-01";
+      "2010-01-01T00:00:00Z";
 
     endDate =
       new Date()
@@ -1885,15 +1663,11 @@ async function loadHistoricalYear() {
     const year =
       Number(selected);
 
-
     startDate =
-      year +
-      "-01-01";
-
+      `${year}-01-01T00:00:00Z`;
 
     if (
-      year ===
-      currentYear
+      year === currentYear
     ) {
 
       endDate =
@@ -1903,57 +1677,51 @@ async function loadHistoricalYear() {
     } else {
 
       endDate =
-        (year + 1) +
-        "-01-01";
+        `${year}-12-31T23:59:59Z`;
     }
-
 
     label =
       String(year);
   }
 
-
   const params =
     new URLSearchParams({
 
-      format:
-        "geojson",
+      format:"geojson",
 
-      starttime:
-        startDate,
+      starttime:startDate,
 
-      endtime:
-        endDate,
+      endtime:endDate,
 
-      minmagnitude:
-        "6.0",
+      minmagnitude:"6.0",
 
-      orderby:
-        "time",
+      orderby:"time",
 
-      limit:
-        "20000"
+      limit:"20000"
 
     });
 
+  const url =
+    USGS_HISTORY_API +
+    "?" +
+    params.toString();
+
+  console.log(
+    "Historical USGS request:",
+    url
+  );
 
   try {
 
     const response =
       await fetch(
-        USGS_HISTORY_API +
-        "?" +
-        params.toString(),
+        url,
         {
-          cache:
-            "no-store"
+          cache:"no-store"
         }
       );
 
-
-    if (
-      !response.ok
-    ) {
+    if (!response.ok) {
 
       throw new Error(
         "USGS catalog returned " +
@@ -1961,10 +1729,8 @@ async function loadHistoricalYear() {
       );
     }
 
-
     const json =
       await response.json();
-
 
     displayedEarthquakeData =
       json.features
@@ -1976,15 +1742,32 @@ async function loadHistoricalYear() {
             q.magnitude >= 6.0
         );
 
+    console.log(
+      `Loaded ${displayedEarthquakeData.length} M6+ earthquakes for ${label}`
+    );
+
+    document
+      .getElementById(
+        "historyLoadedLabel"
+      )
+      .textContent =
+        `${label}: ` +
+        `${displayedEarthquakeData.length.toLocaleString()} ` +
+        `earthquakes M6.0+`;
+
+    document
+      .getElementById(
+        "historyBanner"
+      )
+      .textContent =
+        `Historical M6+ • ${label}`;
 
     updateTimestamp(
       "Historical catalog: " +
       label
     );
 
-
     render();
-
 
   } catch(error) {
 
@@ -1996,11 +1779,20 @@ async function loadHistoricalYear() {
         "Historical catalog error: " +
         error.message;
 
+    document
+      .getElementById(
+        "historyLoadedLabel"
+      )
+      .textContent =
+        "Historical load failed.";
+
+    console.error(
+      error
+    );
+
   } finally {
 
-    showLoading(
-      false
-    );
+    showLoading(false);
   }
 }
 
@@ -2017,7 +1809,6 @@ function normalizeUSGSFeature(
     feature.geometry
       ?.coordinates ||
     [0,0,0];
-
 
   return {
 
@@ -2069,16 +1860,14 @@ function normalizeUSGSFeature(
 
 
 /* =====================================================
-   DATA MODE
+   DATA MODE SWITCH
 ===================================================== */
 
 async function setDataMode(
   mode
 ) {
 
-  dataMode =
-    mode;
-
+  dataMode = mode;
 
   document
     .getElementById(
@@ -2087,10 +1876,8 @@ async function setDataMode(
     .classList
     .toggle(
       "active",
-      mode ===
-      "live"
+      mode === "live"
     );
-
 
   document
     .getElementById(
@@ -2099,10 +1886,8 @@ async function setDataMode(
     .classList
     .toggle(
       "active",
-      mode ===
-      "history"
+      mode === "history"
     );
-
 
   document
     .getElementById(
@@ -2111,10 +1896,8 @@ async function setDataMode(
     .classList
     .toggle(
       "visible",
-      mode ===
-      "history"
+      mode === "history"
     );
-
 
   document
     .getElementById(
@@ -2122,11 +1905,9 @@ async function setDataMode(
     )
     .style
     .display =
-      mode ===
-      "live"
+      mode === "live"
         ? "block"
         : "none";
-
 
   document
     .getElementById(
@@ -2134,11 +1915,24 @@ async function setDataMode(
     )
     .style
     .display =
-      mode ===
-      "live"
+      mode === "live"
         ? "block"
         : "none";
 
+  document
+    .getElementById(
+      "historyBanner"
+    )
+    .classList
+    .toggle(
+      "visible",
+      mode === "history"
+    );
+
+  const exposureToggle =
+    document.getElementById(
+      "exposureToggle"
+    );
 
   const pill =
     document
@@ -2146,10 +1940,8 @@ async function setDataMode(
         "modePill"
       );
 
-
   if (
-    mode ===
-    "live"
+    mode === "live"
   ) {
 
     pill.className =
@@ -2158,15 +1950,26 @@ async function setDataMode(
     pill.textContent =
       "● LIVE";
 
+    /*
+      Restore live data.
+    */
 
     displayedEarthquakeData =
-      liveEarthquakeData;
+      [...liveEarthquakeData];
 
+    /*
+      Exposure halos allowed again.
+    */
+
+    exposureToggle.disabled =
+      false;
+
+    exposureToggle.checked =
+      layerState.exposure;
 
     updateTimestamp(
       "Live feed"
     );
-
 
     render();
 
@@ -2178,9 +1981,20 @@ async function setDataMode(
     pill.textContent =
       "● HISTORY";
 
+    /*
+      Hide current exposure halos
+      while viewing historical data.
+    */
 
-    closeFacilityDrawer();
+    exposureToggle.checked =
+      false;
 
+    exposureToggle.disabled =
+      true;
+
+    closeFacilityDrawer(
+      false
+    );
 
     await loadHistoricalYear();
   }
@@ -2199,15 +2013,11 @@ async function loadMyMap() {
       await fetch(
         MY_MAP_KML,
         {
-          cache:
-            "no-store"
+          cache:"no-store"
         }
       );
 
-
-    if (
-      !response.ok
-    ) {
+    if (!response.ok) {
 
       throw new Error(
         "My Maps KML returned " +
@@ -2215,16 +2025,13 @@ async function loadMyMap() {
       );
     }
 
-
     const text =
       await response.text();
-
 
     facilities =
       parseKMLPoints(
         text
       );
-
 
     if (
       !facilities.length
@@ -2234,7 +2041,6 @@ async function loadMyMap() {
         "No Point placemarks found."
       );
     }
-
 
     document
       .getElementById(
@@ -2259,7 +2065,6 @@ async function loadMyMap() {
     );
   }
 
-
   render();
 }
 
@@ -2275,7 +2080,6 @@ function parseKMLPoints(
         "text/xml"
       );
 
-
   return [
     ...xml.querySelectorAll(
       "Placemark"
@@ -2288,18 +2092,10 @@ function parseKMLPoints(
         index
       ) => {
 
-        /*
-          KML namespaces can cause
-          selector differences.
-
-          Try both approaches.
-        */
-
         let pointCoordinates =
           placemark.querySelector(
             "Point coordinates"
           );
-
 
         if (
           !pointCoordinates
@@ -2312,7 +2108,6 @@ function parseKMLPoints(
                   "Point"
                 )
             ][0];
-
 
           if (
             point
@@ -2328,13 +2123,11 @@ function parseKMLPoints(
           }
         }
 
-
         if (
           !pointCoordinates
         ) {
           return null;
         }
-
 
         const parts =
           pointCoordinates
@@ -2342,25 +2135,17 @@ function parseKMLPoints(
             .trim()
             .split(",");
 
-
         if (
           parts.length < 2
         ) {
           return null;
         }
 
-
         const longitude =
-          Number(
-            parts[0]
-          );
-
+          Number(parts[0]);
 
         const latitude =
-          Number(
-            parts[1]
-          );
-
+          Number(parts[1]);
 
         if (
           !Number.isFinite(
@@ -2374,20 +2159,17 @@ function parseKMLPoints(
           return null;
         }
 
-
         const nameElement =
           placemark
             .getElementsByTagName(
               "name"
             )[0];
 
-
         const descriptionElement =
           placemark
             .getElementsByTagName(
               "description"
             )[0];
-
 
         return {
 
@@ -2417,9 +2199,7 @@ function parseKMLPoints(
       }
     )
 
-    .filter(
-      Boolean
-    );
+    .filter(Boolean);
 }
 
 
@@ -2435,23 +2215,16 @@ async function loadLocalMap(
     event.target
       .files[0];
 
-
-  if (
-    !file
-  ) {
+  if (!file) {
     return;
   }
 
-
   let kmlText;
-
 
   if (
     file.name
       .toLowerCase()
-      .endsWith(
-        ".kmz"
-      )
+      .endsWith(".kmz")
   ) {
 
     const zip =
@@ -2459,7 +2232,6 @@ async function loadLocalMap(
         .loadAsync(
           await file.arrayBuffer()
         );
-
 
     const kmlFile =
       Object.values(
@@ -2469,11 +2241,8 @@ async function loadLocalMap(
         item =>
           item.name
             .toLowerCase()
-            .endsWith(
-              ".kml"
-            )
+            .endsWith(".kml")
       );
-
 
     if (
       !kmlFile
@@ -2486,7 +2255,6 @@ async function loadLocalMap(
       return;
     }
 
-
     kmlText =
       await kmlFile.async(
         "string"
@@ -2498,12 +2266,10 @@ async function loadLocalMap(
       await file.text();
   }
 
-
   facilities =
     parseKMLPoints(
       kmlText
     );
-
 
   document
     .getElementById(
@@ -2514,7 +2280,6 @@ async function loadLocalMap(
       " manufacturing locations loaded from " +
       file.name +
       ".";
-
 
   render();
 }
@@ -2529,9 +2294,7 @@ function distanceKm(
   b
 ) {
 
-  const R =
-    6371;
-
+  const R = 6371;
 
   const dLat =
     (
@@ -2541,7 +2304,6 @@ function distanceKm(
     Math.PI /
     180;
 
-
   const dLon =
     (
       b.longitude -
@@ -2550,36 +2312,22 @@ function distanceKm(
     Math.PI /
     180;
 
-
   const lat1 =
     a.latitude *
     Math.PI /
     180;
-
 
   const lat2 =
     b.latitude *
     Math.PI /
     180;
 
-
   const h =
-    Math.sin(
-      dLat / 2
-    ) ** 2 +
+    Math.sin(dLat/2) ** 2 +
 
-    Math.cos(
-      lat1
-    ) *
-
-    Math.cos(
-      lat2
-    ) *
-
-    Math.sin(
-      dLon / 2
-    ) ** 2;
-
+    Math.cos(lat1) *
+    Math.cos(lat2) *
+    Math.sin(dLon/2) ** 2;
 
   return R *
     2 *
@@ -2591,15 +2339,7 @@ function distanceKm(
 
 
 /* =====================================================
-   CURRENT EXPOSURE CALCULATION
-
-   IMPORTANT:
-   Facility exposure is based on
-   LIVE activity, even if the user
-   is looking at historical mode.
-
-   History therefore does not make
-   today's facility risk look red.
+   CURRENT LIVE EXPOSURE
 ===================================================== */
 
 function liveVisibleQuakes() {
@@ -2612,15 +2352,13 @@ function liveVisibleQuakes() {
     60 *
     1000;
 
-
   return liveEarthquakeData
     .filter(
       q =>
         q.magnitude >=
           minMagnitude
         &&
-        q.time >=
-          cutoff
+        q.time >= cutoff
     );
 }
 
@@ -2632,14 +2370,9 @@ function exposureScore(
   const now =
     Date.now();
 
+  let score = 0;
 
-  let score =
-    0;
-
-
-  let nearest =
-    null;
-
+  let nearest = null;
 
   liveVisibleQuakes()
     .forEach(
@@ -2651,13 +2384,11 @@ function exposureScore(
             q
           );
 
-
         if (
           km > 500
         ) {
           return;
         }
-
 
         const ageHours =
           Math.max(
@@ -2669,7 +2400,6 @@ function exposureScore(
             3600000
           );
 
-
         const magnitudeFactor =
           Math.pow(
             10,
@@ -2680,13 +2410,11 @@ function exposureScore(
             )
           );
 
-
         const recencyFactor =
           Math.exp(
             -ageHours /
             72
           );
-
 
         const distanceFactor =
           Math.exp(
@@ -2694,17 +2422,15 @@ function exposureScore(
             120
           );
 
-
         score +=
           magnitudeFactor *
           recencyFactor *
           distanceFactor;
 
-
         if (
           !nearest ||
           km <
-            nearest.km
+          nearest.km
         ) {
 
           nearest = {
@@ -2714,7 +2440,6 @@ function exposureScore(
         }
       }
     );
-
 
   return {
     score,
@@ -2732,76 +2457,50 @@ function exposureLevel(
   ) {
 
     return {
-      label:
-        "VERY HIGH",
-
-      color:
-        colors.veryHigh
+      label:"VERY HIGH",
+      color:colors.veryHigh
     };
   }
-
 
   if (
     score >= 1.5
   ) {
 
     return {
-      label:
-        "HIGH",
-
-      color:
-        colors.high
+      label:"HIGH",
+      color:colors.high
     };
   }
-
 
   if (
     score >= .45
   ) {
 
     return {
-      label:
-        "ELEVATED",
-
-      color:
-        colors.elevated
+      label:"ELEVATED",
+      color:colors.elevated
     };
   }
 
-
   return {
-    label:
-      "LOW",
-
-    color:
-      colors.low
+    label:"LOW",
+    color:colors.low
   };
 }
 
 
 /* =====================================================
-   DISPLAY FILTERS
+   DISPLAY FILTER
 ===================================================== */
 
 function visibleQuakes() {
 
-  /*
-    HISTORICAL MODE:
-    API already limits to M6+.
-  */
-
   if (
-    dataMode ===
-    "history"
+    dataMode === "history"
   ) {
 
     return displayedEarthquakeData;
   }
-
-
-  /*
-    LIVE MODE
-  */
 
   const cutoff =
     Date.now() -
@@ -2811,37 +2510,27 @@ function visibleQuakes() {
     60 *
     1000;
 
-
   return displayedEarthquakeData
     .filter(
       q =>
         q.magnitude >=
           minMagnitude
         &&
-        q.time >=
-          cutoff
+        q.time >= cutoff
     );
 }
 
 
 /* =====================================================
-   HEAT WEIGHTS
+   HEAT WEIGHT
 ===================================================== */
 
 function quakeWeight(
   q
 ) {
 
-  /*
-    Historical events are not
-    penalized for age because the
-    selected historical interval
-    itself is the context.
-  */
-
   if (
-    dataMode ===
-    "history"
+    dataMode === "history"
   ) {
 
     return Math.pow(
@@ -2850,7 +2539,6 @@ function quakeWeight(
       6
     );
   }
-
 
   const ageHours =
     Math.max(
@@ -2861,7 +2549,6 @@ function quakeWeight(
       ) /
       3600000
     );
-
 
   return (
     Math.pow(
@@ -2879,21 +2566,17 @@ function quakeWeight(
 
 
 /* =====================================================
-   DRAW MAP
+   MAP RENDER
 ===================================================== */
 
 function render() {
 
-  if (
-    !overlay
-  ) {
+  if (!overlay) {
     return;
   }
 
-
   const quakes =
     visibleQuakes();
-
 
   const facilityExposure =
     facilities.map(
@@ -2903,7 +2586,6 @@ function render() {
           exposureScore(
             site
           );
-
 
         return {
 
@@ -2920,14 +2602,7 @@ function render() {
       }
     );
 
-
-  const layers =
-    [];
-
-
-  /*
-    HEAT MAP
-  */
+  const layers = [];
 
   if (
     layerState.heat
@@ -2937,11 +2612,9 @@ function render() {
 
       new deck.HeatmapLayer({
 
-        id:
-          "seismic-heat",
+        id:"seismic-heat",
 
-        data:
-          quakes,
+        data:quakes,
 
         getPosition:
           d => [
@@ -2953,19 +2626,16 @@ function render() {
           quakeWeight,
 
         radiusPixels:
-          dataMode ===
-          "history"
+          dataMode === "history"
             ? 42
             : 50,
 
         intensity:
-          dataMode ===
-          "history"
+          dataMode === "history"
             ? 1.45
             : 1.2,
 
-        threshold:
-          .03,
+        threshold:.03,
 
         colorRange:[
 
@@ -2986,11 +2656,6 @@ function render() {
     );
   }
 
-
-  /*
-    EARTHQUAKE DOTS
-  */
-
   if (
     layerState.quakes
   ) {
@@ -2999,20 +2664,15 @@ function render() {
 
       new deck.ScatterplotLayer({
 
-        id:
-          "earthquake-events",
+        id:"earthquake-events",
 
-        data:
-          quakes,
+        data:quakes,
 
-        pickable:
-          true,
+        pickable:true,
 
-        stroked:
-          true,
+        stroked:true,
 
-        filled:
-          true,
+        filled:true,
 
         getPosition:
           d => [
@@ -3024,8 +2684,7 @@ function render() {
           d => {
 
             if (
-              dataMode ===
-              "history"
+              dataMode === "history"
             ) {
 
               return Math.max(
@@ -3037,7 +2696,6 @@ function render() {
                 900
               );
             }
-
 
             return Math.max(
               5000,
@@ -3051,13 +2709,11 @@ function render() {
           },
 
         radiusMinPixels:
-          dataMode ===
-          "history"
+          dataMode === "history"
             ? 5
             : 3,
 
-        radiusMaxPixels:
-          30,
+        radiusMaxPixels:30,
 
         getFillColor:
           d => {
@@ -3074,7 +2730,6 @@ function render() {
               ];
             }
 
-
             if (
               d.magnitude >= 6
             ) {
@@ -3086,7 +2741,6 @@ function render() {
                 220
               ];
             }
-
 
             if (
               d.magnitude >= 5
@@ -3100,7 +2754,6 @@ function render() {
               ];
             }
 
-
             if (
               d.magnitude >= 4
             ) {
@@ -3112,7 +2765,6 @@ function render() {
                 190
               ];
             }
-
 
             return [
               255,
@@ -3130,19 +2782,12 @@ function render() {
             90
           ],
 
-        lineWidthMinPixels:
-          1
+        lineWidthMinPixels:1
 
       })
 
     );
   }
-
-
-  /*
-    SELECTED FACILITY
-    DISTANCE RINGS
-  */
 
   if (
     selectedFacility
@@ -3152,46 +2797,31 @@ function render() {
 
       {
         ...selectedFacility,
-
-        radius:
-          50000,
-
-        alpha:
-          155
+        radius:50000,
+        alpha:155
       },
 
       {
         ...selectedFacility,
-
-        radius:
-          100000,
-
-        alpha:
-          105
+        radius:100000,
+        alpha:105
       },
 
       {
         ...selectedFacility,
-
-        radius:
-          250000,
-
-        alpha:
-          65
+        radius:250000,
+        alpha:65
       }
 
     ];
-
 
     layers.push(
 
       new deck.ScatterplotLayer({
 
-        id:
-          "facility-distance-rings",
+        id:"facility-distance-rings",
 
-        data:
-          ringData,
+        data:ringData,
 
         getPosition:
           d => [
@@ -3203,11 +2833,9 @@ function render() {
           d =>
             d.radius,
 
-        filled:
-          false,
+        filled:false,
 
-        stroked:
-          true,
+        stroked:true,
 
         getLineColor:
           d => [
@@ -3224,26 +2852,26 @@ function render() {
               ? 1500
               : 900,
 
-        lineWidthMinPixels:
-          1,
+        lineWidthMinPixels:1,
 
-        pickable:
-          false
+        pickable:false
 
       })
 
     );
   }
 
-
   /*
-    FACILITY EXPOSURE HALOS
-
-    Always current live exposure.
+    IMPORTANT:
+    Hide current exposure halos
+    in historical mode.
   */
 
   if (
-    layerState.exposure &&
+    dataMode === "live"
+    &&
+    layerState.exposure
+    &&
     facilityExposure.length
   ) {
 
@@ -3251,11 +2879,9 @@ function render() {
 
       new deck.ScatterplotLayer({
 
-        id:
-          "facility-exposure",
+        id:"facility-exposure",
 
-        data:
-          facilityExposure,
+        data:facilityExposure,
 
         getPosition:
           d => [
@@ -3263,14 +2889,11 @@ function render() {
             d.latitude
           ],
 
-        getRadius:
-          70000,
+        getRadius:70000,
 
-        radiusMinPixels:
-          18,
+        radiusMinPixels:18,
 
-        radiusMaxPixels:
-          44,
+        radiusMaxPixels:44,
 
         getFillColor:
           d => [
@@ -3278,24 +2901,18 @@ function render() {
             55
           ],
 
-        stroked:
-          false,
+        stroked:false,
 
-        pickable:
-          false
+        pickable:false
 
       })
 
     );
   }
 
-
-  /*
-    FACILITY DOTS
-  */
-
   if (
-    layerState.sites &&
+    layerState.sites
+    &&
     facilityExposure.length
   ) {
 
@@ -3303,29 +2920,22 @@ function render() {
 
       new deck.ScatterplotLayer({
 
-        id:
-          "manufacturing-sites",
+        id:"manufacturing-sites",
 
-        data:
-          facilityExposure,
+        data:facilityExposure,
 
-        pickable:
-          true,
+        pickable:true,
 
         onClick:
           ({object}) => {
 
-            if (
-              !object
-            ) {
+            if (!object) {
               return;
             }
-
 
             openFacilityDrawer(
               object
             );
-
 
             map.panTo({
 
@@ -3336,7 +2946,6 @@ function render() {
                 object.longitude
 
             });
-
 
             map.setZoom(
               Math.max(
@@ -3352,14 +2961,11 @@ function render() {
             d.latitude
           ],
 
-        getRadius:
-          16000,
+        getRadius:16000,
 
-        radiusMinPixels:
-          6,
+        radiusMinPixels:6,
 
-        radiusMaxPixels:
-          10,
+        radiusMaxPixels:10,
 
         getFillColor:
           [
@@ -3369,23 +2975,27 @@ function render() {
             255
           ],
 
-        stroked:
-          true,
+        stroked:true,
 
         getLineColor:
-          d => [
-            ...d.level.color,
-            255
-          ],
+          dataMode === "history"
+            ? [
+                255,
+                255,
+                255,
+                180
+              ]
+            : d => [
+                ...d.level.color,
+                255
+              ],
 
-        lineWidthMinPixels:
-          3
+        lineWidthMinPixels:3
 
       })
 
     );
   }
-
 
   overlay.setProps({
 
@@ -3397,17 +3007,14 @@ function render() {
         layer
       }) => {
 
-        if (
-          !object
-        ) {
+        if (!object) {
           return null;
         }
-
 
         if (
           layer &&
           layer.id ===
-            "earthquake-events"
+          "earthquake-events"
         ) {
 
           return {
@@ -3439,31 +3046,25 @@ function render() {
 
             style:{
 
-              background:
-                "#11161c",
+              background:"#11161c",
 
-              color:
-                "#fff",
+              color:"#fff",
 
-              padding:
-                "10px",
+              padding:"10px",
 
-              borderRadius:
-                "7px",
+              borderRadius:"7px",
 
-              fontSize:
-                "11px"
+              fontSize:"11px"
 
             }
 
           };
         }
 
-
         if (
           layer &&
           layer.id ===
-            "manufacturing-sites"
+          "manufacturing-sites"
         ) {
 
           return {
@@ -3477,41 +3078,39 @@ function render() {
               ) +
               "</b><br>" +
 
-              "Current exposure: " +
-              "<strong>" +
-              object.level.label +
-              "</strong>" +
+              (
+                dataMode === "history"
+                  ? "Manufacturing location"
+                  :
+                  "Current exposure: " +
+                  "<strong>" +
+                  object.level.label +
+                  "</strong>"
+              ) +
 
               "</div>",
 
             style:{
 
-              background:
-                "#11161c",
+              background:"#11161c",
 
-              color:
-                "#fff",
+              color:"#fff",
 
-              padding:
-                "10px",
+              padding:"10px",
 
-              borderRadius:
-                "7px",
+              borderRadius:"7px",
 
-              fontSize:
-                "11px"
+              fontSize:"11px"
 
             }
 
           };
         }
 
-
         return null;
       }
 
   });
-
 
   updateDashboard(
     quakes,
@@ -3521,7 +3120,7 @@ function render() {
 
 
 /* =====================================================
-   MAJOR EARTHQUAKE PULSE
+   MAJOR QUake PULSE
 ===================================================== */
 
 function startPulseAnimation() {
@@ -3530,21 +3129,14 @@ function startPulseAnimation() {
     timestamp
   ) {
 
-    /*
-      Pulsing is meaningful only
-      for LIVE mode.
-    */
-
     if (
-      dataMode !==
-      "live"
+      dataMode !== "live"
     ) {
 
       pulseOverlay
         ?.setProps({
           layers:[]
         });
-
 
       pulseAnimationId =
         requestAnimationFrame(
@@ -3554,7 +3146,6 @@ function startPulseAnimation() {
       return;
     }
 
-
     const progress =
       (
         (
@@ -3563,7 +3154,6 @@ function startPulseAnimation() {
         ) %
         1
       );
-
 
     const recentMajor =
       liveEarthquakeData
@@ -3580,15 +3170,12 @@ function startPulseAnimation() {
               1000
         );
 
-
     const pulseLayer =
       new deck.ScatterplotLayer({
 
-        id:
-          "major-quake-pulse",
+        id:"major-quake-pulse",
 
-        data:
-          recentMajor,
+        data:recentMajor,
 
         getPosition:
           d => [
@@ -3606,11 +3193,9 @@ function startPulseAnimation() {
               12000
             ),
 
-        filled:
-          false,
+        filled:false,
 
-        stroked:
-          true,
+        stroked:true,
 
         getLineColor:
           [
@@ -3627,31 +3212,24 @@ function startPulseAnimation() {
             )
           ],
 
-        lineWidthMinPixels:
-          2,
+        lineWidthMinPixels:2,
 
-        pickable:
-          false
+        pickable:false
 
       });
-
 
     pulseOverlay
       ?.setProps({
-
         layers:[
           pulseLayer
         ]
-
       });
-
 
     pulseAnimationId =
       requestAnimationFrame(
         animate
       );
   }
-
 
   pulseAnimationId =
     requestAnimationFrame(
@@ -3679,13 +3257,11 @@ function quakesNearSite(
     60 *
     1000;
 
-
   return liveEarthquakeData
 
     .filter(
       q =>
-        q.time >=
-          cutoff
+        q.time >= cutoff
         &&
         q.magnitude >=
           minimumMagnitude
@@ -3725,7 +3301,6 @@ function calculateFacilityMetrics(
       2.5
     );
 
-
   const nearby7M4 =
     nearby30.filter(
       q =>
@@ -3740,13 +3315,11 @@ function calculateFacilityMetrics(
           1000
     );
 
-
   const nearby30M5 =
     nearby30.filter(
       q =>
         q.magnitude >= 5
     );
-
 
   const largest =
     nearby30.reduce(
@@ -3762,12 +3335,10 @@ function calculateFacilityMetrics(
       null
     );
 
-
   const exposure =
     exposureScore(
       site
     );
-
 
   return {
 
@@ -3795,15 +3366,12 @@ async function openFacilityDrawer(
   loadBaseline = true
 ) {
 
-  selectedFacility =
-    site;
-
+  selectedFacility = site;
 
   const metrics =
     calculateFacilityMetrics(
       site
     );
-
 
   document
     .getElementById(
@@ -3812,40 +3380,33 @@ async function openFacilityDrawer(
     .textContent =
       site.name;
 
-
   const badge =
     document
       .getElementById(
         "drawerExposureBadge"
       );
 
-
   badge.textContent =
     metrics.level.label;
-
 
   const rgb =
     metrics.level.color
       .join(",");
-
 
   badge.style.color =
     "rgb(" +
     rgb +
     ")";
 
-
   badge.style.background =
     "rgba(" +
     rgb +
     ",.13)";
 
-
   badge.style.border =
     "1px solid rgba(" +
     rgb +
     ",.35)";
-
 
   if (
     metrics.largest
@@ -3861,7 +3422,6 @@ async function openFacilityDrawer(
           .magnitude
           .toFixed(1);
 
-
     document
       .getElementById(
         "drawerDistance"
@@ -3873,7 +3433,6 @@ async function openFacilityDrawer(
         ) +
         " km";
 
-
     document
       .getElementById(
         "drawerDepth"
@@ -3884,7 +3443,6 @@ async function openFacilityDrawer(
             .depth
         ) +
         " km";
-
 
     document
       .getElementById(
@@ -3913,7 +3471,6 @@ async function openFacilityDrawer(
       .textContent =
         "None";
 
-
     document
       .getElementById(
         "drawerDistance"
@@ -3921,14 +3478,12 @@ async function openFacilityDrawer(
       .textContent =
         "—";
 
-
     document
       .getElementById(
         "drawerDepth"
       )
       .textContent =
         "—";
-
 
     document
       .getElementById(
@@ -3939,7 +3494,6 @@ async function openFacilityDrawer(
         "within 250 km in the last 30 days.";
   }
 
-
   document
     .getElementById(
       "drawerM4Seven"
@@ -3948,7 +3502,6 @@ async function openFacilityDrawer(
       metrics.nearby7M4
         .length;
 
-
   document
     .getElementById(
       "drawerM5Thirty"
@@ -3956,7 +3509,6 @@ async function openFacilityDrawer(
     .textContent =
       metrics.nearby30M5
         .length;
-
 
   document
     .getElementById(
@@ -3967,14 +3519,10 @@ async function openFacilityDrawer(
         .toLocaleTimeString(
           [],
           {
-            hour:
-              "numeric",
-
-            minute:
-              "2-digit"
+            hour:"numeric",
+            minute:"2-digit"
           }
         );
-
 
   document
     .getElementById(
@@ -3985,9 +3533,7 @@ async function openFacilityDrawer(
       "open"
     );
 
-
   render();
-
 
   if (
     loadBaseline
@@ -4000,11 +3546,11 @@ async function openFacilityDrawer(
 }
 
 
-function closeFacilityDrawer() {
+function closeFacilityDrawer(
+  redraw = true
+) {
 
-  selectedFacility =
-    null;
-
+  selectedFacility = null;
 
   document
     .getElementById(
@@ -4015,19 +3561,16 @@ function closeFacilityDrawer() {
       "open"
     );
 
-
-  render();
+  if (
+    redraw
+  ) {
+    render();
+  }
 }
 
 
 /* =====================================================
    FACILITY HISTORICAL BASELINE
-
-   Uses previous 365 days of M4+
-   activity within 250 km.
-
-   This is intentionally separate
-   from the M6 historical explorer.
 ===================================================== */
 
 async function loadHistoricalBaseline(
@@ -4040,7 +3583,6 @@ async function loadHistoricalBaseline(
     "," +
     site.longitude
       .toFixed(4);
-
 
   if (
     historicalBaselineCache[
@@ -4058,7 +3600,6 @@ async function loadHistoricalBaseline(
     return;
   }
 
-
   document
     .getElementById(
       "drawerBaseline"
@@ -4066,10 +3607,8 @@ async function loadHistoricalBaseline(
     .textContent =
       "Calculating…";
 
-
   const end =
     new Date();
-
 
   const start =
     new Date(
@@ -4081,12 +3620,10 @@ async function loadHistoricalBaseline(
       1000
     );
 
-
   const params =
     new URLSearchParams({
 
-      format:
-        "geojson",
+      format:"geojson",
 
       starttime:
         start.toISOString(),
@@ -4104,17 +3641,13 @@ async function loadHistoricalBaseline(
           site.longitude
         ),
 
-      maxradiuskm:
-        "250",
+      maxradiuskm:"250",
 
-      minmagnitude:
-        "4",
+      minmagnitude:"4",
 
-      limit:
-        "20000"
+      limit:"20000"
 
     });
-
 
   try {
 
@@ -4125,10 +3658,7 @@ async function loadHistoricalBaseline(
         params.toString()
       );
 
-
-    if (
-      !response.ok
-    ) {
+    if (!response.ok) {
 
       throw new Error(
         "USGS returned " +
@@ -4136,19 +3666,15 @@ async function loadHistoricalBaseline(
       );
     }
 
-
     const data =
       await response.json();
-
 
     const annualCount =
       data.features.length;
 
-
     const weeklyAverage =
       annualCount /
       52.1429;
-
 
     const baseline = {
 
@@ -4158,18 +3684,15 @@ async function loadHistoricalBaseline(
 
     };
 
-
     historicalBaselineCache[
       cacheKey
     ] =
       baseline;
 
-
     displayHistoricalBaseline(
       site,
       baseline
     );
-
 
   } catch(error) {
 
@@ -4179,7 +3702,6 @@ async function loadHistoricalBaseline(
       )
       .textContent =
         "Unavailable";
-
 
     console.error(
       error
@@ -4201,21 +3723,17 @@ function displayHistoricalBaseline(
     return;
   }
 
-
   const metrics =
     calculateFacilityMetrics(
       site
     );
 
-
   const current =
     metrics.nearby7M4
       .length;
 
-
   const average =
     baseline.weeklyAverage;
-
 
   const ratio =
     average > 0
@@ -4223,14 +3741,11 @@ function displayHistoricalBaseline(
         average
       : 0;
 
-
   let activity =
     "Typical";
 
-
   let color =
     "#44d17a";
-
 
   if (
     ratio >= 3
@@ -4263,7 +3778,6 @@ function displayHistoricalBaseline(
       "#ffd34e";
   }
 
-
   document
     .getElementById(
       "drawerBaseline"
@@ -4272,7 +3786,6 @@ function displayHistoricalBaseline(
       average
         .toFixed(1) +
       " M4+ / week";
-
 
   document
     .getElementById(
@@ -4285,17 +3798,14 @@ function displayHistoricalBaseline(
           "×"
         : "—";
 
-
   const activityElement =
     document
       .getElementById(
         "drawerActivity"
       );
 
-
   activityElement.textContent =
     activity;
-
 
   activityElement.style.color =
     color;
@@ -4319,7 +3829,6 @@ function updateDashboard(
       quakes.length
         .toLocaleString();
 
-
   const largest =
     quakes.reduce(
       (
@@ -4333,7 +3842,6 @@ function updateDashboard(
       0
     );
 
-
   document
     .getElementById(
       "largestMag"
@@ -4344,13 +3852,11 @@ function updateDashboard(
           largest.toFixed(1)
         : "—";
 
-
   const list =
     document
       .getElementById(
         "siteList"
       );
-
 
   if (
     !facilityExposure.length
@@ -4368,7 +3874,6 @@ function updateDashboard(
     return;
   }
 
-
   const sorted =
     [
       ...facilityExposure
@@ -4381,7 +3886,6 @@ function updateDashboard(
           b.exposure.score -
           a.exposure.score
       );
-
 
   list.innerHTML =
     sorted
@@ -4397,6 +3901,15 @@ function updateDashboard(
               .join(",") +
             ")";
 
+          const riskText =
+            dataMode === "history"
+              ? "Manufacturing location"
+              : site.level.label;
+
+          const dotColor =
+            dataMode === "history"
+              ? "#f5f1ea"
+              : color;
 
           return (
 
@@ -4422,11 +3935,11 @@ function updateDashboard(
                 "class='dot' " +
                 "style='" +
                 "background:" +
-                color +
+                dotColor +
                 "'>" +
                 "</span>" +
 
-                site.level.label +
+                riskText +
 
               "</div>" +
 
@@ -4436,12 +3949,6 @@ function updateDashboard(
         }
       )
       .join("");
-
-
-  /*
-    Bind clicks without inserting
-    coordinates into HTML.
-  */
 
   [
     ...list.querySelectorAll(
@@ -4459,15 +3966,11 @@ function updateDashboard(
           () => {
 
             const site =
-              sorted[
-                index
-              ];
-
+              sorted[index];
 
             openFacilityDrawer(
               site
             );
-
 
             map.panTo({
 
@@ -4478,7 +3981,6 @@ function updateDashboard(
                 site.longitude
 
             });
-
 
             map.setZoom(
               Math.max(
@@ -4508,10 +4010,8 @@ function setRegion(
     .classList
     .toggle(
       "active",
-      region ===
-      "japan"
+      region === "japan"
     );
-
 
   document
     .getElementById(
@@ -4520,14 +4020,11 @@ function setRegion(
     .classList
     .toggle(
       "active",
-      region ===
-      "global"
+      region === "global"
     );
 
-
   if (
-    region ===
-    "japan"
+    region === "japan"
   ) {
 
     map.panTo({
@@ -4538,10 +4035,7 @@ function setRegion(
 
     });
 
-
-    map.setZoom(
-      5
-    );
+    map.setZoom(5);
 
   } else {
 
@@ -4553,10 +4047,7 @@ function setRegion(
 
     });
 
-
-    map.setZoom(
-      2
-    );
+    map.setZoom(2);
   }
 }
 
@@ -4565,9 +4056,7 @@ function setDays(
   value
 ) {
 
-  days =
-    value;
-
+  days = value;
 
   document
     .querySelectorAll(
@@ -4583,14 +4072,11 @@ function setDays(
 
             Number(
               button.dataset.days
-            ) ===
-            value
+            ) === value
           )
     );
 
-
   render();
-
 
   if (
     selectedFacility
@@ -4608,9 +4094,7 @@ function setMagnitude(
   value
 ) {
 
-  minMagnitude =
-    value;
-
+  minMagnitude = value;
 
   document
     .querySelectorAll(
@@ -4626,11 +4110,9 @@ function setMagnitude(
 
             Number(
               button.dataset.mag
-            ) ===
-            value
+            ) === value
           )
     );
-
 
   render();
 }
@@ -4646,7 +4128,6 @@ function toggleLayer(
   ] =
     value;
 
-
   render();
 }
 
@@ -4659,9 +4140,7 @@ function escapeHtml(
   text
 ) {
 
-  return String(
-    text
-  )
+  return String(text)
 
     .replaceAll(
       "&",
@@ -4705,11 +4184,8 @@ function updateTimestamp(
         .toLocaleTimeString(
           [],
           {
-            hour:
-              "numeric",
-
-            minute:
-              "2-digit"
+            hour:"numeric",
+            minute:"2-digit"
           }
         );
 }
@@ -4744,7 +4220,6 @@ window.addEventListener(
         "tatchaMapsKey"
       );
 
-
     if (
       saved
     ) {
@@ -4757,14 +4232,12 @@ window.addEventListener(
         .display =
           "none";
 
-
       loadGoogleMaps(
         saved
       );
     }
   }
 );
-
 
 window.initMap =
   initMap;
