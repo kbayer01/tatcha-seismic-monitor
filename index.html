@@ -1244,7 +1244,7 @@
 
       <div class="small-note">
         Total Exposure combines 60% current seismic activity
-        and 40% historical M6+ activity over the past 15 years.
+        and 40% historical M6+ activity over the past 30 years.
         It is an exposure index, not an earthquake prediction.
       </div>
 
@@ -1511,7 +1511,7 @@
 
 
       <div class="drawer-section-title">
-        15-YEAR HISTORICAL CONTEXT
+        30-YEAR HISTORICAL CONTEXT
       </div>
 
 
@@ -1580,7 +1580,7 @@
       <div class="drawer-method">
         Total Exposure = 60% Current Exposure +
         40% Historical Exposure. Historical Exposure uses
-        USGS M6.0+ events from the rolling prior 15 years,
+        USGS M6.0+ events from the rolling prior 30 years,
         weighted by magnitude and proximity. This index is
         intended for comparative exposure context and is not
         a seismic forecast or probability estimate.
@@ -2010,7 +2010,7 @@ async function loadLiveEarthquakes() {
 
 
 /* =====================================================
-   15-YEAR HISTORICAL EXPOSURE CATALOG
+   30-YEAR HISTORICAL EXPOSURE CATALOG
 ===================================================== */
 
 async function loadHistoricalExposureCatalog() {
@@ -2023,7 +2023,7 @@ async function loadHistoricalExposureCatalog() {
 
   start.setFullYear(
     end.getFullYear() -
-    15
+    30
   );
 
 
@@ -2250,10 +2250,13 @@ function populateHistoryYears() {
       value:"15y",
       label:"Past 15 Years"
     },
-
+ {
+      value:"30y",
+      label:"Past 30 Years"
+    },
     {
-      value:"all",
-      label:"2010 – Present"
+      value:"76y",
+      label:"1950 – Present"
     }
 
   ];
@@ -2376,7 +2379,9 @@ async function loadHistoricalYear() {
   if (
     selected === "5y" ||
     selected === "10y" ||
-    selected === "15y"
+   selected === "15y" ||
+selected === "30y" ||
+    selected === "76y"
   ) {
 
     const years =
