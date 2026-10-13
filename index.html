@@ -1241,7 +1241,16 @@
         ></span>
         Very high
       </div>
+<div class="key-row">
 
+  <span
+    class="key"
+    style="background:#48000f"
+  ></span>
+
+  Historical earthquake &gt;100 fatalities
+
+</div>
       <div class="small-note">
         Total Exposure combines 60% current seismic activity
         and 40% historical M6+ activity over the past 30 years.
@@ -1652,6 +1661,9 @@ const colors = {
 
   veryHigh:[255,59,69]
 
+  const NOAA_SIGNIFICANT_EQ_API =
+  "https://www.ngdc.noaa.gov/" +
+  "hazel/hazard-service/api/v1/earthquakes";
 };
 
 
@@ -1705,7 +1717,9 @@ let layerState = {
   exposure:true,
 
   totalExposure:false
-
+    
+let casualtyEarthquakeData = [];
+  
 };
 
 
@@ -1923,8 +1937,9 @@ async function initMap() {
 
     loadTectonicBoundaries(),
 
-    loadHistoricalExposureCatalog()
+    loadHistoricalExposureCatalog(),
 
+    loadCasualtyEarthquakes()
   ]);
 
 
@@ -2008,7 +2023,134 @@ async function loadLiveEarthquakes() {
   }
 }
 
+/* =====================================================
+   NOAA CASUALTY DATA
+===================================================== */
 
+async function loadCasualtyEarthquakes() {
+
+  const currentYear =
+    new Date().getFullYear();
+
+  const startYear =
+    currentYear - 30;
+
+  let page =
+    1;
+
+  let totalPages =
+    1;
+
+  const results =
+    [];
+
+
+  try {
+
+    while (
+      page <= totalPages
+    ) {
+
+      const params =
+        new URLSearchParams({
+
+          minYear:
+            String(startYear),
+
+          maxYear:
+            String(currentYear),
+
+          page:
+            String(page),
+
+          itemsPerPage:
+            "200"
+
+        });
+
+
+      const response =
+        await fetch(
+          NOAA_SIGNIFICANT_EQ_API +
+          "?" +
+          params.toString(),
+          {
+            cache:"force-cache"
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "NOAA casualty data returned " +
+          response.status
+        );
+      }
+
+
+      const json =
+        await response.json();
+
+
+      const items =
+        Array.isArray(
+          json.items
+        )
+          ?
+          json.items
+          :
+          [];
+
+
+      results.push(
+        ...items
+      );
+
+
+      totalPages =
+        Number(
+          json.totalPages ||
+          1
+        );
+
+
+      page++;
+    }
+
+
+    casualtyEarthquakeData =
+      results.filter(
+        item => {
+
+          const deaths =
+            Number(
+              item.deathsTotal ??
+              item.deaths ??
+              0
+            );
+
+          return deaths > 100;
+        }
+      );
+
+
+    console.log(
+      "NOAA casualty earthquakes loaded:",
+      casualtyEarthquakeData.length
+    );
+
+  } catch(error) {
+
+    console.warn(
+      "NOAA casualty data unavailable:",
+      error
+    );
+
+    casualtyEarthquakeData =
+      [];
+  }
+}
 /* =====================================================
    30-YEAR HISTORICAL EXPOSURE CATALOG
 ===================================================== */
@@ -2090,7 +2232,7 @@ async function loadHistoricalExposureCatalog() {
     console.error(error);
 
     setStatus(
-      "15-year exposure history could not be loaded. " +
+      "30-year exposure history could not be loaded. " +
       "Live monitoring remains available."
     );
   }
@@ -2511,15 +2653,26 @@ selected === "30y" ||
     }
 
 
-    displayedEarthquakeData =
-      json.features
-        .map(
-          normalizeUSGSFeature
-        )
-        .filter(
-          q =>
-            q.magnitude >= 6
-        );
+  let historicalQuakes =
+  json.features
+    .map(
+      normalizeUSGSFeature
+    )
+    .filter(
+      q =>
+        q.magnitude >= 6
+    );
+
+
+if (
+  selected === "30y"
+) {
+
+  historicalQuakes =
+    attachCasualtyData(
+      historicalQuakes
+    );
+}
 
 
     document
@@ -3350,7 +3503,157 @@ function distanceKm(
     );
 }
 
+/* =====================================================
+   MATCH NOAA CASUALTY DATA TO USGS EVENTS
+===================================================== */
 
+function attachCasualtyData(
+  quakes
+) {
+
+  if (
+    !casualtyEarthquakeData.length
+  ) {
+
+    return quakes;
+  }
+
+  return quakes.map(
+    quake => {
+
+      const quakeDate =
+        new Date(
+          quake.time
+        );
+
+      let bestMatch =
+        null;
+
+      let bestDistance =
+        Infinity;
+
+      casualtyEarthquakeData.forEach(
+        event => {
+
+          const year =
+            Number(
+              event.year
+            );
+
+          const month =
+            Number(
+              event.month || 1
+            );
+
+          const day =
+            Number(
+              event.day || 1
+            );
+
+          if (
+            year !==
+            quakeDate.getUTCFullYear()
+          ) {
+
+            return;
+          }
+
+          const eventDate =
+            Date.UTC(
+              year,
+              month - 1,
+              day
+            );
+
+          const quakeDay =
+            Date.UTC(
+              quakeDate.getUTCFullYear(),
+              quakeDate.getUTCMonth(),
+              quakeDate.getUTCDate()
+            );
+
+          const dayDifference =
+            Math.abs(
+              eventDate -
+              quakeDay
+            ) /
+            DAY_MS;
+
+          if (
+            dayDifference > 1
+          ) {
+
+            return;
+          }
+
+          const lat =
+            Number(
+              event.latitude
+            );
+
+          const lon =
+            Number(
+              event.longitude
+            );
+
+          if (
+            !Number.isFinite(lat)
+            ||
+            !Number.isFinite(lon)
+          ) {
+
+            return;
+          }
+
+          const km =
+            distanceKm(
+              quake,
+              {
+                latitude:lat,
+                longitude:lon
+              }
+            );
+
+          if (
+            km <= 150
+            &&
+            km < bestDistance
+          ) {
+
+            bestDistance =
+              km;
+
+            bestMatch =
+              event;
+          }
+        }
+      );
+
+      if (
+        !bestMatch
+      ) {
+
+        return {
+          ...quake,
+          fatalities:0
+        };
+      }
+
+      const fatalities =
+        Number(
+          bestMatch.deathsTotal ??
+          bestMatch.deaths ??
+          0
+        );
+
+      return {
+        ...quake,
+        fatalities,
+        casualtySource:"NOAA/NCEI"
+      };
+    }
+  );
+}
 /* =====================================================
    EXPOSURE SCORING
 ===================================================== */
@@ -4562,32 +4865,47 @@ function getMapTooltip(
 
     return {
 
-      html:
+    html:
 
-        "<div>" +
+  "<div>" +
 
-        "<b>M" +
-        object.magnitude
-          .toFixed(1) +
-        "</b><br>" +
+  "<b>M" +
+  object.magnitude
+    .toFixed(1) +
+  "</b><br>" +
 
-        escapeHtml(
-          object.place
-        ) +
-        "<br>" +
+  escapeHtml(
+    object.place
+  ) +
+  "<br>" +
 
-        "Depth: " +
-        object.depth
-          .toFixed(1) +
-        " km<br>" +
+  "Depth: " +
+  object.depth
+    .toFixed(1) +
+  " km<br>" +
 
-        new Date(
-          object.time
-        )
-          .toLocaleString() +
+  new Date(
+    object.time
+  )
+    .toLocaleString() +
 
-        "</div>",
+  (
+    Number(
+      object.fatalities || 0
+    ) > 100
+      ?
+      "<br><strong style='color:#ff9aa2'>" +
+      "Reported fatalities: " +
+      Number(
+        object.fatalities
+      )
+        .toLocaleString() +
+      "</strong>"
+      :
+      ""
+  ) +
 
+  "</div>",
       style:
         tooltipStyle()
 
@@ -4725,7 +5043,21 @@ function tooltipStyle() {
 function earthquakeColor(
   d
 ) {
+if (
+  dataMode === "history"
+  &&
+  Number(
+    d.fatalities || 0
+  ) > 100
+) {
 
+  return [
+    72,
+    0,
+    15,
+    255
+  ];
+}
   if (
     d.magnitude >= 8
   ) {
