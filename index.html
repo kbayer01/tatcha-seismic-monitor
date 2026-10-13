@@ -1930,18 +1930,42 @@ async function initMap() {
     );
 
 
-  await Promise.all([
+ await Promise.all([
 
-    loadLiveEarthquakes(),
+  loadLiveEarthquakes(),
 
-    loadMyMap(),
+  loadMyMap(),
 
-    loadTectonicBoundaries(),
+  loadTectonicBoundaries(),
 
-    loadHistoricalExposureCatalog(),
+  loadHistoricalExposureCatalog()
 
-    loadCasualtyEarthquakes()
-  ]);
+]);
+
+/*
+  Casualty data is optional enrichment.
+  Do not block map startup while it loads.
+*/
+loadCasualtyEarthquakes()
+  .then(() => {
+
+    if (
+      dataMode === "history" &&
+      document.getElementById("historyYear").value === "30y"
+    ) {
+
+      loadHistoricalYear();
+    }
+
+  })
+  .catch(error => {
+
+    console.warn(
+      "Casualty enrichment unavailable:",
+      error
+    );
+
+  });
 
 
   render();
@@ -3808,7 +3832,7 @@ function normalizeCurrentExposure(
 /*
   HISTORICAL EXPOSURE POLICY
 
-  - rolling 15 years
+  - rolling 30 years
   - M6.0+
   - magnitude + proximity weighted
   - 500 km context radius
