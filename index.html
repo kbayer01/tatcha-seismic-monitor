@@ -1651,6 +1651,10 @@ const TECTONIC_BOUNDARY_FEED =
 const DAY_MS =
   24 * 60 * 60 * 1000;
 
+const NOAA_SIGNIFICANT_EQ_API =
+  "https://www.ngdc.noaa.gov/" +
+  "hazel/hazard-service/api/v1/earthquakes";
+
 const colors = {
 
   low:[68,209,122],
@@ -1661,9 +1665,6 @@ const colors = {
 
   veryHigh:[255,59,69]
 
-  const NOAA_SIGNIFICANT_EQ_API =
-  "https://www.ngdc.noaa.gov/" +
-  "hazel/hazard-service/api/v1/earthquakes";
 };
 
 
@@ -1717,10 +1718,10 @@ let layerState = {
   exposure:true,
 
   totalExposure:false
-    
-let casualtyEarthquakeData = [];
-  
+
 };
+
+let casualtyEarthquakeData = [];
 
 
 /* =====================================================
@@ -2673,7 +2674,8 @@ if (
       historicalQuakes
     );
 }
-
+displayedEarthquakeData =
+  historicalQuakes;
 
     document
       .getElementById(
