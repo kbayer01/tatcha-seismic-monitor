@@ -2547,13 +2547,27 @@ async function loadHistoricalYear() {
   render();
 
 
-  const selected =
-    document
-      .getElementById(
-        "historyYear"
-      )
-      .value;
+const selected =
+  document
+    .getElementById(
+      "historyYear"
+    )
+    .value;
 
+
+const fatalityContainer =
+  document.getElementById(
+    "fatalityFilterContainer"
+  );
+
+const fatalityToggle =
+  document.getElementById(
+    "fatalityOnlyToggle"
+  );
+
+
+if (
+  selected === "30y"
 ) {
 
   fatalityContainer.style.display =
@@ -2574,7 +2588,6 @@ async function loadHistoricalYear() {
     fatalityToggle.checked =
       false;
   }
-}
   const currentYear =
     new Date()
       .getFullYear();
