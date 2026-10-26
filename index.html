@@ -5266,16 +5266,16 @@ function makeSupplierLayer(
       d =>
         isCM
           ?
-          "🏭"
+          "CM"
           :
-          "📦",
+          "PKG",
 
     getSize:
       isCM
         ?
-        28
+        18
         :
-        27,
+        17,
 
     sizeUnits:
       "pixels",
@@ -5286,16 +5286,38 @@ function makeSupplierLayer(
     getAlignmentBaseline:
       "center",
 
-    billboard:
-      true,
+    billboard:true,
 
     fontFamily:
       "Arial, sans-serif",
 
-    getColor:[
-      255,
-      255,
-      255,
+    fontWeight:
+      700,
+
+    getColor:
+      isCM
+        ?
+        [
+          91,
+          167,
+          255,
+          255
+        ]
+        :
+        [
+          244,
+          238,
+          228,
+          255
+        ],
+
+    outlineWidth:
+      3,
+
+    outlineColor:[
+      20,
+      23,
+      27,
       255
     ]
 
