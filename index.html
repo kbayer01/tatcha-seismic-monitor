@@ -3734,10 +3734,152 @@ function attachCasualtyData(
           0
         );
 
+     return {
+
+  ...quake,
+
+  fatalities,
+
+  casualtySource:
+    "NOAA/NCEI",
+
+  casualtyGroupId:
+  String(
+    bestMatch.id ??
+    bestMatch.ID ??
+    [
+      bestMatch.year,
+      bestMatch.month || 1,
+      bestMatch.day || 1,
+      Number(
+        bestMatch.latitude
+      ).toFixed(2),
+      Number(
+        bestMatch.longitude
+      ).toFixed(2)
+    ].join("-")
+  ),
+
+  casualtyLatitude:
+    Number(
+      bestMatch.latitude
+    ),
+
+  casualtyLongitude:
+    Number(
+      bestMatch.longitude
+    )
+
+};
+    }
+  );
+}
+  function collapseCasualtySequences(
+  quakes
+) {
+
+  const groups =
+    new Map();
+
+
+  quakes.forEach(
+    quake => {
+
+      if (
+        Number(
+          quake.fatalities || 0
+        ) <= 100
+      ) {
+
+        return;
+      }
+
+
+      const key =
+        quake.casualtyGroupId ||
+        quake.id;
+
+
+      if (
+        !groups.has(key)
+      ) {
+
+        groups.set(
+          key,
+          []
+        );
+      }
+
+
+      groups
+        .get(key)
+        .push(quake);
+    }
+  );
+
+
+  return [
+    ...groups.values()
+  ].map(
+    sequence => {
+
+      sequence.sort(
+        (a,b) =>
+          a.time -
+          b.time
+      );
+
+
+      const largest =
+        sequence.reduce(
+          (best,q) =>
+            !best ||
+            q.magnitude >
+              best.magnitude
+              ?
+              q
+              :
+              best,
+          null
+        );
+
+
       return {
-        ...quake,
-        fatalities,
-        casualtySource:"NOAA/NCEI"
+
+        ...largest,
+
+        longitude:
+          Number.isFinite(
+            largest.casualtyLongitude
+          )
+            ?
+            largest.casualtyLongitude
+            :
+            largest.longitude,
+
+        latitude:
+          Number.isFinite(
+            largest.casualtyLatitude
+          )
+            ?
+            largest.casualtyLatitude
+            :
+            largest.latitude,
+
+        sequenceCount:
+          sequence.length,
+
+        sequenceStart:
+          sequence[0].time,
+
+        sequenceEnd:
+          sequence[
+            sequence.length - 1
+          ].time,
+
+        isCasualtySequence:
+          true
+
       };
     }
   );
@@ -4162,13 +4304,9 @@ function visibleQuakes() {
     fatalityOnly
   ) {
 
-    return displayedEarthquakeData
-      .filter(
-        q =>
-          Number(
-            q.fatalities || 0
-          ) > 100
-      );
+ return collapseCasualtySequences(
+  displayedEarthquakeData
+);
   }
 
   return displayedEarthquakeData;
@@ -4966,7 +5104,7 @@ function getMapTooltip(
 
     return {
 
-    html:
+html:
 
   "<div>" +
 
@@ -4991,12 +5129,40 @@ function getMapTooltip(
     .toLocaleString() +
 
   (
+    object.isCasualtySequence
+      ?
+      "<br><br><strong>" +
+      object.sequenceCount +
+      " M6+ earthquake" +
+      (
+        object.sequenceCount === 1
+          ? ""
+          : "s"
+      ) +
+      " associated with this event" +
+      "</strong><br>" +
+
+      "Sequence: " +
+      new Date(
+        object.sequenceStart
+      )
+        .toLocaleDateString() +
+      " – " +
+      new Date(
+        object.sequenceEnd
+      )
+        .toLocaleDateString()
+      :
+      ""
+  ) +
+
+  (
     Number(
       object.fatalities || 0
     ) > 100
       ?
       "<br><strong style='color:#ff9aa2'>" +
-      "Reported fatalities: " +
+      "Reported fatalities for associated disaster: " +
       Number(
         object.fatalities
       )
