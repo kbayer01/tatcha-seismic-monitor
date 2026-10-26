@@ -1158,20 +1158,26 @@
 
         <label class="key-row">
 
-          <input
-            type="checkbox"
-            checked
-            onchange="toggleLayer('packaging',this.checked)"
-          >
+  <input
+    type="checkbox"
+    checked
+    onchange="toggleLayer('packaging',this.checked)"
+  >
 
-          <span
-            class="key"
-            style="background:#b88cff"
-          ></span>
+  <img
+    src="./assets/primary-packaging-icon.png"
+    alt="Primary Packaging"
+    style="
+      width:18px;
+      height:18px;
+      object-fit:contain;
+      flex:0 0 18px;
+    "
+  >
 
-          Primary Packaging
+  Primary Packaging
 
-        </label>
+</label>
 
 
         <label class="key-row">
@@ -5175,6 +5181,73 @@ function makeSupplierLayer(
   const isCM =
     category === "cm";
 
+  if (!isCM) {
+
+    return new deck.IconLayer({
+
+      id,
+
+      data,
+
+      pickable:true,
+
+      onClick:
+        ({object}) => {
+
+          if (
+            !object
+          ) {
+            return;
+          }
+
+          map.panTo({
+            lat:object.latitude,
+            lng:object.longitude
+          });
+
+          map.setZoom(
+            Math.max(
+              map.getZoom(),
+              7
+            )
+          );
+
+          openFacilityDrawer(
+            object
+          );
+        },
+
+      getPosition:
+        d => [
+          d.longitude,
+          d.latitude
+        ],
+
+      getIcon:
+        d => ({
+          url:PACKAGING_ICON_URL,
+          width:128,
+          height:128,
+          anchorY:128
+        }),
+
+      getSize:
+        30,
+
+      sizeUnits:
+        "pixels",
+
+      sizeMinPixels:
+        24,
+
+      sizeMaxPixels:
+        36,
+
+      alphaCutoff:
+        0.05
+
+    });
+  }
 
   return new deck.ScatterplotLayer({
 
@@ -5193,17 +5266,10 @@ function makeSupplierLayer(
           return;
         }
 
-
         map.panTo({
-
-          lat:
-            object.latitude,
-
-          lng:
-            object.longitude
-
+          lat:object.latitude,
+          lng:object.longitude
         });
-
 
         map.setZoom(
           Math.max(
@@ -5211,7 +5277,6 @@ function makeSupplierLayer(
             7
           )
         );
-
 
         openFacilityDrawer(
           object
@@ -5225,72 +5290,35 @@ function makeSupplierLayer(
       ],
 
     getRadius:
-      isCM
-        ?
-        16000
-        :
-        15000,
+      16000,
 
     radiusMinPixels:
-      isCM
-        ?
-        7
-        :
-        6,
+      7,
 
     radiusMaxPixels:
-      isCM
-        ?
-        11
-        :
-        10,
+      11,
 
-    getFillColor:
-      isCM
-        ?
-        [
-          248,
-          243,
-          235,
-          255
-        ]
-        :
-        [
-          184,
-          140,
-          255,
-          255
-        ],
+    getFillColor:[
+      248,
+      243,
+      235,
+      255
+    ],
 
     stroked:true,
 
-    getLineColor:
-      isCM
-        ?
-        [
-          91,
-          167,
-          255,
-          255
-        ]
-        :
-        [
-          235,
-          220,
-          255,
-          255
-        ],
+    getLineColor:[
+      91,
+      167,
+      255,
+      255
+    ],
 
     lineWidthMinPixels:
-      isCM
-        ?
-        3
-        :
-        2
+      3
 
   });
 }
-
 
 /* =====================================================
    MAP TOOLTIPS
