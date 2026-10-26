@@ -294,7 +294,118 @@
       font-size:10px;
       line-height:1.45;
     }
+.impact-events-panel {
+  display:none;
 
+  margin-top:12px;
+  padding:11px;
+
+  border:1px solid rgba(91,42,134,.55);
+  border-radius:10px;
+
+  background:#17141d;
+}
+
+.impact-events-panel.visible {
+  display:block;
+}
+
+.impact-events-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:8px;
+
+  color:#e6d7f5;
+
+  font-size:11px;
+  font-weight:650;
+}
+
+.impact-close {
+  padding:1px 6px;
+
+  border:0;
+  background:transparent;
+
+  color:#aaa0b5;
+
+  font-size:18px;
+}
+
+.impact-events-note {
+  margin-top:6px;
+  margin-bottom:10px;
+
+  color:#8f8798;
+
+  font-size:9px;
+  line-height:1.45;
+}
+
+#impactEventsList {
+  max-height:330px;
+
+  overflow-y:auto;
+
+  padding-right:3px;
+}
+
+.impact-event {
+  margin-bottom:7px;
+  padding:10px;
+
+  border:1px solid #3b3443;
+  border-radius:8px;
+
+  background:#211b28;
+
+  cursor:pointer;
+}
+
+.impact-event:hover {
+  border-color:#8d66ae;
+
+  background:#292031;
+}
+
+.impact-event-date {
+  color:#bda8d1;
+
+  font-size:9px;
+  font-weight:650;
+
+  letter-spacing:.06em;
+}
+
+.impact-event-title {
+  margin-top:4px;
+
+  color:#f4f0f6;
+
+  font-size:11px;
+  font-weight:600;
+  line-height:1.35;
+}
+
+.impact-event-details {
+  margin-top:5px;
+
+  color:#aaa2b0;
+
+  font-size:9px;
+  line-height:1.5;
+}
+
+.impact-empty {
+  padding:12px 4px;
+
+  color:#8b8491;
+
+  font-size:10px;
+  line-height:1.5;
+}
     .layer-list {
       display:flex;
       flex-direction:column;
@@ -900,9 +1011,48 @@
         >
           M6+ History
         </button>
-
+<button
+  id="impactEventsBtn"
+  onclick="toggleImpactEventsPanel()"
+>
+  Impact Events
+</button>
       </div>
+<div
+  id="impactEventsPanel"
+  class="impact-events-panel"
+>
 
+  <div class="impact-events-header">
+
+    <div>
+      Major Operational / Infrastructure Impact Events
+    </div>
+
+    <button
+      class="impact-close"
+      onclick="toggleImpactEventsPanel(false)"
+      title="Close"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <div class="impact-events-note">
+    Past 30 years • M6.0+ earthquakes meeting the monitor's
+    major operational / infrastructure impact criteria.
+  </div>
+
+  <div id="impactEventsList">
+
+    <div class="impact-empty">
+      Loading impact events…
+    </div>
+
+  </div>
+
+</div>
 
       <div
         id="historyControls"
@@ -2240,7 +2390,7 @@ async function loadCasualtyEarthquakes() {
       "NOAA impact earthquakes loaded:",
       casualtyEarthquakeData.length
     );
-
+renderImpactEventsList();
   } catch(error) {
 
     console.warn(
@@ -2325,7 +2475,7 @@ async function loadHistoricalExposureCatalog() {
             q.magnitude >= 6
         );
 
-
+renderImpactEventsList();
     render();
 
   } catch(error) {
@@ -4179,7 +4329,357 @@ function isMajorOperationalImpact(
     fatalities > 100
   );
 }
-  
+  /* =====================================================
+   IMPACT EVENTS SIDEBAR
+===================================================== */
+
+function toggleImpactEventsPanel(
+  forceOpen
+) {
+
+  const panel =
+    document.getElementById(
+      "impactEventsPanel"
+    );
+
+  const button =
+    document.getElementById(
+      "impactEventsBtn"
+    );
+
+
+  if (
+    !panel ||
+    !button
+  ) {
+    return;
+  }
+
+
+  const shouldOpen =
+    typeof forceOpen === "boolean"
+      ?
+      forceOpen
+      :
+      !panel.classList.contains(
+        "visible"
+      );
+
+
+  panel.classList.toggle(
+    "visible",
+    shouldOpen
+  );
+
+
+  button.classList.toggle(
+    "active",
+    shouldOpen
+  );
+
+
+  if (
+    shouldOpen
+  ) {
+
+    renderImpactEventsList();
+  }
+}
+
+
+function getMajorImpactEvents() {
+
+  if (
+    !historicalExposureData.length
+  ) {
+
+    return [];
+  }
+
+
+  const enriched =
+    attachCasualtyData(
+      historicalExposureData
+    );
+
+
+  return collapseImpactSequences(
+    enriched.filter(
+      isMajorOperationalImpact
+    )
+  )
+    .sort(
+      (a,b) =>
+        b.time -
+        a.time
+    );
+}
+
+
+function renderImpactEventsList() {
+
+  const container =
+    document.getElementById(
+      "impactEventsList"
+    );
+
+
+  if (
+    !container
+  ) {
+    return;
+  }
+
+
+  const events =
+    getMajorImpactEvents();
+
+
+  container.innerHTML =
+    "";
+
+
+  if (
+    !casualtyEarthquakeData.length
+  ) {
+
+    container.innerHTML =
+      `
+        <div class="impact-empty">
+          Impact data is still loading or is currently unavailable.
+        </div>
+      `;
+
+    return;
+  }
+
+
+  if (
+    !events.length
+  ) {
+
+    container.innerHTML =
+      `
+        <div class="impact-empty">
+          No qualifying major impact events were found in the loaded
+          30-year catalog.
+        </div>
+      `;
+
+    return;
+  }
+
+
+  events.forEach(
+    event => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+
+      item.className =
+        "impact-event";
+
+
+      const date =
+        new Date(
+          event.time
+        );
+
+
+      const dateText =
+        date.toLocaleDateString(
+          undefined,
+          {
+            year:"numeric",
+            month:"short",
+            day:"numeric"
+          }
+        );
+
+
+      const damage =
+        Number(
+          event.damageMillions ||
+          0
+        );
+
+
+      const destroyed =
+        Number(
+          event.housesDestroyed ||
+          0
+        );
+
+
+      const damaged =
+        Number(
+          event.housesDamaged ||
+          0
+        );
+
+
+      const fatalities =
+        Number(
+          event.fatalities ||
+          0
+        );
+
+
+      const detailParts =
+        [];
+
+
+      if (
+        damage > 0
+      ) {
+
+        detailParts.push(
+          "$" +
+          damage.toLocaleString() +
+          "M reported damage"
+        );
+      }
+
+
+      if (
+        destroyed > 0
+      ) {
+
+        detailParts.push(
+          destroyed.toLocaleString() +
+          " houses destroyed"
+        );
+      }
+
+
+      if (
+        damaged > 0
+      ) {
+
+        detailParts.push(
+          damaged.toLocaleString() +
+          " houses damaged"
+        );
+      }
+
+
+      if (
+        fatalities > 0
+      ) {
+
+        detailParts.push(
+          fatalities.toLocaleString() +
+          " reported fatalities"
+        );
+      }
+
+
+      const dateElement =
+        document.createElement(
+          "div"
+        );
+
+      dateElement.className =
+        "impact-event-date";
+
+      dateElement.textContent =
+        dateText;
+
+
+      const titleElement =
+        document.createElement(
+          "div"
+        );
+
+      titleElement.className =
+        "impact-event-title";
+
+      titleElement.textContent =
+        "M" +
+        event.magnitude.toFixed(1) +
+        " — " +
+        event.place;
+
+
+      const detailElement =
+        document.createElement(
+          "div"
+        );
+
+      detailElement.className =
+        "impact-event-details";
+
+      detailElement.textContent =
+        detailParts.length
+          ?
+          detailParts.join(" • ")
+          :
+          "Major operational / infrastructure impact";
+
+
+      item.appendChild(
+        dateElement
+      );
+
+      item.appendChild(
+        titleElement
+      );
+
+      item.appendChild(
+        detailElement
+      );
+
+
+      item.addEventListener(
+        "click",
+        () =>
+          focusImpactEvent(
+            event
+          )
+      );
+
+
+      container.appendChild(
+        item
+      );
+    }
+  );
+}
+
+
+function focusImpactEvent(
+  event
+) {
+
+  if (
+    !map ||
+    !event
+  ) {
+    return;
+  }
+
+
+  map.panTo({
+
+    lat:
+      event.latitude,
+
+    lng:
+      event.longitude
+
+  });
+
+
+  map.setZoom(
+    Math.max(
+      map.getZoom(),
+      6
+    )
+  );
+}
 /* =====================================================
    EXPOSURE SCORING
 ===================================================== */
