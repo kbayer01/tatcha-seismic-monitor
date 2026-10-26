@@ -3947,6 +3947,89 @@ const tsunamiAssociated =
     }
   );
 }
+  function collapseImpactSequences(
+  quakes
+) {
+
+  const groups =
+    new Map();
+
+
+  quakes.forEach(
+    quake => {
+
+      const key =
+        quake.casualtyGroupId ||
+        quake.id;
+
+
+      if (
+        !groups.has(key)
+      ) {
+
+        groups.set(
+          key,
+          []
+        );
+      }
+
+
+      groups
+        .get(key)
+        .push(quake);
+    }
+  );
+
+
+  return [
+    ...groups.values()
+  ].map(
+    sequence => {
+
+      sequence.sort(
+        (a,b) =>
+          a.time -
+          b.time
+      );
+
+
+      const largest =
+        sequence.reduce(
+          (best,q) =>
+            !best ||
+            q.magnitude >
+            best.magnitude
+              ?
+              q
+              :
+              best,
+          null
+        );
+
+
+      return {
+
+        ...largest,
+
+        sequenceCount:
+          sequence.length,
+
+        sequenceStart:
+          sequence[0].time,
+
+        sequenceEnd:
+          sequence[
+            sequence.length - 1
+          ].time,
+
+        isImpactSequence:
+          true
+
+      };
+    }
+  );
+}
+
 function isMajorOperationalImpact(
   quake
 ) {
@@ -5334,7 +5417,7 @@ html:
     )
     :
     ""
-)
+) +
   "</div>",
       style:
         tooltipStyle()
@@ -6588,15 +6671,7 @@ function setOperationalImpactFilter(
 
   render();
 }
-  function setOperationalImpactFilter(
-  value
-) {
 
-  operationalImpactOnly =
-    value;
-
-  render();
-}
 function toggleLayer(
   name,
   value
