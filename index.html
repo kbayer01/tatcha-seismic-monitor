@@ -1135,28 +1135,32 @@
         </label>
 
 
-        <label class="key-row">
+    <label class="key-row">
 
-          <input
-            type="checkbox"
-            checked
-            onchange="toggleLayer('cms',this.checked)"
-          >
+  <input
+    type="checkbox"
+    checked
+    onchange="toggleLayer('cms',this.checked)"
+  >
 
-          <span
-            class="key"
-            style="
-              background:#f8f3eb;
-              border:2px solid #5ba7ff;
-            "
-          ></span>
+  <span
+    style="
+      width:20px;
+      text-align:center;
+      color:#5ba7ff;
+      font-size:17px;
+      font-weight:700;
+    "
+  >
+    ▰
+  </span>
 
-          Contract Manufacturers
+  Contract Manufacturers / Fillers
 
-        </label>
+</label>
 
 
-        <label class="key-row">
+   <label class="key-row">
 
   <input
     type="checkbox"
@@ -1164,16 +1168,17 @@
     onchange="toggleLayer('packaging',this.checked)"
   >
 
-  <img
-    src="./assets/primary-packaging-icon.png"
-    alt="Primary Packaging"
+  <span
     style="
-      width:18px;
-      height:18px;
-      object-fit:contain;
-      flex:0 0 18px;
+      width:20px;
+      text-align:center;
+      color:#f4eee4;
+      font-size:18px;
+      font-weight:700;
     "
   >
+    ▣
+  </span>
 
   Primary Packaging
 
@@ -1703,8 +1708,37 @@ const NOAA_SIGNIFICANT_EQ_API =
   "https://www.ngdc.noaa.gov/" +
   "hazel/hazard-service/api/v1/earthquakes";
 
-const PACKAGING_ICON_URL =
-  "./assets/primary-packaging-icon.png";
+const PACKAGING_ICON =
+  "data:image/svg+xml;charset=utf-8," +
+  encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+      <rect x="10" y="17" width="44" height="37" rx="5"
+        fill="#f4eee4"
+        stroke="#3f4650"
+        stroke-width="4"/>
+      <path d="M10 27h44M24 17v10M40 17v10"
+        fill="none"
+        stroke="#3f4650"
+        stroke-width="4"
+        stroke-linecap="round"/>
+    </svg>
+  `);
+
+
+const CM_ICON =
+  "data:image/svg+xml;charset=utf-8," +
+  encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+      <path d="M8 54V30l14 8V27l15 9V18h9v36z"
+        fill="#f4eee4"
+        stroke="#5ba7ff"
+        stroke-width="4"
+        stroke-linejoin="round"/>
+      <rect x="16" y="44" width="6" height="6" fill="#5ba7ff"/>
+      <rect x="29" y="44" width="6" height="6" fill="#5ba7ff"/>
+      <rect x="42" y="44" width="6" height="6" fill="#5ba7ff"/>
+    </svg>
+  `);
   
   const colors = {
 
@@ -5181,75 +5215,8 @@ function makeSupplierLayer(
   const isCM =
     category === "cm";
 
-  if (!isCM) {
 
-    return new deck.IconLayer({
-
-      id,
-
-      data,
-
-      pickable:true,
-
-      onClick:
-        ({object}) => {
-
-          if (
-            !object
-          ) {
-            return;
-          }
-
-          map.panTo({
-            lat:object.latitude,
-            lng:object.longitude
-          });
-
-          map.setZoom(
-            Math.max(
-              map.getZoom(),
-              7
-            )
-          );
-
-          openFacilityDrawer(
-            object
-          );
-        },
-
-      getPosition:
-        d => [
-          d.longitude,
-          d.latitude
-        ],
-
-      getIcon:
-        d => ({
-          url:PACKAGING_ICON_URL,
-          width:128,
-          height:128,
-          anchorY:128
-        }),
-
-      getSize:
-        30,
-
-      sizeUnits:
-        "pixels",
-
-      sizeMinPixels:
-        24,
-
-      sizeMaxPixels:
-        36,
-
-      alphaCutoff:
-        0.05
-
-    });
-  }
-
-  return new deck.ScatterplotLayer({
+  return new deck.IconLayer({
 
     id,
 
@@ -5266,10 +5233,17 @@ function makeSupplierLayer(
           return;
         }
 
+
         map.panTo({
-          lat:object.latitude,
-          lng:object.longitude
+
+          lat:
+            object.latitude,
+
+          lng:
+            object.longitude
+
         });
+
 
         map.setZoom(
           Math.max(
@@ -5277,6 +5251,7 @@ function makeSupplierLayer(
             7
           )
         );
+
 
         openFacilityDrawer(
           object
@@ -5289,33 +5264,44 @@ function makeSupplierLayer(
         d.latitude
       ],
 
-    getRadius:
-      16000,
+    getIcon:
+      d => ({
 
-    radiusMinPixels:
-      7,
+        url:
+          isCM
+            ?
+            CM_ICON
+            :
+            PACKAGING_ICON,
 
-    radiusMaxPixels:
-      11,
+        width:64,
 
-    getFillColor:[
-      248,
-      243,
-      235,
-      255
-    ],
+        height:64,
 
-    stroked:true,
+        anchorX:32,
 
-    getLineColor:[
-      91,
-      167,
-      255,
-      255
-    ],
+        anchorY:32
 
-    lineWidthMinPixels:
-      3
+      }),
+
+    getSize:
+      isCM
+        ?
+        32
+        :
+        30,
+
+    sizeUnits:
+      "pixels",
+
+    sizeMinPixels:
+      24,
+
+    sizeMaxPixels:
+      40,
+
+    alphaCutoff:
+      0.05
 
   });
 }
