@@ -3638,6 +3638,85 @@ function distanceKm(
       Math.sqrt(1 - h)
     );
 }
+ return R *
+    2 *
+    Math.atan2(
+      Math.sqrt(h),
+      Math.sqrt(1 - h)
+    );
+}
+
+
+/* =====================================================
+   EMOJI MAP ICONS
+===================================================== */
+
+function emojiToDataUrl(
+  emoji,
+  size = 64
+) {
+
+  const canvas =
+    document.createElement(
+      "canvas"
+    );
+
+  canvas.width =
+    size;
+
+  canvas.height =
+    size;
+
+
+  const ctx =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  ctx.clearRect(
+    0,
+    0,
+    size,
+    size
+  );
+
+
+  ctx.font =
+    `${Math.floor(
+      size * 0.72
+    )}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+
+  ctx.textAlign =
+    "center";
+
+  ctx.textBaseline =
+    "middle";
+
+
+  ctx.fillText(
+    emoji,
+    size / 2,
+    size / 2
+  );
+
+
+  return canvas.toDataURL(
+    "image/png"
+  );
+}
+
+
+const CM_EMOJI_ICON =
+  emojiToDataUrl(
+    "🏭"
+  );
+
+const PACKAGING_EMOJI_ICON =
+  emojiToDataUrl(
+    "📦"
+  );
+
 
 /* =====================================================
    MATCH NOAA CASUALTY DATA TO USGS EVENTS
@@ -5214,7 +5293,7 @@ function makeSupplierLayer(
     category === "cm";
 
 
-  return new deck.TextLayer({
+  return new deck.IconLayer({
 
     id,
 
@@ -5262,68 +5341,49 @@ function makeSupplierLayer(
         d.latitude
       ],
 
-    getText:
-      d =>
-        isCM
-          ?
-          "CM"
-          :
-          "PKG",
+    getIcon:
+      d => ({
+
+        url:
+          isCM
+            ?
+            CM_EMOJI_ICON
+            :
+            PACKAGING_EMOJI_ICON,
+
+        width:64,
+
+        height:64,
+
+        anchorX:32,
+
+        anchorY:32
+
+      }),
 
     getSize:
       isCM
         ?
-        18
+        30
         :
-        17,
+        28,
 
     sizeUnits:
       "pixels",
 
-    getTextAnchor:
-      "middle",
+    sizeMinPixels:
+      24,
 
-    getAlignmentBaseline:
-      "center",
+    sizeMaxPixels:
+      38,
 
-    billboard:true,
-
-    fontFamily:
-      "Arial, sans-serif",
-
-    fontWeight:
-      700,
-
-    getColor:
-      isCM
-        ?
-        [
-          91,
-          167,
-          255,
-          255
-        ]
-        :
-        [
-          244,
-          238,
-          228,
-          255
-        ],
-
-    outlineWidth:
-      3,
-
-    outlineColor:[
-      20,
-      23,
-      27,
-      255
-    ]
+    alphaCutoff:
+      0.01
 
   });
 }
 
+This should give you the actua
 /* =====================================================
    MAP TOOLTIPS
 ===================================================== */
