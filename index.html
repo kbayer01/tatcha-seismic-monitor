@@ -1143,17 +1143,16 @@
     onchange="toggleLayer('cms',this.checked)"
   >
 
-  <span
-    style="
-      width:20px;
-      text-align:center;
-      color:#5ba7ff;
-      font-size:17px;
-      font-weight:700;
-    "
-  >
-    ▰
-  </span>
+ <span
+  style="
+    width:22px;
+    text-align:center;
+    font-size:17px;
+    flex:0 0 22px;
+  "
+>
+  🏭
+</span>
 
   Contract Manufacturers / Fillers
 
@@ -1168,17 +1167,16 @@
     onchange="toggleLayer('packaging',this.checked)"
   >
 
-  <span
-    style="
-      width:20px;
-      text-align:center;
-      color:#f4eee4;
-      font-size:18px;
-      font-weight:700;
-    "
-  >
-    ▣
-  </span>
+ <span
+  style="
+    width:22px;
+    text-align:center;
+    font-size:17px;
+    flex:0 0 22px;
+  "
+>
+  📦
+</span>
 
   Primary Packaging
 
@@ -5216,7 +5214,7 @@ function makeSupplierLayer(
     category === "cm";
 
 
-  return new deck.IconLayer({
+  return new deck.TextLayer({
 
     id,
 
@@ -5264,44 +5262,42 @@ function makeSupplierLayer(
         d.latitude
       ],
 
-    getIcon:
-      d => ({
-
-        url:
-          isCM
-            ?
-            CM_ICON
-            :
-            PACKAGING_ICON,
-
-        width:64,
-
-        height:64,
-
-        anchorX:32,
-
-        anchorY:32
-
-      }),
+    getText:
+      d =>
+        isCM
+          ?
+          "🏭"
+          :
+          "📦",
 
     getSize:
       isCM
         ?
-        32
+        28
         :
-        30,
+        27,
 
     sizeUnits:
       "pixels",
 
-    sizeMinPixels:
-      24,
+    getTextAnchor:
+      "middle",
 
-    sizeMaxPixels:
-      40,
+    getAlignmentBaseline:
+      "center",
 
-    alphaCutoff:
-      0.05
+    billboard:
+      true,
+
+    fontFamily:
+      "Arial, sans-serif",
+
+    getColor:[
+      255,
+      255,
+      255,
+      255
+    ]
 
   });
 }
