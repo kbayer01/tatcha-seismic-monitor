@@ -1697,7 +1697,10 @@ const NOAA_SIGNIFICANT_EQ_API =
   "https://www.ngdc.noaa.gov/" +
   "hazel/hazard-service/api/v1/earthquakes";
 
-const colors = {
+const PACKAGING_ICON_URL =
+  "./assets/primary-packaging-icon.png";
+  
+  const colors = {
 
   low:[68,209,122],
 
@@ -4759,19 +4762,36 @@ const visibleFacilityProfiles =
         threshold:
           .03,
 
-        colorRange:[
+       colorRange:
+  operationalImpactOnly
+    ?
+    [
 
-          [255,230,90,15],
+      [216,198,235,20],
 
-          [255,198,55,70],
+      [190,155,220,70],
 
-          [255,137,45,125],
+      [150,105,190,125],
 
-          [255,70,48,175],
+      [110,60,155,180],
 
-          [190,15,40,225]
+      [91,42,134,235]
 
-        ]
+    ]
+    :
+    [
+
+      [255,230,90,15],
+
+      [255,198,55,70],
+
+      [255,137,45,125],
+
+      [255,70,48,175],
+
+      [190,15,40,225]
+
+    ],
 
       })
 
@@ -5556,6 +5576,21 @@ function tooltipStyle() {
 function earthquakeColor(
   d
 ) {
+  if (
+  dataMode === "history"
+  &&
+  operationalImpactOnly
+  &&
+  isMajorOperationalImpact(d)
+) {
+
+  return [
+    91,
+    42,
+    134,
+    255
+  ];
+}
 if (
   dataMode === "history"
   &&
