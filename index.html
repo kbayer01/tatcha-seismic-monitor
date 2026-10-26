@@ -924,7 +924,33 @@
           earthquakes by rolling period
           or individual year.
         </div>
+<div
+  id="fatalityFilterContainer"
+  style="
+    display:none;
+    margin-top:12px;
+  "
+>
 
+  <label class="key-row">
+
+    <input
+      id="fatalityOnlyToggle"
+      type="checkbox"
+      onchange="setFatalityFilter(this.checked)"
+    >
+
+    <span
+      class="key"
+      style="background:#48000f"
+    ></span>
+
+    Major human impact only
+    (&gt;100 reported fatalities)
+
+  </label>
+
+</div>
         <div
           id="historyLoadedLabel"
           class="history-loaded"
@@ -1703,6 +1729,8 @@ let selectedFacility = null;
 
 let historyRequestToken = 0;
 
+let fatalityOnly = false;
+  
 let layerState = {
 
   heat:true,
@@ -2526,7 +2554,27 @@ async function loadHistoricalYear() {
       )
       .value;
 
+) {
 
+  fatalityContainer.style.display =
+    "block";
+
+} else {
+
+  fatalityContainer.style.display =
+    "none";
+
+  fatalityOnly =
+    false;
+
+  if (
+    fatalityToggle
+  ) {
+
+    fatalityToggle.checked =
+      false;
+  }
+}
   const currentYear =
     new Date()
       .getFullYear();
@@ -4092,12 +4140,25 @@ function exposureLevel100(
 
 function visibleQuakes() {
 
+ if (
+  dataMode === "history"
+) {
+
   if (
-    dataMode === "history"
+    fatalityOnly
   ) {
 
-    return displayedEarthquakeData;
+    return displayedEarthquakeData
+      .filter(
+        q =>
+          Number(
+            q.fatalities || 0
+          ) > 100
+      );
   }
+
+  return displayedEarthquakeData;
+}
 
 
   const cutoff =
@@ -6120,7 +6181,15 @@ function setMagnitude(
   render();
 }
 
+function setFatalityFilter(
+  value
+) {
 
+  fatalityOnly =
+    value;
+
+  render();
+}
 function toggleLayer(
   name,
   value
