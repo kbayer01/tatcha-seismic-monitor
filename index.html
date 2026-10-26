@@ -1934,7 +1934,9 @@ let minMagnitude = 2.5;
 
 let selectedFacility = null;
 
-let historyRequestToken = 0;
+  let selectedImpactEvent = null;
+
+  let historyRequestToken = 0;
 
 let fatalityOnly = false;
 
@@ -4662,6 +4664,10 @@ function focusImpactEvent(
   }
 
 
+  selectedImpactEvent =
+    event;
+
+
   map.panTo({
 
     lat:
@@ -4679,6 +4685,9 @@ function focusImpactEvent(
       6
     )
   );
+
+
+  render();
 }
 /* =====================================================
    EXPOSURE SCORING
@@ -5755,7 +5764,59 @@ const visibleFacilityProfiles =
     );
   }
 
+if (
+  selectedImpactEvent
+) {
 
+  layers.push(
+
+    new deck.ScatterplotLayer({
+
+      id:
+        "selected-impact-event-ring",
+
+      data:[
+        selectedImpactEvent
+      ],
+
+      pickable:false,
+
+      getPosition:
+        d => [
+          d.longitude,
+          d.latitude
+        ],
+
+      getRadius:
+        42000,
+
+      radiusUnits:
+        "meters",
+
+      radiusMinPixels:
+        18,
+
+      radiusMaxPixels:
+        34,
+
+      filled:false,
+
+      stroked:true,
+
+      getLineColor:[
+        202,
+        156,
+        255,
+        255
+      ],
+
+      lineWidthMinPixels:
+        4
+
+    })
+
+  );
+}
   overlay.setProps({
 
     layers,
