@@ -343,7 +343,28 @@
   font-size:9px;
   line-height:1.45;
 }
+.impact-filter-row {
+  display:grid;
+  grid-template-columns:1fr 1fr;
 
+  gap:7px;
+
+  margin-bottom:10px;
+}
+
+.impact-filter-row select {
+  width:100%;
+
+  padding:7px 8px;
+
+  border:1px solid #44384f;
+  border-radius:7px;
+
+  background:#16121b;
+  color:#d7cddd;
+
+  font-size:9px;
+}
 #impactEventsList {
   max-height:330px;
 
@@ -1043,7 +1064,49 @@
     Past 30 years • M6.0+ earthquakes meeting the monitor's
     major operational / infrastructure impact criteria.
   </div>
+<div class="impact-filter-row">
 
+  <select
+    id="impactRegionFilter"
+    onchange="updateImpactCountryOptions(); updateImpactCountryOptions();
+
+updateImpactCountryOptions();
+
+renderImpactEventsList();"
+  >
+    <option value="all">
+      All Regions
+    </option>
+
+    <option value="asia-pacific">
+      Asia-Pacific
+    </option>
+
+    <option value="americas">
+      Americas
+    </option>
+
+    <option value="europe">
+      Europe
+    </option>
+
+    <option value="middle-east-africa">
+      Middle East & Africa
+    </option>
+
+  </select>
+
+
+  <select
+    id="impactCountryFilter"
+    onchange="renderImpactEventsList()"
+  >
+    <option value="all">
+      All Countries
+    </option>
+  </select>
+
+</div>
   <div id="impactEventsList">
 
     <div class="impact-empty">
@@ -2392,6 +2455,8 @@ async function loadCasualtyEarthquakes() {
       "NOAA impact earthquakes loaded:",
       casualtyEarthquakeData.length
     );
+updateImpactCountryOptions();
+
 renderImpactEventsList();
   } catch(error) {
 
@@ -2476,6 +2541,8 @@ async function loadHistoricalExposureCatalog() {
           q =>
             q.magnitude >= 6
         );
+
+updateImpactCountryOptions();
 
 renderImpactEventsList();
     render();
@@ -4380,12 +4447,14 @@ function toggleImpactEventsPanel(
   );
 
 
-  if (
-    shouldOpen
-  ) {
+if (
+  shouldOpen
+) {
 
-    renderImpactEventsList();
-  }
+  updateImpactCountryOptions();
+
+  renderImpactEventsList();
+}
 }
 
 
@@ -4417,7 +4486,251 @@ function getMajorImpactEvents() {
     );
 }
 
+function impactRegion(
+  event
+) {
 
+  const lat =
+    Number(
+      event.latitude
+    );
+
+  const lon =
+    Number(
+      event.longitude
+    );
+
+
+  if (
+    !Number.isFinite(lat)
+    ||
+    !Number.isFinite(lon)
+  ) {
+
+    return "other";
+  }
+
+
+  /*
+    Asia-Pacific
+  */
+
+  if (
+    lon >= 60
+    &&
+    lon <= 180
+    &&
+    lat >= -50
+    &&
+    lat <= 75
+  ) {
+
+    return "asia-pacific";
+  }
+
+
+  /*
+    Americas
+  */
+
+  if (
+    lon >= -170
+    &&
+    lon <= -30
+  ) {
+
+    return "americas";
+  }
+
+
+  /*
+    Europe
+  */
+
+  if (
+    lon >= -30
+    &&
+    lon < 60
+    &&
+    lat >= 35
+  ) {
+
+    return "europe";
+  }
+
+
+  /*
+    Middle East + Africa
+  */
+
+  if (
+    lon >= -20
+    &&
+    lon < 60
+    &&
+    lat < 35
+  ) {
+
+    return "middle-east-africa";
+  }
+
+
+  return "other";
+}
+  function impactCountry(
+  event
+) {
+
+  const place =
+    String(
+      event.place ||
+      ""
+    ).trim();
+
+
+  if (
+    !place
+  ) {
+
+    return "Unknown";
+  }
+
+
+  const parts =
+    place
+      .split(",")
+      .map(
+        item =>
+          item.trim()
+      )
+      .filter(Boolean);
+
+
+  if (
+    parts.length >= 2
+  ) {
+
+    return parts[
+      parts.length - 1
+    ];
+  }
+
+
+  return place;
+}
+  function updateImpactCountryOptions() {
+
+  const countrySelect =
+    document.getElementById(
+      "impactCountryFilter"
+    );
+
+  const regionSelect =
+    document.getElementById(
+      "impactRegionFilter"
+    );
+
+
+  if (
+    !countrySelect ||
+    !regionSelect
+  ) {
+
+    return;
+  }
+
+
+  const selectedRegion =
+    regionSelect.value;
+
+
+  const previousCountry =
+    countrySelect.value;
+
+
+  let events =
+    getMajorImpactEvents();
+
+
+  if (
+    selectedRegion !== "all"
+  ) {
+
+    events =
+      events.filter(
+        event =>
+          impactRegion(event) ===
+          selectedRegion
+      );
+  }
+
+
+  const countries =
+    [
+      ...new Set(
+        events
+          .map(
+            impactCountry
+          )
+          .filter(
+            country =>
+              country &&
+              country !== "Unknown"
+          )
+      )
+    ]
+      .sort(
+        (a,b) =>
+          a.localeCompare(b)
+      );
+
+
+  countrySelect.innerHTML =
+    `
+      <option value="all">
+        All Countries
+      </option>
+    `;
+
+
+  countries.forEach(
+    country => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        country;
+
+      option.textContent =
+        country;
+
+
+      countrySelect.appendChild(
+        option
+      );
+    }
+  );
+
+
+  if (
+    countries.includes(
+      previousCountry
+    )
+  ) {
+
+    countrySelect.value =
+      previousCountry;
+
+  } else {
+
+    countrySelect.value =
+      "all";
+  }
+}
 function renderImpactEventsList() {
 
   const container =
@@ -4433,8 +4746,30 @@ function renderImpactEventsList() {
   }
 
 
-  const events =
-    getMajorImpactEvents();
+if (
+  selectedRegion !== "all"
+) {
+
+  events =
+    events.filter(
+      event =>
+        impactRegion(event) ===
+        selectedRegion
+    );
+}
+
+
+if (
+  selectedCountry !== "all"
+) {
+
+  events =
+    events.filter(
+      event =>
+        impactCountry(event) ===
+        selectedCountry
+    );
+}
 
 
   container.innerHTML =
