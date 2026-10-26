@@ -950,6 +950,22 @@
 
   </label>
 
+  <label class="key-row">
+
+  <input
+    id="operationalImpactToggle"
+    type="checkbox"
+    onchange="setOperationalImpactFilter(this.checked)"
+  >
+
+  <span
+    class="key"
+    style="background:#5b2a86"
+  ></span>
+
+  Major operational / infrastructure impact
+
+</label>
 </div>
         <div
           id="historyLoadedLabel"
@@ -1730,6 +1746,9 @@ let selectedFacility = null;
 let historyRequestToken = 0;
 
 let fatalityOnly = false;
+
+  let operationalImpactOnly =
+  false;
   
 let layerState = {
 
@@ -2173,30 +2192,18 @@ async function loadCasualtyEarthquakes() {
 
 
     casualtyEarthquakeData =
-      results.filter(
-        item => {
-
-          const deaths =
-            Number(
-              item.deathsTotal ??
-              item.deaths ??
-              0
-            );
-
-          return deaths > 100;
-        }
-      );
+  results;
 
 
     console.log(
-      "NOAA casualty earthquakes loaded:",
+      "NOAA impact earthquakes loaded:",
       casualtyEarthquakeData.length
     );
 
   } catch(error) {
 
     console.warn(
-      "NOAA casualty data unavailable:",
+      "NOAA impact data unavailable:",
       error
     );
 
@@ -3733,12 +3740,68 @@ function attachCasualtyData(
           bestMatch.deaths ??
           0
         );
+const damageMillions =
+  Number(
+    bestMatch.damageMillionsDollarsTotal ??
+    bestMatch.damageMillionsDollars ??
+    bestMatch.DAMAGE_MILLIONS_DOLLARS_TOTAL ??
+    bestMatch.DAMAGE_MILLIONS_DOLLARS ??
+    0
+  );
 
+
+const housesDestroyed =
+  Number(
+    bestMatch.housesDestroyedTotal ??
+    bestMatch.housesDestroyed ??
+    bestMatch.HOUSES_DESTROYED_TOTAL ??
+    bestMatch.HOUSES_DESTROYED ??
+    0
+  );
+
+
+const housesDamaged =
+  Number(
+    bestMatch.housesDamagedTotal ??
+    bestMatch.housesDamaged ??
+    bestMatch.HOUSES_DAMAGED_TOTAL ??
+    bestMatch.HOUSES_DAMAGED ??
+    0
+  );
+
+
+const damageOrder =
+  Number(
+    bestMatch.damageAmountOrderTotal ??
+    bestMatch.damageAmountOrder ??
+    bestMatch.DAMAGE_AMOUNT_ORDER_TOTAL ??
+    bestMatch.DAMAGE_AMOUNT_ORDER ??
+    0
+  );
+
+
+const tsunamiAssociated =
+  String(
+    bestMatch.flagTsunami ??
+    bestMatch.FLAG_TSUNAMI ??
+    ""
+  )
+    .toUpperCase() === "Y";
      return {
 
   ...quake,
 
   fatalities,
+ 
+  damageMillions,
+
+  housesDestroyed,
+
+  housesDamaged,
+
+  damageOrder,
+
+  tsunamiAssociated,
 
   casualtySource:
     "NOAA/NCEI",
@@ -3884,6 +3947,42 @@ function attachCasualtyData(
     }
   );
 }
+function isMajorOperationalImpact(
+  quake
+) {
+
+  const damageMillions =
+    Number(
+      quake.damageMillions || 0
+    );
+
+  const housesDestroyed =
+    Number(
+      quake.housesDestroyed || 0
+    );
+
+  const damageOrder =
+    Number(
+      quake.damageOrder || 0
+    );
+
+  const fatalities =
+    Number(
+      quake.fatalities || 0
+    );
+
+
+  return (
+    damageMillions >= 500
+    ||
+    housesDestroyed >= 1000
+    ||
+    damageOrder >= 4
+    ||
+    fatalities > 100
+  );
+}
+  
 /* =====================================================
    EXPOSURE SCORING
 ===================================================== */
@@ -4296,7 +4395,7 @@ function exposureLevel100(
 
 function visibleQuakes() {
 
- if (
+if (
   dataMode === "history"
 ) {
 
@@ -4304,9 +4403,22 @@ function visibleQuakes() {
     fatalityOnly
   ) {
 
- return collapseCasualtySequences(
-  displayedEarthquakeData
-);
+    return collapseCasualtySequences(
+      displayedEarthquakeData
+    );
+  }
+
+
+  if (
+    operationalImpactOnly
+  ) {
+
+    return collapseImpactSequences(
+      displayedEarthquakeData
+        .filter(
+          isMajorOperationalImpact
+        )
+    );
   }
 
   return displayedEarthquakeData;
@@ -5171,7 +5283,58 @@ html:
       :
       ""
   ) +
+(
+  object.isImpactSequence
+    ?
+    "<br><br><strong style='color:#c99cff'>" +
+    "Major operational / infrastructure impact" +
+    "</strong>" +
 
+    (
+      Number(
+        object.damageMillions || 0
+      ) > 0
+        ?
+        "<br>Reported damage: $" +
+        Number(
+          object.damageMillions
+        )
+          .toLocaleString() +
+        "M"
+        :
+        ""
+    ) +
+
+    (
+      Number(
+        object.housesDestroyed || 0
+      ) > 0
+        ?
+        "<br>Houses destroyed: " +
+        Number(
+          object.housesDestroyed
+        )
+          .toLocaleString()
+        :
+        ""
+    ) +
+
+    (
+      Number(
+        object.housesDamaged || 0
+      ) > 0
+        ?
+        "<br>Houses damaged: " +
+        Number(
+          object.housesDamaged
+        )
+          .toLocaleString()
+        :
+        ""
+    )
+    :
+    ""
+)
   "</div>",
       style:
         tooltipStyle()
@@ -6366,6 +6529,70 @@ function setFatalityFilter(
 ) {
 
   fatalityOnly =
+    value;
+
+
+  if (
+    value
+  ) {
+
+    operationalImpactOnly =
+      false;
+
+    const toggle =
+      document.getElementById(
+        "operationalImpactToggle"
+      );
+
+    if (
+      toggle
+    ) {
+
+      toggle.checked =
+        false;
+    }
+  }
+
+
+  render();
+}
+function setOperationalImpactFilter(
+  value
+) {
+
+  operationalImpactOnly =
+    value;
+
+
+  if (
+    value
+  ) {
+
+    fatalityOnly =
+      false;
+
+    const toggle =
+      document.getElementById(
+        "fatalityOnlyToggle"
+      );
+
+    if (
+      toggle
+    ) {
+
+      toggle.checked =
+        false;
+    }
+  }
+
+
+  render();
+}
+  function setOperationalImpactFilter(
+  value
+) {
+
+  operationalImpactOnly =
     value;
 
   render();
