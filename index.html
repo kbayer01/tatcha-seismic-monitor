@@ -1912,8 +1912,9 @@ const DAY_MS =
   24 * 60 * 60 * 1000;
 
 const NOAA_SIGNIFICANT_EQ_API =
-  "https://www.ngdc.noaa.gov/" +
-  "hazel/hazard-service/api/v1/earthquakes";
+  "https://gis.ngdc.noaa.gov/" +
+  "arcgis/rest/services/web_mercator/" +
+  "hazards/MapServer/5/query";
 
 const PACKAGING_ICON =
   "data:image/svg+xml;charset=utf-8," +
@@ -2359,101 +2360,224 @@ async function loadCasualtyEarthquakes() {
   const startYear =
     currentYear - 30;
 
-  let page =
-    1;
-
-  let totalPages =
-    1;
-
-  const results =
-    [];
-
 
   try {
 
-    while (
-      page <= totalPages
-    ) {
+    const params =
+      new URLSearchParams({
 
-      const params =
-        new URLSearchParams({
+        where:
+          `YEAR >= ${startYear}`,
 
-          minYear:
-            String(startYear),
+        outFields:
+          "*",
 
-          maxYear:
-            String(currentYear),
+        returnGeometry:
+          "false",
 
-          page:
-            String(page),
+        f:
+          "json"
 
-          itemsPerPage:
-            "200"
-
-        });
+      });
 
 
-      const response =
-        await fetch(
-          NOAA_SIGNIFICANT_EQ_API +
-          "?" +
-          params.toString(),
-          {
-            cache:"force-cache"
-          }
-        );
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          "NOAA casualty data returned " +
-          response.status
-        );
-      }
-
-
-      const json =
-        await response.json();
-
-
-      const items =
-        Array.isArray(
-          json.items
-        )
-          ?
-          json.items
-          :
-          [];
-
-
-      results.push(
-        ...items
+    const response =
+      await fetch(
+        NOAA_SIGNIFICANT_EQ_API +
+        "?" +
+        params.toString(),
+        {
+          cache:"no-store"
+        }
       );
 
 
-      totalPages =
-        Number(
-          json.totalPages ||
-          1
-        );
+    if (
+      !response.ok
+    ) {
 
-
-      page++;
+      throw new Error(
+        "NOAA impact data returned " +
+        response.status
+      );
     }
 
 
+    const json =
+      await response.json();
+
+
+    const features =
+      Array.isArray(
+        json.features
+      )
+        ?
+        json.features
+        :
+        [];
+
+
     casualtyEarthquakeData =
-  results;
+      features.map(
+        feature => {
+
+          const a =
+            feature.attributes ||
+            {};
+
+
+          return {
+
+            id:
+              a.ID ??
+              a.OBJECTID,
+
+            year:
+              Number(
+                a.YEAR
+              ),
+
+            month:
+              Number(
+                a.MONTH || 1
+              ),
+
+            day:
+              Number(
+                a.DAY || 1
+              ),
+
+            latitude:
+              Number(
+                a.LATITUDE
+              ),
+
+            longitude:
+              Number(
+                a.LONGITUDE
+              ),
+
+            country:
+              a.COUNTRY ||
+              "",
+
+            region:
+              a.REGION ||
+              "",
+
+            locationName:
+              a.LOCATION_NAME ||
+              "",
+
+            magnitude:
+              Number(
+                a.EQ_MAGNITUDE || 0
+              ),
+
+            deaths:
+              Number(
+                a.DEATHS || 0
+              ),
+
+            deathsTotal:
+              Number(
+                a.DEATHS_TOTAL ??
+                a.DEATHS ??
+                0
+              ),
+
+            damageMillionsDollars:
+              Number(
+                a.DAMAGE_MILLIONS_DOLLARS ||
+                0
+              ),
+
+            damageMillionsDollarsTotal:
+              Number(
+                a.DAMAGE_MILLIONS_DOLLARS_TOTAL ??
+                a.DAMAGE_MILLIONS_DOLLARS ??
+                0
+              ),
+
+            damageAmountOrder:
+              Number(
+                a.DAMAGE_AMOUNT_ORDER ||
+                0
+              ),
+
+            damageAmountOrderTotal:
+              Number(
+                a.DAMAGE_AMOUNT_ORDER_TOTAL ??
+                a.DAMAGE_AMOUNT_ORDER ??
+                0
+              ),
+
+            housesDestroyed:
+              Number(
+                a.HOUSES_DESTROYED ||
+                0
+              ),
+
+            housesDestroyedTotal:
+              Number(
+                a.HOUSES_DESTROYED_TOTAL ??
+                a.HOUSES_DESTROYED ??
+                0
+              ),
+
+            housesDamaged:
+              Number(
+                a.HOUSES_DAMAGED ||
+                0
+              ),
+
+            housesDamagedTotal:
+              Number(
+                a.HOUSES_DAMAGED_TOTAL ??
+                a.HOUSES_DAMAGED ??
+                0
+              ),
+
+            flagTsunami:
+              a.FLAG_TSUNAMI ||
+              ""
+
+          };
+        }
+      )
+      .filter(
+        event =>
+          Number.isFinite(
+            event.latitude
+          )
+          &&
+          Number.isFinite(
+            event.longitude
+          )
+      );
 
 
     console.log(
       "NOAA impact earthquakes loaded:",
       casualtyEarthquakeData.length
     );
-updateImpactCountryOptions();
 
-renderImpactEventsList();
+
+    updateImpactCountryOptions();
+
+    renderImpactEventsList();
+
+
+    if (
+      dataMode === "history" &&
+      document.getElementById(
+        "historyYear"
+      ).value === "30y"
+    ) {
+
+      loadHistoricalYear();
+    }
+
   } catch(error) {
 
     console.warn(
@@ -2461,8 +2585,28 @@ renderImpactEventsList();
       error
     );
 
+
     casualtyEarthquakeData =
       [];
+
+
+    const list =
+      document.getElementById(
+        "impactEventsList"
+      );
+
+
+    if (
+      list
+    ) {
+
+      list.innerHTML =
+        `
+          <div class="impact-empty">
+            NOAA impact data could not be loaded.
+          </div>
+        `;
+    }
   }
 }
 /* =====================================================
