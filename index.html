@@ -1068,11 +1068,7 @@
 
   <select
     id="impactRegionFilter"
-    onchange="updateImpactCountryOptions(); updateImpactCountryOptions();
-
-updateImpactCountryOptions();
-
-renderImpactEventsList();"
+    onchange="updateImpactCountryOptions(); renderImpactEventsList();"
   >
     <option value="all">
       All Regions
@@ -4067,51 +4063,49 @@ function attachCasualtyData(
         };
       }
 
-      const fatalities =
-        Number(
-          bestMatch.deathsTotal ??
-          bestMatch.deaths ??
-          0
-        );
+     const fatalities =
+  Number(
+    bestMatch.DEATHS ??
+    bestMatch.deaths ??
+    bestMatch.deathsTotal ??
+    0
+  );
+
+
 const damageMillions =
   Number(
-    bestMatch.damageMillionsDollarsTotal ??
-    bestMatch.damageMillionsDollars ??
-    bestMatch.DAMAGE_MILLIONS_DOLLARS_TOTAL ??
     bestMatch.DAMAGE_MILLIONS_DOLLARS ??
+    bestMatch.damageMillionsDollars ??
+    bestMatch.damageMillionsDollarsTotal ??
     0
   );
 
 
 const housesDestroyed =
   Number(
-    bestMatch.housesDestroyedTotal ??
-    bestMatch.housesDestroyed ??
-    bestMatch.HOUSES_DESTROYED_TOTAL ??
     bestMatch.HOUSES_DESTROYED ??
+    bestMatch.housesDestroyed ??
+    bestMatch.housesDestroyedTotal ??
     0
   );
 
 
 const housesDamaged =
   Number(
-    bestMatch.housesDamagedTotal ??
-    bestMatch.housesDamaged ??
-    bestMatch.HOUSES_DAMAGED_TOTAL ??
     bestMatch.HOUSES_DAMAGED ??
+    bestMatch.housesDamaged ??
+    bestMatch.housesDamagedTotal ??
     0
   );
 
 
 const damageOrder =
   Number(
-    bestMatch.damageAmountOrderTotal ??
-    bestMatch.damageAmountOrder ??
-    bestMatch.DAMAGE_AMOUNT_ORDER_TOTAL ??
     bestMatch.DAMAGE_AMOUNT_ORDER ??
+    bestMatch.damageAmountOrder ??
+    bestMatch.damageAmountOrderTotal ??
     0
   );
-
 
 const tsunamiAssociated =
   String(
