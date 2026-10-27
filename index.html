@@ -4946,30 +4946,62 @@ function renderImpactEventsList() {
   }
 
 
-if (
-  selectedRegion !== "all"
-) {
+  let events =
+    getMajorImpactEvents();
 
-  events =
-    events.filter(
-      event =>
-        impactRegion(event) ===
-        selectedRegion
+
+  const regionFilter =
+    document.getElementById(
+      "impactRegionFilter"
     );
-}
 
 
-if (
-  selectedCountry !== "all"
-) {
-
-  events =
-    events.filter(
-      event =>
-        impactCountry(event) ===
-        selectedCountry
+  const countryFilter =
+    document.getElementById(
+      "impactCountryFilter"
     );
-}
+
+
+  const selectedRegion =
+    regionFilter
+      ?
+      regionFilter.value
+      :
+      "all";
+
+
+  const selectedCountry =
+    countryFilter
+      ?
+      countryFilter.value
+      :
+      "all";
+
+
+  if (
+    selectedRegion !== "all"
+  ) {
+
+    events =
+      events.filter(
+        event =>
+          impactRegion(event) ===
+          selectedRegion
+      );
+  }
+
+
+  if (
+    selectedCountry !== "all"
+  ) {
+
+    events =
+      events.filter(
+        event =>
+          impactCountry(event) ===
+          selectedCountry
+      );
+  }
 
 
   container.innerHTML =
