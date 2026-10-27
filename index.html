@@ -4777,7 +4777,7 @@ function impactRegion(
 
   return "other";
 }
-  function impactCountry(
+ function impactCountry(
   event
 ) {
 
@@ -4806,26 +4806,27 @@ function impactRegion(
       .filter(Boolean);
 
 
-let country =
-  parts.length >= 2
-    ?
-    parts[
-      parts.length - 1
-    ]
-    :
-    place;
+  let country =
+    parts.length >= 2
+      ?
+      parts[
+        parts.length - 1
+      ]
+      :
+      place;
 
-
-if (
-  country === "Japan Earthquake"
-) {
 
   country =
-    "Japan";
-}
+    country
+      .replace(
+        /\s+Earthquake$/i,
+        ""
+      )
+      .trim();
 
 
-return country;
+  return country ||
+    "Unknown";
 }
   function updateImpactCountryOptions() {
 
