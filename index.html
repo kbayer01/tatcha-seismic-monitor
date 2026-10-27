@@ -4806,17 +4806,26 @@ function impactRegion(
       .filter(Boolean);
 
 
-  if (
-    parts.length >= 2
-  ) {
-
-    return parts[
+let country =
+  parts.length >= 2
+    ?
+    parts[
       parts.length - 1
-    ];
-  }
+    ]
+    :
+    place;
 
 
-  return place;
+if (
+  country === "Japan Earthquake"
+) {
+
+  country =
+    "Japan";
+}
+
+
+return country;
 }
   function updateImpactCountryOptions() {
 
