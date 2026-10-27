@@ -5115,11 +5115,32 @@ function renderImpactEventsList() {
         damage > 0
       ) {
 
-        detailParts.push(
-          "$" +
-          damage.toLocaleString() +
-          "M reported damage"
-        );
+     let damageLabel;
+
+if (
+  damage >= 1000
+) {
+
+  damageLabel =
+    "$" +
+    (
+      damage / 1000
+    ).toFixed(1) +
+    "B";
+
+} else {
+
+  damageLabel =
+    "$" +
+    damage.toLocaleString() +
+    "M";
+}
+
+
+detailParts.push(
+  damageLabel +
+  " reported damage"
+);
       }
 
 
@@ -6617,20 +6638,35 @@ html:
     "Major operational / infrastructure impact" +
     "</strong>" +
 
+  (
+  Number(
+    object.damageMillions || 0
+  ) > 0
+    ?
     (
       Number(
-        object.damageMillions || 0
-      ) > 0
+        object.damageMillions
+      ) >= 1000
         ?
+        "<br>Reported damage: $" +
+        (
+          Number(
+            object.damageMillions
+          ) / 1000
+        )
+          .toFixed(1) +
+        "B"
+        :
         "<br>Reported damage: $" +
         Number(
           object.damageMillions
         )
           .toLocaleString() +
         "M"
-        :
-        ""
-    ) +
+    )
+    :
+    ""
+) +
 
     (
       Number(
