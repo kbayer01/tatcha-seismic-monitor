@@ -2370,10 +2370,36 @@ async function loadCasualtyEarthquakes() {
           `YEAR >= ${startYear}`,
 
         outFields:
-          "*",
+          [
+            "ID",
+            "YEAR",
+            "MONTH",
+            "DAY",
+            "LATITUDE",
+            "LONGITUDE",
+            "LOCATION_NAME",
+            "COUNTRY",
+            "REGION",
+            "EQ_MAGNITUDE",
+            "DEATHS",
+            "DEATHS_TOTAL",
+            "DAMAGE_MILLIONS_DOLLARS",
+            "DAMAGE_MILLIONS_DOLLARS_TOTAL",
+            "DAMAGE_AMOUNT_ORDER",
+            "DAMAGE_AMOUNT_ORDER_TOTAL",
+            "HOUSES_DESTROYED",
+            "HOUSES_DESTROYED_TOTAL",
+            "HOUSES_DAMAGED",
+            "HOUSES_DAMAGED_TOTAL",
+            "FLAG_TSUNAMI",
+            "OBJECTID"
+          ].join(","),
 
         returnGeometry:
           "false",
+
+        resultRecordCount:
+          "2000",
 
         f:
           "json"
@@ -2381,15 +2407,31 @@ async function loadCasualtyEarthquakes() {
       });
 
 
+    const url =
+      NOAA_SIGNIFICANT_EQ_API +
+      "?" +
+      params.toString();
+
+
+    console.log(
+      "Loading NOAA impact data:",
+      url
+    );
+
+
     const response =
       await fetch(
-        NOAA_SIGNIFICANT_EQ_API +
-        "?" +
-        params.toString(),
+        url,
         {
           cache:"no-store"
         }
       );
+
+
+    console.log(
+      "NOAA response status:",
+      response.status
+    );
 
 
     if (
@@ -2407,6 +2449,17 @@ async function loadCasualtyEarthquakes() {
       await response.json();
 
 
+    if (
+      json.error
+    ) {
+
+      throw new Error(
+        json.error.message ||
+        "NOAA ArcGIS query error"
+      );
+    }
+
+
     const features =
       Array.isArray(
         json.features
@@ -2418,148 +2471,157 @@ async function loadCasualtyEarthquakes() {
 
 
     casualtyEarthquakeData =
-      features.map(
-        feature => {
+      features
+        .map(
+          feature => {
 
-          const a =
-            feature.attributes ||
-            {};
+            const a =
+              feature.attributes ||
+              {};
 
 
-          return {
+            return {
 
-            id:
-              a.ID ??
-              a.OBJECTID,
+              id:
+                a.ID ??
+                a.OBJECTID,
 
-            year:
-              Number(
-                a.YEAR
-              ),
+              year:
+                Number(
+                  a.YEAR
+                ),
 
-            month:
-              Number(
-                a.MONTH || 1
-              ),
+              month:
+                Number(
+                  a.MONTH || 1
+                ),
 
-            day:
-              Number(
-                a.DAY || 1
-              ),
+              day:
+                Number(
+                  a.DAY || 1
+                ),
 
-            latitude:
-              Number(
-                a.LATITUDE
-              ),
+              latitude:
+                Number(
+                  a.LATITUDE
+                ),
 
-            longitude:
-              Number(
-                a.LONGITUDE
-              ),
+              longitude:
+                Number(
+                  a.LONGITUDE
+                ),
 
-            country:
-              a.COUNTRY ||
-              "",
+              country:
+                a.COUNTRY ||
+                "",
 
-            region:
-              a.REGION ||
-              "",
+              region:
+                a.REGION ||
+                "",
 
-            locationName:
-              a.LOCATION_NAME ||
-              "",
+              locationName:
+                a.LOCATION_NAME ||
+                "",
 
-            magnitude:
-              Number(
-                a.EQ_MAGNITUDE || 0
-              ),
+              magnitude:
+                Number(
+                  a.EQ_MAGNITUDE ||
+                  0
+                ),
 
-            deaths:
-              Number(
-                a.DEATHS || 0
-              ),
+              deaths:
+                Number(
+                  a.DEATHS ||
+                  0
+                ),
 
-            deathsTotal:
-              Number(
-                a.DEATHS_TOTAL ??
-                a.DEATHS ??
-                0
-              ),
+              deathsTotal:
+                Number(
+                  a.DEATHS_TOTAL ??
+                  a.DEATHS ??
+                  0
+                ),
 
-            damageMillionsDollars:
-              Number(
-                a.DAMAGE_MILLIONS_DOLLARS ||
-                0
-              ),
+              damageMillionsDollars:
+                Number(
+                  a.DAMAGE_MILLIONS_DOLLARS ||
+                  0
+                ),
 
-            damageMillionsDollarsTotal:
-              Number(
-                a.DAMAGE_MILLIONS_DOLLARS_TOTAL ??
-                a.DAMAGE_MILLIONS_DOLLARS ??
-                0
-              ),
+              damageMillionsDollarsTotal:
+                Number(
+                  a.DAMAGE_MILLIONS_DOLLARS_TOTAL ??
+                  a.DAMAGE_MILLIONS_DOLLARS ??
+                  0
+                ),
 
-            damageAmountOrder:
-              Number(
-                a.DAMAGE_AMOUNT_ORDER ||
-                0
-              ),
+              damageAmountOrder:
+                Number(
+                  a.DAMAGE_AMOUNT_ORDER ||
+                  0
+                ),
 
-            damageAmountOrderTotal:
-              Number(
-                a.DAMAGE_AMOUNT_ORDER_TOTAL ??
-                a.DAMAGE_AMOUNT_ORDER ??
-                0
-              ),
+              damageAmountOrderTotal:
+                Number(
+                  a.DAMAGE_AMOUNT_ORDER_TOTAL ??
+                  a.DAMAGE_AMOUNT_ORDER ??
+                  0
+                ),
 
-            housesDestroyed:
-              Number(
-                a.HOUSES_DESTROYED ||
-                0
-              ),
+              housesDestroyed:
+                Number(
+                  a.HOUSES_DESTROYED ||
+                  0
+                ),
 
-            housesDestroyedTotal:
-              Number(
-                a.HOUSES_DESTROYED_TOTAL ??
-                a.HOUSES_DESTROYED ??
-                0
-              ),
+              housesDestroyedTotal:
+                Number(
+                  a.HOUSES_DESTROYED_TOTAL ??
+                  a.HOUSES_DESTROYED ??
+                  0
+                ),
 
-            housesDamaged:
-              Number(
-                a.HOUSES_DAMAGED ||
-                0
-              ),
+              housesDamaged:
+                Number(
+                  a.HOUSES_DAMAGED ||
+                  0
+                ),
 
-            housesDamagedTotal:
-              Number(
-                a.HOUSES_DAMAGED_TOTAL ??
-                a.HOUSES_DAMAGED ??
-                0
-              ),
+              housesDamagedTotal:
+                Number(
+                  a.HOUSES_DAMAGED_TOTAL ??
+                  a.HOUSES_DAMAGED ??
+                  0
+                ),
 
-            flagTsunami:
-              a.FLAG_TSUNAMI ||
-              ""
+              flagTsunami:
+                a.FLAG_TSUNAMI ||
+                ""
 
-          };
-        }
-      )
-      .filter(
-        event =>
-          Number.isFinite(
-            event.latitude
-          )
-          &&
-          Number.isFinite(
-            event.longitude
-          )
-      );
+            };
+          }
+        )
+        .filter(
+          event =>
+            Number.isFinite(
+              event.latitude
+            )
+            &&
+            Number.isFinite(
+              event.longitude
+            )
+        );
 
 
     console.log(
       "NOAA impact earthquakes loaded:",
       casualtyEarthquakeData.length
+    );
+
+
+    console.log(
+      "NOAA sample event:",
+      casualtyEarthquakeData[0]
     );
 
 
@@ -2580,7 +2642,7 @@ async function loadCasualtyEarthquakes() {
 
   } catch(error) {
 
-    console.warn(
+    console.error(
       "NOAA impact data unavailable:",
       error
     );
